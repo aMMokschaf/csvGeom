@@ -28,7 +28,7 @@ while True:
         #Schreibt alles in eine Datei, iteriert über die Listeneinträge / Reihen
         file = io.open(str(inpnewfilename+"_polygon.txt"), "w")
 
-        file.write("    [\n")
+        file.write("[\n    [\n")
         for i in range(len(dict_list)):
             file.write("        [\n")
             file.write("            "+str(dict_list[i]['East']).replace(' ', '')+",\n")
@@ -38,7 +38,7 @@ while True:
                 file.write("        ]\n")
             else:
                 file.write("        ],\n")
-        file.write("    ]\n")
+        file.write("    ]\n]")
         file.close() 
 
     if event == "Close" or event == sg.WIN_CLOSED:
