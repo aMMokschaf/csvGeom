@@ -143,6 +143,3 @@ And the resulting polygon is this:
   ]
 }
 ```
-
-
-## Dependencies
