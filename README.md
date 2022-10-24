@@ -147,3 +147,6 @@ And the resulting polygon is this:
   ]
 }
 ```
+
+## Context
+This script was produced during my work for the [Miletus Excavation](https://www.miletgrabung.uni-hamburg.de/) in the course of the DFG/ANR-funded project ["Life Forms in the Megapolis: Miletus in the Longue Durée"](https://www.kulturwissenschaften.uni-hamburg.de/ka/forschung/lebensformen-megapolis.html). 
