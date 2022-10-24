@@ -153,3 +153,4 @@ cython_debug/
 
 #test
 prtest/
+exe/config.json

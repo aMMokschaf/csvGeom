@@ -3,6 +3,10 @@ Convert Lists of Coordinates to GeoJSON-geometry-Format for iDAI.field / Field D
 
 Python script that converts csv-Lists (currently only of the format stated below) to (currently only) Polygons used in [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON)-files. The chosen file will be saved as "*filename*_polygon.txt" in the same place as the original file. The contents of the resulting txt-file can be copied into the "Geometry"-Field of a Resource in [iDAI.field 2 / Field Desktop client](https://github.com/dainst/idai-field) with the type of geometry being "Polygon". This way, exports from total stations can be relatively easy transferred to the database. 
 
+## Use this without installing Python
+
+Many colleagues who could maybe use a script like this one do not have python readily installed on their computers. In this case, you can use this script without installing python itself. The *.exe attached to [each release](https://github.com/lsteinmann/csvGeom/releases) works perfectly fine (without installing anything).
+
 ## Format of the csv-File
 Currently, the format of the csv-File **has** to be exactly: "PtID,East,North,Height" in the first row, and corresponding coordinates in the rows below (see examples). The decimal separator is "**.**". Currently, the height value has to exists or there will be redundand commata and the geometry will not work. Set to 0 if neccessary. For example, the csv-File may look like this: 
 
