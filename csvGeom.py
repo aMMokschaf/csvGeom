@@ -4,29 +4,44 @@ import PySimpleGUI as sg
 import csv
 import io
 
+DELIMITER = ','
+PROGRAM_TITLE = "csvGeom v0.1.0"
+FILE_SUFFIX = "_polygon.txt"
 
-# layout of the window
-layout = [[sg.Text("Convert Lists of Coordinates to GeoJSON-geometry-Format for Field Desktop")], [sg.Input(visible=True, enable_events=True, key='-IN-'), sg.FilesBrowse(file_types=(("CSV Files","*.csv"),))], 
-[sg.Button("Convert")],[sg.Button("Close")]]
+layout = [
+    [
+        sg.Text("Convert Lists of Coordinates to GeoJSON-geometry-Format for Field Desktop")
+    ],
+    [
+        sg.Input(visible=True, enable_events=True, key='-IN-'),
+        sg.FilesBrowse(file_types=(("CSV Files","*.csv"),))
+    ], 
+    [
+        sg.Button("Convert")
+    ],
+    [
+        sg.Button("Close")
+    ]
+]
 
-# settings of window
-window = sg.Window("csvGeom v0.1.0", layout)
+window = sg.Window(PROGRAM_TITLE, layout)
 
-# event loop 
 while True:
     event, values = window.read()
-    # End program if user closes window or
-    # presses the "Close" button
+
     if event == "Convert":
         inpfilename = values['-IN-']
         inpnewfilename = inpfilename.replace('.csv', '')
+
         with io.open(str(inpfilename)) as impfile:
             dict_list = []
-            reader = csv.DictReader(impfile, delimiter=',')
+            reader = csv.DictReader(impfile, delimiter=DELIMITER)
             for row in reader:
                 dict_list.append(row)
-        #Schreibt alles in eine Datei, iteriert über die Listeneinträge / Reihen
-        file = io.open(str(inpnewfilename+"_polygon.geojson"), "w")
+                
+        file = io.open(str(inpnewfilename + FILE_SUFFIX), "w")
+
+        dict_len = len(dict_list)
 
         # Zeile für die FeatureCollection, braucht man nur ein mal
         file.write('{\n"type": "FeatureCollection",\n "name": "csvGeom-Export",\n')
@@ -45,25 +60,27 @@ while True:
         # Zeilen 36-hier kann man dann theoretisch auch in einer Zeile abhandeln, ich persönlich finde das dann aber unverständlich und übersichtlich, also lieber so und dann vermutlich langsamer als völlig undurchsichtig
 
         # jetz über die einzelnen koordinaten iterieren, jede wird ein punkt im Polygon
-        for i in range(len(dict_list)):
+        for i in range(dict_len):
             file.write("        [\n")
-            file.write("            "+str(dict_list[i]['East']).replace(' ', '')+",\n")
-            file.write("            "+str(dict_list[i]['North']).replace(' ', '')+",\n")
-            file.write("            "+str(dict_list[i]['Height']).replace(' ', '')+"\n")
+            file.write("            " + str(dict_list[i]['East']).replace(' ', '') + ",\n")
+            file.write("            " + str(dict_list[i]['North']).replace(' ', '') + ",\n")
+            file.write("            " + str(dict_list[i]['Height']).replace(' ', '') + "\n")
             # wenn wir in der letzten Zeile sind kein Komma
-            if i+1 == len(dict_list):
+            if i+1 == dict_len:
                 file.write("        ]\n")
             # wenn nicht doch ein Komma
             else:
                 file.write("        ],\n")
         # schließende Klammern für das Polygon
         file.write("    ]\n]")
+        
         # schließende Klammern für das JSON-gedönse oben
         file.write("} }]}")
-        # schließen weil fertig
-        file.close() 
+
+        file.close()
 
     if event == "Close" or event == sg.WIN_CLOSED:
         break
 
 window.close()
+
