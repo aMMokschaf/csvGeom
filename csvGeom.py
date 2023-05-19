@@ -6,7 +6,8 @@ import io
 
 DELIMITER = ','
 PROGRAM_TITLE = "csvGeom v0.1.0"
-FILE_SUFFIX = "_polygon.txt"
+OUTPUT_FORMAT = "geojson"
+OUTPUT_SUFFIX = "_polygon."+OUTPUT_FORMAT
 
 layout = [
     [
@@ -39,7 +40,7 @@ while True:
             for row in reader:
                 dict_list.append(row)
                 
-        file = io.open(str(inpnewfilename + FILE_SUFFIX), "w")
+        file = io.open(str(inpnewfilename + OUTPUT_SUFFIX), "w")
 
         dict_len = len(dict_list)
 
