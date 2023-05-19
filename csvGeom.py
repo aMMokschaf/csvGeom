@@ -5,7 +5,13 @@ import csv
 import io
 
 # layout of the window
-layout = [[sg.Text("Convert Lists of Coordinates to GeoJSON-geometry-Format for Field Desktop")], [sg.Input(visible=True, enable_events=True, key='-IN-'), sg.FilesBrowse(file_types=(("CSV Files","*.csv"),))], 
+layout = [
+    [
+        sg.Text("Convert Lists of Coordinates to GeoJSON-geometry-Format for Field Desktop")
+    ],
+    [
+        sg.Input(visible=True, enable_events=True, key='-IN-'),
+        sg.FilesBrowse(file_types=(("CSV Files","*.csv"),))], 
 [sg.Button("Convert")],[sg.Button("Close")]]
 
 # settings of window
