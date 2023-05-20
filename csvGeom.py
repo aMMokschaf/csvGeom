@@ -9,24 +9,31 @@ PROGRAM_TITLE = "csvGeom v0.1.0"
 OUTPUT_FORMAT = "geojson"
 OUTPUT_SUFFIX = "_polygon." + OUTPUT_FORMAT
 
-def main():
-    layout = [
-        [
-            sg.Text("Convert Lists of Coordinates to GeoJSON-geometry-Format for Field Desktop")
-        ],
-        [
-            sg.Input(visible=True, enable_events=True, key='-IN-'),
-            sg.FilesBrowse(file_types=(("CSV Files","*.csv"),))
-        ], 
-        [
-            sg.Button("Convert")
-        ],
-        [
-            sg.Button("Close")
-        ]
-    ]
+def createLayout():
+    return [
+                [
+                    sg.Text("Convert Lists of Coordinates to GeoJSON-geometry-Format for Field Desktop")
+                ],
+                [
+                    sg.Input(visible=True, enable_events=True, key='-IN-'),
+                    sg.FilesBrowse(file_types=(("CSV Files","*.csv"),))
+                ], 
+                [
+                    sg.Button("Convert")
+                ],
+                [
+                    sg.Button("Close")
+                ]
+            ]
 
-    window = sg.Window(PROGRAM_TITLE, layout)
+def createGui():
+    layout = createLayout()
+
+    return sg.Window(PROGRAM_TITLE, layout)
+
+def main():
+    
+    window = createGui()
 
     while True:
         event, values = window.read()
