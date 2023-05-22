@@ -60,7 +60,7 @@ def convertData(values):
     data = data + indent(1) + '"name": "csvGeom-Export",'
     data = data + indent(1) + '"features": [ '
 
-    data = createPolygonFeature(dict_list, data)
+    data = data + createPolygonFeature(dict_list)
 
     # closing bracket for features + Feature Collection
     data = data + indent(1) + ']' + '\n}'
@@ -79,16 +79,16 @@ def createPoint(values, minIndent, last):
     
     return point
 
-def createPolygonFeature(dict, data):
-    data = data + indent(2) + '{'
-    data = data + indent(3) + '"type": "Feature",'
-    data = data + indent(3) + '"properties": {'
-    data = data + indent(4) + '"identifier": "' + str(dict[0]['Attribut1']) + '"'
-    data = data + indent(3) + '},'
-    data = data + indent(3) + '"geometry": {'
-    data = data + indent(4) + '"type": "Polygon",'
-    data = data + indent(4) + '"coordinates": ['
-    data = data + indent(5) + '['
+def createPolygonFeature(dict):
+    feature = indent(2) + '{'
+    feature = feature + indent(3) + '"type": "Feature",'
+    feature = feature + indent(3) + '"properties": {'
+    feature = feature + indent(4) + '"identifier": "' + str(dict[0]['Attribut1']) + '"'
+    feature = feature + indent(3) + '},'
+    feature = feature + indent(3) + '"geometry": {'
+    feature = feature + indent(4) + '"type": "Polygon",'
+    feature = feature + indent(4) + '"coordinates": ['
+    feature = feature + indent(5) + '['
 
     dict_len = len(dict)
 
@@ -96,18 +96,18 @@ def createPolygonFeature(dict, data):
     for i in range(dict_len):
         values = [str(dict[i]['East']).replace(' ', ''), str(dict[i]['North']).replace(' ', ''), str(dict[i]['Height']).replace(' ', '')]
         if i+1 == dict_len:
-            data = data + createPoint(values, 6, True)
+            feature = feature + createPoint(values, 6, True)
         else:
-            data = data + createPoint(values, 6, False)
+            feature = feature + createPoint(values, 6, False)
 
-    data = data + indent(5) + ']'
-    data = data + indent(4) + ']'
+    feature = feature + indent(5) + ']'
+    feature = feature + indent(4) + ']'
     
     # closing brackets for geometry + single feature
-    data = data + indent(3) + '}'
-    data = data + indent(2) + '}'
+    feature = feature + indent(3) + '}'
+    feature = feature + indent(2) + '}'
 
-    return data
+    return feature
 
 def createLineFeature():
     pass
