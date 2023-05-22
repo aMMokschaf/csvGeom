@@ -6,10 +6,10 @@ import io
 
 DELIMITER = ','
 PROGRAM_TITLE = "csvGeom v0.1.0"
-OUTPUT_FORMAT = "geojson"
-OUTPUT_SUFFIX_POLYGON = "_polygon." + OUTPUT_FORMAT
-OUTPUT_SUFFIX_LINE = "_line." + OUTPUT_FORMAT
-OUTPUT_SUFFIX_POINT = "_point." + OUTPUT_FORMAT
+OUTPUT_FORMAT = ".geojson"
+OUTPUT_SUFFIX_POLYGON = "_polygon" + OUTPUT_FORMAT
+OUTPUT_SUFFIX_LINE = "_line" + OUTPUT_FORMAT
+OUTPUT_SUFFIX_POINT = "_point" + OUTPUT_FORMAT
 TAB = "    " # Four spaces
 
 def createLayout():
