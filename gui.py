@@ -1,10 +1,17 @@
 import PySimpleGUI as sg
 
+from outputType import OutputType
+
 class Gui():
     programTitle = ''
+    listOfCodes = []
 
     def __init__(self, programTitle):
         self.programTitle = programTitle
+
+    def setListOfCodes(self, list):
+        self.listOfCodes = list
+        # Muss man das aktualisieren?
 
     def createLayout(self):
         return [
@@ -14,7 +21,10 @@ class Gui():
                     [
                         sg.Input(visible=True, enable_events=True, key='-IN-'),
                         sg.FilesBrowse(file_types=(("CSV Files","*.csv"),))
-                    ], 
+                    ],
+                    [
+                        sg.DropDown(self.listOfCodes, enable_events=True, key='CodeSelected')
+                    ],
                     [
                         sg.Button("Convert")
                     ],
