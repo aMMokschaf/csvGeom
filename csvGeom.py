@@ -1,159 +1,31 @@
 # csvGeom v0.1.0
 
 import PySimpleGUI as sg
-import csv
-import io
-from enum import Enum
 
-DELIMITER = ','
-PROGRAM_TITLE = "csvGeom v0.1.0"
-OUTPUT_FORMAT = ".geojson"
+from gui import Gui
+from logic import Logic
 
-class OutputType(Enum):
-    POLYGON = "_polygon"
-    LINE = "_line"
-    POINT = "_point"
+class Main():
 
-class FileType(Enum):
-    GEO_JSON = ".geojson"
+    PROGRAM_TITLE = "csvGeom v0.1.0"
 
-class Gui():
-    def __init__(self):
-        pass
+    def main(self):
+        gui = Gui(self.PROGRAM_TITLE)
+        window = gui.initializeGui()
 
-    def createLayout(self):
-        return [
-                    [
-                        sg.Text("Convert Lists of Coordinates to GeoJSON-geometry-Format for Field Desktop")
-                    ],
-                    [
-                        sg.Input(visible=True, enable_events=True, key='-IN-'),
-                        sg.FilesBrowse(file_types=(("CSV Files","*.csv"),))
-                    ], 
-                    [
-                        sg.Button("Convert")
-                    ],
-                    [
-                        sg.Button("Close")
-                    ]
-                ]
+        logic = Logic()
 
-    def initializeGui(self):
-        layout = self.createLayout()
+        while True:
+            event, values = window.read()
 
-        return sg.Window(PROGRAM_TITLE, layout)
+            if event == "Convert":
+                logic.convertData(values)
 
-def createDictionary(inpFileName):
-    with io.open(str(inpFileName)) as impFile:
-        dict_list = []
-        reader = csv.DictReader(impFile, delimiter=DELIMITER)
-        for row in reader:
-            dict_list.append(row)
-        return dict_list
-    
-def getFileNameWithoutSuffix(filename):
-    return filename.rsplit(".", 1)[0]
+            if event == "Close" or event == sg.WIN_CLOSED:
+                break
 
-def indent(n):
-    indent = '    ' * n # Four spaces times n
-    indent = '\n' + indent
-    return indent
-
-def convertData(values):
-    inpFileName = values['-IN-']
-    outputFileName = getFileNameWithoutSuffix(inpFileName)
-
-    dict_list = createDictionary(inpFileName)
-    
-    data = '{'
-    data = data + indent(1) + '"type": "FeatureCollection",' 
-    data = data + indent(1) + '"name": "csvGeom-Export",'
-    data = data + indent(1) + '"features": [ '
-
-    data = data + createPolygonFeature(dict_list)
-
-    # closing bracket for features + Feature Collection
-    data = data + indent(1) + ']' + '\n}'
-
-    writePolygonToFile(outputFileName, data, FileType.GEO_JSON.value)
-
-# sollte nur 'values' akzeptieren: also schon ein 
-def createPoint(values, minIndent, last):
-    point = indent(minIndent) + '['
-    point = point + indent(minIndent + 1) + values[0] + ','
-    point = point + indent(minIndent + 1) + values[1] + ','
-    point = point + indent(minIndent + 1) + values[2] + ''
-    point = point + indent(minIndent) + ']'
-    if last == False: 
-        point = point + ','
-    
-    return point
-
-def createPolygonFeature(dict):
-    feature = indent(2) + '{'
-    feature = feature + indent(3) + '"type": "Feature",'
-    feature = feature + indent(3) + '"properties": {'
-    feature = feature + indent(4) + '"identifier": "' + str(dict[0]['Attribut1']) + '"'
-    feature = feature + indent(3) + '},'
-    feature = feature + indent(3) + '"geometry": {'
-    feature = feature + indent(4) + '"type": "Polygon",'
-    feature = feature + indent(4) + '"coordinates": ['
-    feature = feature + indent(5) + '['
-
-    dict_len = len(dict)
-
-    for i in range(dict_len):
-        values = [str(dict[i]['East']).replace(' ', ''), str(dict[i]['North']).replace(' ', ''), str(dict[i]['Height']).replace(' ', '')]
-        if i+1 == dict_len:
-            feature = feature + createPoint(values, 6, True)
-        else:
-            feature = feature + createPoint(values, 6, False)
-
-    feature = feature + indent(5) + ']'
-    feature = feature + indent(4) + ']'
-    
-    # closing brackets for geometry + single feature
-    feature = feature + indent(3) + '}'
-    feature = feature + indent(2) + '}'
-
-    return feature
-
-def createLineFeature():
-    pass
-
-def createPointFeature(values):
-    pass
-
-def writePolygonToFile(filename, data, fileType):
-    suffix = OutputType.POLYGON.value + fileType
-    writeToFile(filename, data, suffix)
-
-def writeLineToFile():
-    pass
-
-def writePointToFile():
-    pass
-
-def writeToFile(filename, data, suffix):
-    file = io.open(filename + suffix, "w")
-    file.write(data)
-    file.close()
-
-def main():
-    
-    gui = Gui()
-    window = gui.initializeGui()
-
-    while True:
-        event, values = window.read()
-
-        if event == "Convert":
-            convertData(values)
-
-        if event == "Close" or event == sg.WIN_CLOSED:
-            break
-
-    window.close()
+        window.close()
 
 if __name__ == '__main__':
-    main()
+    app = Main()
+    app.main()
