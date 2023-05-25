@@ -9,24 +9,20 @@ class Gui():
     def __init__(self, programTitle):
         self.programTitle = programTitle
 
-    def setListOfCodes(self, list):
-        self.listOfCodes = list
-        # Muss man das aktualisieren?
-
     def createLayout(self):
         return [
                     [
                         sg.Text("Convert Lists of Coordinates to GeoJSON-geometry-Format for Field Desktop")
                     ],
                     [
-                        sg.Input(visible=True, enable_events=True, key='-IN-'),
+                        sg.Input(visible=True, enable_events=True, key='-IN-', size=(30,1)),
                         sg.FilesBrowse(file_types=(("CSV Files","*.csv"),))
                     ],
                     [
-                        sg.DropDown(self.listOfCodes, enable_events=True, key='CodeSelected')
+                        sg.DropDown(self.listOfCodes, enable_events=True, key='CodeSelected', disabled=True, size=(30,1))
                     ],
                     [
-                        sg.Button("Convert")
+                        sg.Button("Convert", disabled=True)
                     ],
                     [
                         sg.Button("Close")

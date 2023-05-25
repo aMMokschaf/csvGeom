@@ -12,6 +12,7 @@ class Main():
 
     PROGRAM_TITLE = "csvGeom v0.1.0"
     dict = []
+    filteredDict = []
 
     def __init__(self):
         self.util = Util()
@@ -30,21 +31,25 @@ class Main():
 
             if event == "-IN-":
                 inputFileName = values['-IN-']
+
                 self.dict = logic.createDictionary(inputFileName)
-                # logic.filterCodes() implement this
-                # How to activate the dropdown for code-selection?
+
+                list = logic.createDropDownList(self.dict)
+
+                window["CodeSelected"].update(values=list, disabled=False)
 
             if event == "CodeSelected":
-                pass
-                # dict wird nach dem selektierten Code gefiltert.
-                # Wenn File und Code selected sind wird der Convert-Button erst aktiviert.
+                selectedCode = values['CodeSelected']
+                self.filteredDict = logic.filterByCode(self.dict, selectedCode)
+
+                window["Convert"].update(disabled=False)
 
             if event == "Convert":
                 inputFileName = values['-IN-']
                 outputFileName = self.util.getFileNameWithoutSuffix(inputFileName)
                 outputFileName = outputFileName + '.geojson' #+ type + fileType
 
-                data = logic.convertData(self.dict)
+                data = logic.convertData(self.filteredDict)
 
                 self.writer.writeToFile(data, outputFileName)
 
