@@ -49,15 +49,17 @@ class Converter():
         header = self.createFeatureHeader(identifier, selectedType)
 
         if selectedType == "polygon":
-            geometry = self.createPolygon(dict)
+            coords = self.createPolygonCoords(dict)
         elif selectedType == "point": 
-            geometry = self.createPoint(dict)
+            coords = self.createPointCoords(dict)
+        else:
+            coords = False
         
         footer = self.createFeatureFooter()
 
-        return header + geometry + footer
+        return header + coords + footer
 
-    def createPolygon(self, dict):
+    def createPolygonCoords(self, dict):
         util = self.util
         dictLength = len(dict)
 
@@ -82,7 +84,7 @@ class Converter():
         return polygon
 
     
-    def createPoint(self, dict):
+    def createPointCoords(self, dict):
         util = self.util
 
         # fixed index for test
@@ -99,7 +101,7 @@ class Converter():
 
         return point
     
-    def createLinestring(self):
+    def createLinestringCoords(self):
         pass
 
     def createFeatureCollectionHeader(self):
