@@ -21,7 +21,7 @@ class Converter():
         
         return point
 
-    def createFeatureHeader(self, identifier, selectedType):
+    def createFeatureHeader(self, identifier, selectedType, multi):
         util = self.util
         
         header = util.indent(2) + '{'
@@ -30,7 +30,12 @@ class Converter():
         header = header + util.indent(4) + '"identifier": "' + identifier + '"'
         header = header + util.indent(3) + '},'
         header = header + util.indent(3) + '"geometry": {'
-        header = header + util.indent(4) + '"type": "' + OutputType(selectedType).getTitleCase() + '",'
+
+        geometryType = OutputType(selectedType).getTitleCase()
+        if multi == True:
+            geometryType = "Multi" + geometryType
+
+        header = header + util.indent(4) + '"type": "' + geometryType + '",'
 
         return header
 
@@ -43,10 +48,10 @@ class Converter():
 
         return footer
 
-    def createFeature(self, dict, selectedType):
+    def createFeature(self, dict, selectedType, multi):
         identifier = str(dict[0]['Attribut1'])
 
-        header = self.createFeatureHeader(identifier, selectedType)
+        header = self.createFeatureHeader(identifier, selectedType, multi)
 
         if selectedType == "polygon":
             coords = self.createPolygonCoords(dict)
@@ -87,18 +92,27 @@ class Converter():
     def createPointCoords(self, dict):
         util = self.util
 
-        # fixed index for test
-        # Point should actually switch flexibly between point and multipoint
-        # :(
-        values = [
-                        str(dict[0]['East']).replace(' ', ''),
-                        str(dict[0]['North']).replace(' ', ''),
-                        str(dict[0]['Height']).replace(' ', '')
-                ]
-        
         point = util.indent(4) + '"coordinates": '
-        point = point + self.createSingleCoord(values, 4, True)
 
+        dictLength = len(dict)
+        if dictLength > 1:
+            point = point + '\n' + util.indent(4) + '['
+
+        for i in range(dictLength):
+            values = [
+                str(dict[i]['East']).replace(' ', ''),
+                str(dict[i]['North']).replace(' ', ''),
+                str(dict[i]['Height']).replace(' ', '')
+                ]
+            
+            if i+1 == dictLength:
+                point = point + self.createSingleCoord(values, 5, True)
+            else:
+                point = point + self.createSingleCoord(values, 5, False)
+
+        if dictLength > 1:
+            point = point + '\n' + util.indent(4) + ']'        
+        
         return point
     
     def createLinestringCoords(self):
@@ -119,7 +133,26 @@ class Converter():
     
     def createFeatureCollection(self, dict, selectedType):
         data = self.createFeatureCollectionHeader()
-        data = data + self.createFeature(dict, selectedType)
+        
+        identifiers = []
+
+        for obj in dict:
+            if obj['Attribut1'] not in identifiers:
+                identifiers.append(obj['Attribut1'])
+
+        for id in identifiers:
+            new_dict = []
+            for obj in dict:
+                if obj['Attribut1'] == id:
+                    new_dict.append(obj)
+            if selectedType == "point" and len(new_dict) > 1:
+                multi = True
+            else:
+                multi = False
+            data = data + self.createFeature(new_dict, selectedType, multi)
+            if id != identifiers[-1]:
+                data = data + ','
+
         data = data + self.createFeatureCollectionFooter()
 
         return data
