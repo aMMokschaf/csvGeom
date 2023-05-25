@@ -1,4 +1,5 @@
 from util import Util
+from outputType import OutputType
 
 class Converter():
 
@@ -7,7 +8,7 @@ class Converter():
     def __init__(self):
         self.util = Util()
 
-    def createPoint(self, values, minIndent, last):
+    def createSingleCoord(self, values, minIndent, last):
         util = self.util
 
         point = util.indent(minIndent) + '['
@@ -19,14 +20,8 @@ class Converter():
             point = point + ','
         
         return point
-    
-    def createPointFeature(self):
-        pass
-    
-    def createLineFeature(self):
-        pass
 
-    def createFeatureHeader(self, identifier, geomType):
+    def createFeatureHeader(self, identifier, selectedType):
         util = self.util
         
         header = util.indent(2) + '{'
@@ -35,41 +30,39 @@ class Converter():
         header = header + util.indent(4) + '"identifier": "' + identifier + '"'
         header = header + util.indent(3) + '},'
         header = header + util.indent(3) + '"geometry": {'
-        header = header + util.indent(4) + '"type": "' + geomType + '",'
-        header = header + util.indent(4) + '"coordinates": ['
-        header = header + util.indent(5) + '['
+        header = header + util.indent(4) + '"type": "' + OutputType(selectedType).getTitleCase() + '",'
 
         return header
 
     def createFeatureFooter(self):
         util = self.util
 
-        footer = util.indent(5) + ']'
-        footer = footer+ util.indent(4) + ']'
-        
+        footer = ''
         footer = footer + util.indent(3) + '}'
         footer = footer + util.indent(2) + '}'
 
         return footer
 
-    def createFeature(self, dict, geomType):
+    def createFeature(self, dict, selectedType):
         identifier = str(dict[0]['Attribut1'])
 
-        header = self.createFeatureHeader(identifier, geomType)
+        header = self.createFeatureHeader(identifier, selectedType)
 
-        if geomType == "Polygon":
+        if selectedType == "polygon":
             geometry = self.createPolygon(dict)
-        else: 
-            geometry = self.createPolygon(dict)
+        elif selectedType == "point": 
+            geometry = self.createPoint(dict)
         
         footer = self.createFeatureFooter()
 
         return header + geometry + footer
 
     def createPolygon(self, dict):
+        util = self.util
         dictLength = len(dict)
 
-        polygon = ''
+        polygon = util.indent(4) + '"coordinates": ['
+        polygon = polygon + util.indent(5) + '['
 
         for i in range(dictLength):
             values = [
@@ -79,12 +72,35 @@ class Converter():
                     ]
             
             if i+1 == dictLength:
-                polygon = polygon + self.createPoint(values, 6, True)
+                polygon = polygon + self.createSingleCoord(values, 6, True)
             else:
-                polygon = polygon + self.createPoint(values, 6, False)
+                polygon = polygon + self.createSingleCoord(values, 6, False)
         
+        polygon = polygon + util.indent(5) + ']'
+        polygon = polygon + util.indent(4) + ']'
+
         return polygon
 
+    
+    def createPoint(self, dict):
+        util = self.util
+
+        # fixed index for test
+        # Point should actually switch flexibly between point and multipoint
+        # :(
+        values = [
+                        str(dict[0]['East']).replace(' ', ''),
+                        str(dict[0]['North']).replace(' ', ''),
+                        str(dict[0]['Height']).replace(' ', '')
+                ]
+        
+        point = util.indent(4) + '"coordinates": '
+        point = point + self.createSingleCoord(values, 4, True)
+
+        return point
+    
+    def createLinestring(self):
+        pass
 
     def createFeatureCollectionHeader(self):
         util = self.util
@@ -99,9 +115,9 @@ class Converter():
     def createFeatureCollectionFooter(self):
         return self.util.indent(1) + ']' + '\n}'
     
-    def createFeatureCollection(self, dict, geomType):
+    def createFeatureCollection(self, dict, selectedType):
         data = self.createFeatureCollectionHeader()
-        data = data + self.createFeature(dict, geomType)
+        data = data + self.createFeature(dict, selectedType)
         data = data + self.createFeatureCollectionFooter()
 
         return data

@@ -48,6 +48,5 @@ class Logic(): #Rename to something about input
 
         return list
 
-    def convertData(self, dict):
-        geomType = "Polygon"
-        return self.converter.createFeatureCollection(dict, geomType)
+    def convertData(self, dict, selectedType):
+        return self.converter.createFeatureCollection(dict, selectedType)

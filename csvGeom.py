@@ -7,6 +7,7 @@ from logic import Logic
 from util import Util
 from converter import Converter
 from fileWriter import FileWriter
+from outputType import OutputType
 
 class Main():
 
@@ -45,11 +46,22 @@ class Main():
                 window["Convert"].update(disabled=False)
 
             if event == "Convert":
+                outputTypeSelection = {
+                    "polygon": values['GeomPolygon'],
+                    "point": values['GeomPoint'],
+                    "linestring": False
+                }
+
+                for geomType, selection in outputTypeSelection.items():
+                    if selection == True:
+                        selectedType = geomType
+                
+                typeSuffix = OutputType(selectedType).getAsSuffix()
                 inputFileName = values['-IN-']
                 outputFileName = self.util.getFileNameWithoutSuffix(inputFileName)
-                outputFileName = outputFileName + '.geojson' #+ type + fileType
+                outputFileName = outputFileName + typeSuffix + '.geojson' #+ type + fileType
 
-                data = logic.convertData(self.filteredDict)
+                data = logic.convertData(self.filteredDict, selectedType)
 
                 self.writer.writeToFile(data, outputFileName)
 
