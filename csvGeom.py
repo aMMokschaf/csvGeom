@@ -52,16 +52,15 @@ class Main():
 
                 self.logger.info("Code selected: " + selectedCode)
 
-            if event == "Convert":
-                outputTypeSelection = {
-                    "polygon": values['GeomPolygon'],
-                    "point": values['GeomPoint'],
-                    "linestring": False
-                }
+            if event == "GeomPolygon":
+                selectedType = OutputType.POLYGON.value
+                self.logger.info("Output-type selected: " + selectedType)
 
-                for geomType, selection in outputTypeSelection.items():
-                    if selection == True:
-                        selectedType = geomType
+            if event == "GeomPoint":
+                selectedType = OutputType.POINT.value
+                self.logger.info("Output-type selected: " + selectedType)
+
+            if event == "Convert":
                 
                 typeSuffix = OutputType(selectedType).getAsSuffix()
                 fileEnding = FileType.GEO_JSON.value

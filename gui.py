@@ -21,10 +21,10 @@ class Gui():
                         sg.DropDown(values=[], enable_events=True, key='CodeSelected', disabled=True, size=(30,1))
                     ],
                     [
-                        sg.Radio('Polygon', "GEOMTYPE", default=True, key='GeomPolygon')
+                        sg.Radio(OutputType.POLYGON.getTitleCase(), "GEOMTYPE", enable_events=True, default=True, key='GeomPolygon')
                     ],
                     [
-                        sg.Radio('Point', "GEOMTYPE", default=False, key='GeomPoint')
+                        sg.Radio(OutputType.POINT.getTitleCase(), "GEOMTYPE", enable_events=True, default=False, key='GeomPoint')
                     ],
                     [
                         sg.Button("Convert", disabled=True)
