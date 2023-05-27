@@ -4,7 +4,6 @@ from outputType import OutputType
 
 class Gui():
     programTitle = ''
-    listOfCodes = []
 
     def __init__(self, programTitle):
         self.programTitle = programTitle
@@ -19,7 +18,7 @@ class Gui():
                         sg.FilesBrowse(file_types=(("CSV Files","*.csv"),))
                     ],
                     [
-                        sg.DropDown(self.listOfCodes, enable_events=True, key='CodeSelected', disabled=True, size=(30,1))
+                        sg.DropDown(values=[], enable_events=True, key='CodeSelected', disabled=True, size=(30,1))
                     ],
                     [
                         sg.Radio('Polygon', "GEOMTYPE", default=True, key='GeomPolygon')
