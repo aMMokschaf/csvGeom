@@ -8,6 +8,8 @@ from util import Util
 from converter import Converter
 from fileWriter import FileWriter
 from outputType import OutputType
+from fileType import FileType
+from logger import Logger
 
 class Main():
 
@@ -19,6 +21,7 @@ class Main():
         self.util = Util()
         self.converter = Converter()
         self.writer = FileWriter()
+        self.logger = Logger()
 
     def main(self):
 
@@ -39,11 +42,15 @@ class Main():
 
                 window["CodeSelected"].update(values=list, disabled=False)
 
+                self.logger.info("File chosen: " + inputFileName)
+
             if event == "CodeSelected":
                 selectedCode = values['CodeSelected']
                 self.filteredDict = logic.filterByCode(self.dict, selectedCode)
 
                 window["Convert"].update(disabled=False)
+
+                self.logger.info("Code selected: " + selectedCode)
 
             if event == "Convert":
                 outputTypeSelection = {
@@ -57,13 +64,16 @@ class Main():
                         selectedType = geomType
                 
                 typeSuffix = OutputType(selectedType).getAsSuffix()
+                fileEnding = FileType.GEO_JSON.value
                 inputFileName = values['-IN-']
                 outputFileName = self.util.getFileNameWithoutSuffix(inputFileName)
-                outputFileName = outputFileName + typeSuffix + '.geojson' #+ type + fileType
+                outputFileName = outputFileName + typeSuffix + fileEnding
 
                 data = logic.convertData(self.filteredDict, selectedType)
 
                 self.writer.writeToFile(data, outputFileName)
+
+                self.logger.info("File written: " + outputFileName)
 
             if event == "Close" or event == sg.WIN_CLOSED:
                 break
