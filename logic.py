@@ -43,7 +43,6 @@ class Logic(): #Rename to something about input
 
         for obj in dict:
             if obj['Code'] == code:
-                print(obj)
                 list.append(obj)
 
         return list
