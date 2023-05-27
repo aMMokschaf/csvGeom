@@ -26,4 +26,4 @@ class Logger():
         self.printMsg(LogType.CRIT.value, msg)
     
     def printMsg(self, logType, msg):
-        print (logType, self.DELIMITER, msg)
+        print(logType, self.DELIMITER, msg)
