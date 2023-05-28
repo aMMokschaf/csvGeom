@@ -1,17 +1,16 @@
 # csvGeom v0.1.0
 
 import PySimpleGUI as sg
-import json
 
 from gui import Gui
 from inputReader import InputReader
 from modeller import Modeller
 from util import Util
-from converter import Converter
 from fileWriter import FileWriter
 from outputType import OutputType
 from fileType import FileType
 from logger import Logger
+from outputFormatter import OutputFormatter
 
 class Main():
 
@@ -19,7 +18,6 @@ class Main():
 
     def __init__(self):
         self.util = Util()
-        self.converter = Converter()
         self.writer = FileWriter()
         self.logger = Logger()
         self.modeller = Modeller()
@@ -32,8 +30,8 @@ class Main():
         window = gui.initializeGui()
 
         inputReader = InputReader()
-        converter = Converter()
         selectedType = OutputType.POLYGON.value
+        featureCollectionModel = None
 
         while True:
             event, values = window.read()
@@ -61,9 +59,7 @@ class Main():
 
                 self.logger.info("Found " + str(len(splitData)) + " objects.", splitData)
 
-                featureCollection = self.modeller.convertInputToModel(splitData, OutputType(selectedType))
-
-                self.util.debugFeatureCollection(featureCollection)
+                featureCollectionModel = self.modeller.convertInputToModel(splitData, OutputType(selectedType))
 
                 self.logger.info("Converted to object-model.")
 
@@ -83,7 +79,7 @@ class Main():
                 outputFileName = self.util.getFileNameWithoutSuffix(inputFileName)
                 outputFileName = outputFileName + typeSuffix + fileEnding
 
-                data = converter.createFeatureCollection(self.filteredDict, selectedType)
+                data = OutputFormatter().createFeatureCollection(featureCollectionModel)
 
                 self.writer.writeToFile(data, outputFileName)
 

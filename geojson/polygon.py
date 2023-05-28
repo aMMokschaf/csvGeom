@@ -6,6 +6,7 @@ class Polygon(GeoJsonObject):
 
     def __init__(self):
         self.coordinates = []
+        self.type = OutputType.POLYGON
     
     def addCoordinate(self, coordinate):
         self.coordinates.append(coordinate)
