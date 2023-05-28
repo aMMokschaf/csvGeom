@@ -6,8 +6,8 @@ class Line(GeoJsonObject):
         self.coordinates = []
 
     def addCoordinate(self, coordinate):
-        pass
+        self.coordinates.append(coordinate)
     
-    def addMultipleCoordinates(self, coordinate):
-        pass
+    def addMultipleCoordinates(self, coordinates):
+        self.coordinates.append(coordinates)
        
