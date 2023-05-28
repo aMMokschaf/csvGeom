@@ -1,10 +1,10 @@
 
-TAB = '    ' # Four Spaces
+TAB = "    " # Four Spaces
 
 class Util():
     def indent(self, n):
         indent = TAB * n
-        indent = '\n' + indent
+        indent = "\n" + indent
         return indent
     
     def getFileNameWithoutSuffix(self, filename):
