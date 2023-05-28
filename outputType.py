@@ -1,9 +1,12 @@
 from enum import Enum
 
 class OutputType(Enum):
-    POLYGON = "polygon"
-    LINE = "line"
     POINT = "point"
+    LINE = "lineString"
+    POLYGON = "polygon"
+    MULTI_POINT = "multiPoint"
+    MULTI_LINE = "multiLineString"
+    MULTI_POLYGON = "multiPolygon"
 
     def getUpperCase(self):
         return self.value.upper()
@@ -15,5 +18,5 @@ class OutputType(Enum):
         return self.value.title()
     
     def getAsSuffix(self):
-        return '_' + self.value
+        return "_" + self.value
     
