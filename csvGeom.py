@@ -23,6 +23,7 @@ class Main():
         self.modeller = Modeller()
         self.dict = []
         self.filteredDict = []
+        self.selectedType = OutputType.POLYGON.value
 
     def main(self):
 
@@ -30,7 +31,6 @@ class Main():
         window = gui.initializeGui()
 
         inputReader = InputReader()
-        selectedType = OutputType.POLYGON.value
         featureCollectionModel = None
 
         while True:
@@ -59,21 +59,21 @@ class Main():
 
                 self.logger.info("Found " + str(len(splitData)) + " objects.", splitData)
 
-                featureCollectionModel = self.modeller.convertInputToModel(splitData, OutputType(selectedType))
-
-                self.logger.info("Converted to object-model.")
-
             if event == "GeomPolygon":
-                selectedType = OutputType.POLYGON.value
-                self.logger.info("Output-type selected: " + selectedType)
+                self.selectedType = OutputType.POLYGON.value
+                self.logger.info("Output-type selected: " + self.selectedType)
 
             if event == "GeomPoint":
-                selectedType = OutputType.POINT.value
-                self.logger.info("Output-type selected: " + selectedType)
+                self.selectedType = OutputType.POINT.value
+                self.logger.info("Output-type selected: " + self.selectedType)
 
             if event == "Convert":
+
+                featureCollectionModel = self.modeller.convertInputToModel(splitData, OutputType(self.selectedType))
+
+                self.logger.info("Converted to object-model.")
                 
-                typeSuffix = OutputType(selectedType).getAsSuffix()
+                typeSuffix = OutputType(self.selectedType).getAsSuffix()
                 fileEnding = FileType.GEO_JSON.value
                 inputFileName = values['-IN-']
                 outputFileName = self.util.getFileNameWithoutSuffix(inputFileName)

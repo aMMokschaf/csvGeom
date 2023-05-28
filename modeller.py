@@ -1,6 +1,7 @@
 from geojson.featureCollection import FeatureCollection
 from geojson.feature import Feature
 from geojson.polygon import Polygon
+from geojson.point import Point
 from geojson.coordinate import Coordinate
 
 from enums.outputType import OutputType
@@ -20,8 +21,8 @@ class Modeller():
     def createGeometry(self, dict, geometryType):
         geometry = None
 
-        if geometryType == OutputType.POLYGON:
-            geometry = Polygon()
+        if geometryType == OutputType.POINT:
+            geometry = Point()
 
             for dictLine in dict:
                 coordinate = self.createCoordinate(dictLine)
@@ -30,7 +31,20 @@ class Modeller():
         if geometryType == OutputType.LINE:
             pass
 
-        if geometryType == OutputType.POINT:
+        if geometryType == OutputType.POLYGON:
+            geometry = Polygon()
+
+            for dictLine in dict:
+                coordinate = self.createCoordinate(dictLine)
+                geometry.addCoordinate(coordinate)
+
+        if geometryType == OutputType.MULTI_POINT:
+            pass
+
+        if geometryType == OutputType.MULTI_LINE:
+            pass
+
+        if geometryType == OutputType.MULTI_POLYGON:
             pass
 
         return geometry

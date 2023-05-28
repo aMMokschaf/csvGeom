@@ -1,11 +1,15 @@
-from geojsonObject import GeoJsonObject
+from geojson.geojsonObject import GeoJsonObject
 
 from enums.outputType import OutputType
 
 class Point(GeoJsonObject):
 
-    def __init__(self, coordinates):
-        self.coordinates = coordinates
+    def __init__(self):
+        self.coordinates = []
+        self.type = OutputType.POINT
+
+    def addCoordinate(self, coordinate):
+        self.coordinates.append(coordinate)
 
     def __str__(self):
         return f"'type' : {OutputType.POINT.getTitleCase()} 'coordinates' : {self.coordinates}"

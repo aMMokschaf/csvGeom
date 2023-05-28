@@ -1,4 +1,4 @@
-from geojsonObject import GeoJsonObject
+from geojson.geojsonObject import GeoJsonObject
 
 from enums.outputType import OutputType
 
@@ -6,6 +6,7 @@ class Line(GeoJsonObject):
 
     def __init__(self):
         self.coordinates = []
+        self.type = OutputType.LINE
 
     def addCoordinate(self, coordinate):
         self.coordinates.append(coordinate)
