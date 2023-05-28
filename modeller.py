@@ -3,7 +3,7 @@ from geojson.feature import Feature
 from geojson.polygon import Polygon
 from geojson.coordinate import Coordinate
 
-from outputType import OutputType
+from enums.outputType import OutputType
 
 class Modeller():
 

@@ -5,11 +5,11 @@ import PySimpleGUI as sg
 from gui import Gui
 from inputReader import InputReader
 from modeller import Modeller
-from util import Util
-from fileWriter import FileWriter
-from outputType import OutputType
-from fileType import FileType
-from logger import Logger
+from utils.util import Util
+from utils.fileWriter import FileWriter
+from enums.outputType import OutputType
+from enums.fileType import FileType
+from utils.logger import Logger
 from outputFormatter import OutputFormatter
 
 class Main():

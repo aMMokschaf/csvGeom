@@ -1,5 +1,5 @@
-from util import Util
-from outputType import OutputType
+from utils.util import Util
+from enums.outputType import OutputType
 
 class OutputFormatter():
 

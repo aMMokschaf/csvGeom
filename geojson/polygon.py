@@ -1,6 +1,6 @@
 from geojson.geojsonObject import GeoJsonObject
 
-from outputType import OutputType
+from enums.outputType import OutputType
 
 class Polygon(GeoJsonObject):
 

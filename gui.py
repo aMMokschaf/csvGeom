@@ -1,6 +1,6 @@
 import PySimpleGUI as sg
 
-from outputType import OutputType
+from enums.outputType import OutputType
 
 class Gui():
     programTitle = ''

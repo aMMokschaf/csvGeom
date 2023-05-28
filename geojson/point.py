@@ -1,6 +1,6 @@
 from geojsonObject import GeoJsonObject
 
-from outputType import OutputType
+from enums.outputType import OutputType
 
 class Point(GeoJsonObject):
 
