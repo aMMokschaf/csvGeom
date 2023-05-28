@@ -22,6 +22,7 @@ class Main():
         self.logger = Logger()
         self.modeller = Modeller()
         self.inputReader = InputReader()
+        self.outputFormatter = OutputFormatter()
 
         self.dict = []
         self.filteredDict = []
@@ -70,7 +71,7 @@ class Main():
                 featureCollectionModel = self.modeller.convertInputToModel(splitData, self.selectedType)
                 self.logger.info("Converted to object-model.")
 
-                data = OutputFormatter().createFeatureCollection(featureCollectionModel)
+                data = self.outputFormatter.createFeatureCollection(featureCollectionModel)
 
                 outputFileName = self.util.createOutputFileName(self.selectedFileName, self.selectedType, self.selectedFileType)
                 self.writer.writeToFile(data, outputFileName)
