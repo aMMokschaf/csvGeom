@@ -10,12 +10,9 @@ class Util():
     def getFileNameWithoutSuffix(self, filename):
         return filename.rsplit(".", 1)[0]
     
-    #temporary method to debug the object-model
-    def debugFeatureCollection(self, featureCollection):
-        print(featureCollection)
-        for feature in featureCollection.features:
-            print(feature)
-            geometry = feature.geometry
-            for coord in geometry.coordinates:
-                print(coord)
-
+    def createOutputFileName(self, fileName, suffix, ending):
+        outputFileName = self.getFileNameWithoutSuffix(fileName)
+        typeSuffix = suffix.getLowerCase()
+        fileEnding = ending.value
+        
+        return outputFileName + typeSuffix + fileEnding

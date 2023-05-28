@@ -23,7 +23,8 @@ class Main():
         self.modeller = Modeller()
         self.dict = []
         self.filteredDict = []
-        self.selectedType = OutputType.POLYGON.value
+        self.selectedType = OutputType.POLYGON
+        self.selectedFileType = FileType.GEO_JSON
 
     def main(self):
 
@@ -60,24 +61,21 @@ class Main():
                 self.logger.info("Found " + str(len(splitData)) + " objects.", splitData)
 
             if event == "GeomPolygon":
-                self.selectedType = OutputType.POLYGON.value
-                self.logger.info("Output-type selected: " + self.selectedType)
+                self.selectedType = OutputType.POLYGON
+                self.logger.info("Output-type selected: " + self.selectedType.value)
 
             if event == "GeomPoint":
                 self.selectedType = OutputType.POINT.value
-                self.logger.info("Output-type selected: " + self.selectedType)
+                self.logger.info("Output-type selected: " + self.selectedType.value)
 
             if event == "Convert":
 
-                featureCollectionModel = self.modeller.convertInputToModel(splitData, OutputType(self.selectedType))
+                featureCollectionModel = self.modeller.convertInputToModel(splitData, self.selectedType)
 
                 self.logger.info("Converted to object-model.")
-                
-                typeSuffix = OutputType(self.selectedType).getAsSuffix()
-                fileEnding = FileType.GEO_JSON.value
+
                 inputFileName = values['-IN-']
-                outputFileName = self.util.getFileNameWithoutSuffix(inputFileName)
-                outputFileName = outputFileName + typeSuffix + fileEnding
+                outputFileName = self.util.createOutputFileName(inputFileName, self.selectedType, self.selectedFileType,)
 
                 data = OutputFormatter().createFeatureCollection(featureCollectionModel)
 
