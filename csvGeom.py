@@ -32,6 +32,7 @@ class Main():
 
         inputReader = InputReader()
         converter = Converter()
+        selectedType = OutputType.POLYGON.value
 
         while True:
             event, values = window.read()
@@ -59,7 +60,7 @@ class Main():
 
                 self.logger.info("Found " + str(len(splitData)) + " objects.", splitData)
 
-                featureCollection = self.modeller.convertInputToModel(splitData)
+                featureCollection = self.modeller.convertInputToModel(splitData, OutputType(selectedType))
 
                 self.util.debugFeatureCollection(featureCollection)
 
