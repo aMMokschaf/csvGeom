@@ -36,3 +36,22 @@ class InputReader():
                 list.append(obj)
 
         return list
+    
+    def splitByIdentifier(self, dict):
+        listOfLists = []
+        list = []
+        listOfLists.append(list)
+
+        #Catch empty dict
+        identifier = dict[0]['Attribut1']
+
+        for obj in dict:
+            if obj['Attribut1'] == identifier:
+                list.append(obj)
+            else:
+                identifier = obj['Attribut1']
+                list = []
+                list.append(obj)
+                listOfLists.append(list)
+
+        return listOfLists

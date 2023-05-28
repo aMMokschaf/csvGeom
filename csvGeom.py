@@ -4,6 +4,7 @@ import PySimpleGUI as sg
 
 from gui import Gui
 from inputReader import InputReader
+from modeller import Modeller
 from util import Util
 from converter import Converter
 from fileWriter import FileWriter
@@ -14,14 +15,15 @@ from logger import Logger
 class Main():
 
     PROGRAM_TITLE = "csvGeom v0.1.0"
-    dict = []
-    filteredDict = []
 
     def __init__(self):
         self.util = Util()
         self.converter = Converter()
         self.writer = FileWriter()
         self.logger = Logger()
+        self.modeller = Modeller()
+        self.dict = []
+        self.filteredDict = []
 
     def main(self):
 
@@ -52,6 +54,16 @@ class Main():
                 window["Convert"].update(disabled=False)
 
                 self.logger.info("Code selected: " + selectedCode)
+
+                splitData = inputReader.splitByIdentifier(self.filteredDict)
+
+                self.logger.info("Found " + str(len(splitData)) + " objects.", splitData)
+
+                featureCollection = self.modeller.convertInputToModel(splitData)
+
+                self.util.debugFeatureCollection(featureCollection)
+
+                self.logger.info("Converted to object-model.")
 
             if event == "GeomPolygon":
                 selectedType = OutputType.POLYGON.value
