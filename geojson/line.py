@@ -1,5 +1,7 @@
 from geojsonObject import GeoJsonObject
 
+from outputType import OutputType
+
 class Line(GeoJsonObject):
 
     def __init__(self):
@@ -10,4 +12,13 @@ class Line(GeoJsonObject):
     
     def addMultipleCoordinates(self, coordinates):
         self.coordinates.append(coordinates)
+
+    def __str__(self):
+        return f"'type' : {OutputType.LINE.getTitleCase()} 'coordinates' : {self.coordinates}"
+
+    def __dict__(self):
+        return {
+            'type' : OutputType.LINE.value,
+            'coordinates': self.coordinates
+        }
        

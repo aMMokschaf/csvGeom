@@ -1,6 +1,7 @@
 # csvGeom v0.1.0
 
 import PySimpleGUI as sg
+import json
 
 from gui import Gui
 from inputReader import InputReader

@@ -12,15 +12,10 @@ class Util():
     
     #temporary method to debug the object-model
     def debugFeatureCollection(self, featureCollection):
-        print("fc type: ", featureCollection.type)
-        print("fc name: ", featureCollection.name)
-        print("fc features")
+        print(featureCollection)
         for feature in featureCollection.features:
-            print("identifier:", feature.identifier)
-            print("geometry: ")
+            print(feature)
             geometry = feature.geometry
             for coord in geometry.coordinates:
-                print("east: ", coord.east)
-                print("north: ", coord.north)
-                print("height: ", coord.height)
-                print("----")
+                print(coord)
+

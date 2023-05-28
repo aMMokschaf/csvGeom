@@ -11,13 +11,9 @@ class Modeller():
         pass
 
     def createCoordinate(self, dictLine):
-        print("---------------------------east:", str(dictLine['East']))
-
         east = str(dictLine['East']).replace(' ', '')
         north = str(dictLine['North']).replace(' ', '')
         height = str(dictLine['Height']).replace(' ', '')
-
-        print("east nach str-typecast", east)
 
         return Coordinate(east, north, height)
 
