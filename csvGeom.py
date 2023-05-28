@@ -3,7 +3,7 @@
 import PySimpleGUI as sg
 
 from gui import Gui
-from logic import Logic
+from inputReader import InputReader
 from util import Util
 from converter import Converter
 from fileWriter import FileWriter
@@ -28,7 +28,8 @@ class Main():
         gui = Gui(self.PROGRAM_TITLE)
         window = gui.initializeGui()
 
-        logic = Logic()
+        inputReader = InputReader()
+        converter = Converter()
 
         while True:
             event, values = window.read()
@@ -36,9 +37,9 @@ class Main():
             if event == "-IN-":
                 inputFileName = values['-IN-']
 
-                self.dict = logic.createDictionary(inputFileName)
+                self.dict = inputReader.createDictionary(inputFileName)
 
-                list = logic.createDropDownList(self.dict)
+                list = inputReader.createDropDownList(self.dict)
 
                 window["CodeSelected"].update(values=list, disabled=False)
 
@@ -46,7 +47,7 @@ class Main():
 
             if event == "CodeSelected":
                 selectedCode = values['CodeSelected']
-                self.filteredDict = logic.filterByCode(self.dict, selectedCode)
+                self.filteredDict = inputReader.filterByCode(self.dict, selectedCode)
 
                 window["Convert"].update(disabled=False)
 
@@ -68,7 +69,7 @@ class Main():
                 outputFileName = self.util.getFileNameWithoutSuffix(inputFileName)
                 outputFileName = outputFileName + typeSuffix + fileEnding
 
-                data = logic.convertData(self.filteredDict, selectedType)
+                data = converter.createFeatureCollection(self.filteredDict, selectedType)
 
                 self.writer.writeToFile(data, outputFileName)
 

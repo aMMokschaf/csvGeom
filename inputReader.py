@@ -1,19 +1,12 @@
 import csv
 import io
 
-from util import Util
-from converter import Converter
-
 DELIMITER = ','
 
-class Logic(): #Rename to something about input
-
-    util = None
-    converter = None
+class InputReader():
 
     def __init__(self):
-        self.util = Util()
-        self.converter = Converter()
+        pass
 
     def createDictionary(self, inpFileName):
         with io.open(inpFileName) as impFile:
@@ -43,6 +36,3 @@ class Logic(): #Rename to something about input
                 list.append(obj)
 
         return list
-
-    def convertData(self, dict, selectedType):
-        return self.converter.createFeatureCollection(dict, selectedType)
