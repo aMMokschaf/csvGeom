@@ -1,4 +1,5 @@
 from enum import Enum
+from util import Util
 
 class LogType(Enum):
     INFO = "INFO"
@@ -13,8 +14,11 @@ class Logger():
     def __init__(self):
         pass
 
-    def info(self, msg):
+    def info(self, msg, objects=[]):
         self.printMsg(LogType.INFO.value, msg)
+        if len(objects) > 0:
+            for obj in objects:
+                print(Util().indent(1), str(obj), '\n')
 
     def debug(self, msg):
         self.printMsg(LogType.DEBUG.value, msg)
