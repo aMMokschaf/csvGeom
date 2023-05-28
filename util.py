@@ -11,7 +11,7 @@ class Util():
         return filename.rsplit(".", 1)[0]
     
     #temporary method to debug the object-model
-    def debugFeatureCollection(featureCollection):
+    def debugFeatureCollection(self, featureCollection):
         print("fc type: ", featureCollection.type)
         print("fc name: ", featureCollection.name)
         print("fc features")
