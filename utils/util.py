@@ -16,3 +16,4 @@ class Util():
         fileEnding = ending.value
         
         return outputFileName + typeSuffix + fileEnding
+    

@@ -40,9 +40,9 @@ class Main():
 
     def handleCode(self, values):
         selectedCode = values['-CODE-']
-        self.filteredDict = self.inputReader.filterByCode(self.dict, selectedCode)
         self.logger.info("Code selected: " + selectedCode)
-
+        self.filteredDict = self.inputReader.filterByCode(self.dict, selectedCode)
+        
     def main(self):
 
         gui = Gui(self.PROGRAM_TITLE)
@@ -82,7 +82,6 @@ class Main():
 
                 outputFileName = self.util.createOutputFileName(self.selectedFileName, self.selectedType, self.selectedFileType)
                 self.writer.writeToFile(data, outputFileName)
-                self.logger.info("File written: " + outputFileName)
 
             if event == "-CLOSE-" or event == sg.WIN_CLOSED:
                 break
