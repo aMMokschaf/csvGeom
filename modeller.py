@@ -69,6 +69,3 @@ class Modeller():
         featureList = self.createFeatures(dicts, geometryType)
 
         return FeatureCollection(featureList)
-    
-    def convertInputToModel(self, dicts, geometryType):
-        return self.createFeatureCollection(dicts, geometryType)

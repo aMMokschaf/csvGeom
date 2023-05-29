@@ -14,23 +14,23 @@ class Gui():
                         sg.Text("Convert Lists of Coordinates to GeoJSON-geometry-Format for Field Desktop")
                     ],
                     [
-                        sg.Input(visible=True, enable_events=True, key='-IN-', size=(30,1)),
+                        sg.Input(visible=True, enable_events=True, key='-INPUT-', size=(30,1)),
                         sg.FilesBrowse(file_types=(("CSV Files","*.csv"),))
                     ],
                     [
-                        sg.DropDown(values=[], enable_events=True, key='CodeSelected', disabled=True, size=(30,1))
+                        sg.DropDown(values=[], enable_events=True, key='-CODE-', disabled=True, size=(30,1))
                     ],
                     [
-                        sg.Radio(OutputType.POLYGON.getTitleCase(), "GEOMTYPE", enable_events=True, default=True, key='GeomPolygon')
+                        sg.Radio(OutputType.POLYGON.getTitleCase(), "GEOMTYPE", enable_events=True, default=True, key='-GEOM_POLYGON-')
                     ],
                     [
-                        sg.Radio(OutputType.POINT.getTitleCase(), "GEOMTYPE", enable_events=True, default=False, key='GeomPoint')
+                        sg.Radio(OutputType.POINT.getTitleCase(), "GEOMTYPE", enable_events=True, default=False, key='-GEOM_POINT-')
                     ],
                     [
-                        sg.Button("Convert", disabled=True)
+                        sg.Button("Convert", key="-CONVERT-", disabled=True)
                     ],
                     [
-                        sg.Button("Close")
+                        sg.Button("Close", key="-CLOSE-")
                     ]
                 ]
 

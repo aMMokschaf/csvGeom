@@ -33,6 +33,16 @@ class Main():
 
         self.featureCollectionModel = None
 
+    def handleInput(self, values):
+        self.selectedFileName = values['-INPUT-']
+        self.logger.info("File chosen: " + self.selectedFileName)
+        self.dict = self.inputReader.createDictionary(self.selectedFileName)
+
+    def handleCode(self, values):
+        selectedCode = values['-CODE-']
+        self.filteredDict = self.inputReader.filterByCode(self.dict, selectedCode)
+        self.logger.info("Code selected: " + selectedCode)
+
     def main(self):
 
         gui = Gui(self.PROGRAM_TITLE)
@@ -41,43 +51,40 @@ class Main():
         while True:
             event, values = window.read()
 
-            if event == "-IN-":
-                self.selectedFileName = values['-IN-']
-                self.logger.info("File chosen: " + self.selectedFileName)
-                self.dict = self.inputReader.createDictionary(self.selectedFileName)
+            if event == "-INPUT-":
+                self.handleInput(values)
 
                 list = self.inputReader.createDropDownList(self.dict)
-                window["CodeSelected"].update(values=list, disabled=False)
+                window["-CODE-"].update(values=list, disabled=False)
 
-            if event == "CodeSelected":
-                selectedCode = values['CodeSelected']
-                self.filteredDict = self.inputReader.filterByCode(self.dict, selectedCode)
-                self.logger.info("Code selected: " + selectedCode)
+            if event == "-CODE-":
+                self.handleCode(values)
 
                 splitData = self.inputReader.splitByIdentifier(self.filteredDict)
 
-                window["Convert"].update(disabled=False)
+                window["-CONVERT-"].update(disabled=False)
                 self.logger.info(f"Found {str(len(splitData))} objects.", splitData)
 
-            if event == "GeomPoint":
-                self.selectedType = OutputType.POINT.value
+            if event == "-GEOM_POINT-":
+                self.selectedType = OutputType.POINT
                 self.logger.info("Output-type selected: " + self.selectedType.value)
 
-            if event == "GeomPolygon":
+            if event == "-GEOM_POLYGON-":
                 self.selectedType = OutputType.POLYGON
                 self.logger.info("Output-type selected: " + self.selectedType.value)
 
-            if event == "Convert":
-                featureCollectionModel = self.modeller.convertInputToModel(splitData, self.selectedType)
+            if event == "-CONVERT-":
+                featureCollectionModel = self.modeller.createFeatureCollection(splitData, self.selectedType)
                 self.logger.info("Converted to object-model.")
 
                 data = self.outputFormatter.createFeatureCollection(featureCollectionModel)
+                self.logger.info("Converted to GeoJSON.")
 
                 outputFileName = self.util.createOutputFileName(self.selectedFileName, self.selectedType, self.selectedFileType)
                 self.writer.writeToFile(data, outputFileName)
                 self.logger.info("File written: " + outputFileName)
 
-            if event == "Close" or event == sg.WIN_CLOSED:
+            if event == "-CLOSE-" or event == sg.WIN_CLOSED:
                 break
 
         window.close()
