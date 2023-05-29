@@ -15,5 +15,5 @@ class Util():
         typeSuffix = suffix.getLowerCase()
         fileEnding = ending.value
         
-        return outputFileName + typeSuffix + fileEnding
+        return f"{outputFileName}_{typeSuffix}{fileEnding}"
     
