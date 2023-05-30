@@ -24,7 +24,7 @@ class Gui():
                         sg.Radio(OutputType.POLYGON.getTitleCase(), "GEOMTYPE", enable_events=True, default=True, key='-GEOM_POLYGON-')
                     ],
                     [
-                        sg.Radio(OutputType.POINT.getTitleCase(), "GEOMTYPE", enable_events=True, default=False, key='-GEOM_POINT-')
+                        sg.Radio(OutputType.POINT.getTitleCase(), "GEOMTYPE", enable_events=True, default=False, key='-GEOM_POINT-', disabled=True)
                     ],
                     [
                         sg.Button("Convert", key="-CONVERT-", disabled=True)

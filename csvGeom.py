@@ -1,5 +1,3 @@
-# csvGeom v0.1.0
-
 import PySimpleGUI as sg
 
 from gui import Gui
@@ -14,7 +12,7 @@ from outputFormatter import OutputFormatter
 
 class Main():
 
-    PROGRAM_TITLE = "csvGeom v0.1.0"
+    PROGRAM_TITLE = "csvGeom v0.2.0"
 
     def __init__(self):
         self.util = Util()

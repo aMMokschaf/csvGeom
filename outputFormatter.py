@@ -114,10 +114,10 @@ class OutputFormatter():
         data = ""
 
         for index, feature in enumerate(features):
-            data = data + self.createFeature(feature)
+            data += self.createFeature(feature)
 
             if index != len(features)-1:
-                data = data + ','
+                data += ','
         
         return data
 
