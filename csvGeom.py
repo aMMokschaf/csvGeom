@@ -1,104 +1,91 @@
-# csvGeom v0.1.0
-
 import PySimpleGUI as sg
-import csv
-import io
 
-DELIMITER = ','
-PROGRAM_TITLE = "csvGeom v0.1.0"
-OUTPUT_FORMAT = "geojson"
-OUTPUT_SUFFIX = "_polygon." + OUTPUT_FORMAT
+from gui import Gui
+from inputReader import InputReader
+from modeller import Modeller
+from utils.util import Util
+from utils.fileWriter import FileWriter
+from enums.outputType import OutputType
+from enums.fileType import FileType
+from utils.logger import Logger
+from outputFormatter import OutputFormatter
 
-def createLayout():
-    return [
-                [
-                    sg.Text("Convert Lists of Coordinates to GeoJSON-geometry-Format for Field Desktop")
-                ],
-                [
-                    sg.Input(visible=True, enable_events=True, key='-IN-'),
-                    sg.FilesBrowse(file_types=(("CSV Files","*.csv"),))
-                ], 
-                [
-                    sg.Button("Convert")
-                ],
-                [
-                    sg.Button("Close")
-                ]
-            ]
+class Main():
 
-def createGui():
-    layout = createLayout()
+    PROGRAM_TITLE = "csvGeom v0.2.0"
 
-    return sg.Window(PROGRAM_TITLE, layout)
+    def __init__(self):
+        self.util = Util()
+        self.writer = FileWriter()
+        self.logger = Logger()
+        self.modeller = Modeller()
+        self.inputReader = InputReader()
+        self.outputFormatter = OutputFormatter()
 
-def createDictionary(inpFileName):
-    with io.open(str(inpFileName)) as impFile:
-        dict_list = []
-        reader = csv.DictReader(impFile, delimiter=DELIMITER)
-        for row in reader:
-            dict_list.append(row)
-        return dict_list
+        self.dict = []
+        self.filteredDict = []
 
-def convertData(values):
-    inpFileName = values['-IN-']
-    inpNewFileName = inpFileName.replace('.csv', '')
+        self.selectedFileName = None
+        self.selectedType = OutputType.POLYGON
+        self.selectedFileType = FileType.GEO_JSON
 
-    dict_list = createDictionary(inpFileName)
+        self.featureCollectionModel = None
 
-    dict_len = len(dict_list)
-            
-    file = io.open(str(inpNewFileName + OUTPUT_SUFFIX), "w")
+    def handleInput(self, values):
+        self.selectedFileName = values['-INPUT-']
+        self.logger.info("File chosen: " + self.selectedFileName)
+        self.dict = self.inputReader.createDictionary(self.selectedFileName)
 
-    # Zeile für die FeatureCollection, braucht man nur ein mal
-    file.write('{\n"type": "FeatureCollection",\n "name": "csvGeom-Export",\n')
+    def handleCode(self, values):
+        selectedCode = values['-CODE-']
+        self.logger.info("Code selected: " + selectedCode)
+        self.filteredDict = self.inputReader.filterByCode(self.dict, selectedCode)
+        
+    def main(self):
 
-    # Start eines Features (= ein Befund = ein Polygon, d.h. im späteren loop(?) braucht man das für jeden unerschiedlichen Wert in der Attributspalte)
-    # also muss dann hier eigentlich der (erste) loop (oder was auch immer) anfangen. (das geht bestimmt dynamischer und besser als loopen, aber das ganze war eher improvisiert und nicht notwendigerweise durchdacht)
-    file.write('"features": [ {\n"type": "Feature",\n')
-    # Der "Name" des Befundes als identifier in den properties des einzelnen Features
-    # äh, [0] ist offensichtlich improvisierter müll, weil gerade noch nur eine Datei mit nur einem Befund eingelesen wird.
-    file.write('"properties": {\n"identifier": "'+str(dict_list[0]['Attribut1'])+'"\n},\n')
-    # die Geometrie/die Koordinaten brauchen einen Type, hier: Polygon, später das, was man halt auswählt
-    file.write('"geometry": { "type": "Polygon",\n')
-    # hier dann der anfang vom Polygon
-    file.write('"coordinates":\n [\n[\n')
+        gui = Gui(self.PROGRAM_TITLE)
+        window = gui.initializeGui()
 
-    # Zeilen 36-hier kann man dann theoretisch auch in einer Zeile abhandeln, ich persönlich finde das dann aber unverständlich und übersichtlich, also lieber so und dann vermutlich langsamer als völlig undurchsichtig
+        while True:
+            event, values = window.read()
 
-    # jetz über die einzelnen koordinaten iterieren, jede wird ein punkt im Polygon
-    for i in range(dict_len):
-        file.write("        [\n")
-        file.write("            " + str(dict_list[i]['East']).replace(' ', '') + ",\n")
-        file.write("            " + str(dict_list[i]['North']).replace(' ', '') + ",\n")
-        file.write("            " + str(dict_list[i]['Height']).replace(' ', '') + "\n")
-        # wenn wir in der letzten Zeile sind kein Komma
-        if i+1 == dict_len:
-            file.write("        ]\n")
-        # wenn nicht doch ein Komma
-        else:
-            file.write("        ],\n")
-    # schließende Klammern für das Polygon
-    file.write("    ]\n]")
-    
-    # schließende Klammern für das JSON-gedönse oben
-    file.write("} }]}")
+            if event == "-INPUT-":
+                self.handleInput(values)
 
-    file.close()
+                list = self.inputReader.createDropDownList(self.dict)
+                window["-CODE-"].update(values=list, disabled=False)
 
-def main():
-    
-    window = createGui()
+            if event == "-CODE-":
+                self.handleCode(values)
 
-    while True:
-        event, values = window.read()
+                splitData = self.inputReader.splitByIdentifier(self.filteredDict)
 
-        if event == "Convert":
-            convertData(values)
+                window["-CONVERT-"].update(disabled=False)
+                self.logger.info(f"Found {str(len(splitData))} objects.", splitData)
 
-        if event == "Close" or event == sg.WIN_CLOSED:
-            break
+            if event == "-GEOM_POINT-":
+                self.selectedType = OutputType.POINT
+                self.logger.info("Output-type selected: " + self.selectedType.value)
 
-    window.close()
+            if event == "-GEOM_POLYGON-":
+                self.selectedType = OutputType.POLYGON
+                self.logger.info("Output-type selected: " + self.selectedType.value)
+
+            if event == "-CONVERT-":
+                featureCollectionModel = self.modeller.createFeatureCollection(splitData, self.selectedType)
+                self.logger.info("Converted to object-model.")
+
+                data = self.outputFormatter.createFeatureCollection(featureCollectionModel)
+                self.logger.info("Converted to GeoJSON.")
+
+                outputFileName = self.util.createOutputFileName(self.selectedFileName, self.selectedType, self.selectedFileType)
+                self.writer.writeToFile(data, outputFileName)
+
+            if event == "-CLOSE-" or event == sg.WIN_CLOSED:
+                break
+
+        window.close()
 
 if __name__ == '__main__':
-    main()
+    app = Main()
+    app.main()
