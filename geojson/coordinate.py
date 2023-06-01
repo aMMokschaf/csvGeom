@@ -7,7 +7,10 @@ class Coordinate():
 
     def __str__(self):
         return f"'east' : {self.east} 'north' : {self.north} 'height' : {self.height}"
-    
+
+    def __repr__(self):
+        return str(self)
+
     def __dict__(self):
         return {
             'east' : self.east,
