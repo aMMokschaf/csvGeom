@@ -65,10 +65,14 @@ class OutputFormatter():
 
         return header + coords + footer
     
-    def createPointCoords(self, coordinates):
+    def createPointCoords(self, coordinates): #, multi):
         util = self.util
 
-        point = util.indent(4) + '"coordinates": ['
+        point = util.indent(4) + '"coordinates": '
+
+        # todo: handle multipoint here?
+        #if multi == True: 
+        #    point += '['
 
         for index, element in enumerate(coordinates):
             point += self.createSingleCoord(element, 5)
@@ -76,8 +80,9 @@ class OutputFormatter():
             if index != len(coordinates)-1:
                 point += ','
 
-        point += util.indent(4) + ']'
-
+        #if multi == True: 
+        #    point += util.indent(4) + ']'
+        
         return point
 
     def createPolygonCoords(self, coordinates):
