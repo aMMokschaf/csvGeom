@@ -60,7 +60,8 @@ class Modeller():
         # for now, only notify
         if geometryType == OutputType.POINT and len(dict) > 1:
             self.logger.info(f"More than one coordinate for: {str(identifier)}. Using only first coordinate!")
-            dict = dict[0]
+            while len(dict) > 1:
+                dict.pop()
             eval = True
         if geometryType == OutputType.LINE and len(dict) < 2:
             self.logger.error(f"Not enough Coordinates for Line: {str(identifier)}")
