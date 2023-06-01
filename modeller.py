@@ -1,6 +1,7 @@
 from geojson.featureCollection import FeatureCollection
 from geojson.feature import Feature
 from geojson.polygon import Polygon
+from geojson.line import Line
 from geojson.point import Point
 from geojson.coordinate import Coordinate
 
@@ -31,7 +32,11 @@ class Modeller():
                 geometry.addCoordinate(coordinate)
 
         if geometryType == OutputType.LINE:
-            pass
+            geometry = Line()
+
+            for dictLine in dict:
+                coordinate = self.createCoordinate(dictLine)
+                geometry.addCoordinate(coordinate)
 
         if geometryType == OutputType.POLYGON:
             geometry = Polygon()
