@@ -1,16 +1,18 @@
 from geojson.featureCollection import FeatureCollection
 from geojson.feature import Feature
-from geojson.polygon import Polygon
-from geojson.line import Line
 from geojson.point import Point
+from geojson.polygon import Polygon
+from geojson.multiPoint import MultiPoint
 from geojson.coordinate import Coordinate
 
 from enums.outputType import OutputType
 
+from utils.logger import Logger
+
 class Modeller():
 
     def __init__(self):
-        pass
+        self.logger = Logger()
 
     def createCoordinate(self, dictLine):
         east = str(dictLine['East']).replace(' ', '')
@@ -19,58 +21,53 @@ class Modeller():
 
         return Coordinate(east, north, height)
 
-    def createGeometry(self, dict, geometryType):
+    def createGeometry(self, dict, selectedGeometryType):
         geometry = None
 
-        if geometryType == OutputType.POINT:
-            geometry = Point()
+        if selectedGeometryType == OutputType.POINT:
+            if (len(dict) == 1):
+                geometry = Point()
+            if (len(dict) > 1):
+                geometry = MultiPoint()
 
             for dictLine in dict:
                 coordinate = self.createCoordinate(dictLine)
                 geometry.addCoordinate(coordinate)
 
-        if geometryType == OutputType.LINE:
-            geometry = Line()
-
-            for dictLine in dict:
-                coordinate = self.createCoordinate(dictLine)
-                geometry.addCoordinate(coordinate)
-
-        if geometryType == OutputType.POLYGON:
-            geometry = Polygon()
-
-            for dictLine in dict:
-                coordinate = self.createCoordinate(dictLine)
-                geometry.addCoordinate(coordinate)
-
-        if geometryType == OutputType.MULTI_POINT:
+        if selectedGeometryType == OutputType.LINE:
             pass
 
-        if geometryType == OutputType.MULTI_LINE:
-            pass
+        if selectedGeometryType == OutputType.POLYGON:
+            if (len(dict) >= 3):
+                geometry = Polygon()
 
-        if geometryType == OutputType.MULTI_POLYGON:
-            pass
+                for dictLine in dict:
+                    coordinate = self.createCoordinate(dictLine)
+                    geometry.addCoordinate(coordinate)
 
         return geometry
 
-    def createFeature(self, dict, geometryType):
-        geometry = self.createGeometry(dict, geometryType)
-
+    def createFeature(self, dict, selectedGeometryType):
+        
         identifier = dict[0]['Attribut1']
+        
+        geometry = self.createGeometry(dict, selectedGeometryType)
+        if geometry != None:
+            return Feature(identifier, geometry)
+        else:
+            return None
 
-        return Feature(identifier, geometry)
-
-    def createFeatures(self, dicts, geometryType):
+    def createFeatures(self, dicts, selectedGeometryType):
         list = []
 
         for dict in dicts:
-            feature = self.createFeature(dict, geometryType)
-            list.append(feature)
+            feature = self.createFeature(dict, selectedGeometryType)
+            if feature != None:
+                list.append(feature)
         
         return list
 
-    def createFeatureCollection(self, dicts, geometryType):
-        featureList = self.createFeatures(dicts, geometryType)
+    def createFeatureCollection(self, dicts, selectedGeometryType):
+        featureList = self.createFeatures(dicts, selectedGeometryType)
 
         return FeatureCollection(featureList)

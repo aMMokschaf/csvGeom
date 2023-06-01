@@ -27,7 +27,7 @@ class OutputFormatter():
         header += util.indent(3) + '},'
         header += util.indent(3) + '"geometry": {'
 
-        geometryType = OutputType(geometryType).getTitleCase()
+        geometryType = geometryType.value
 
         header += util.indent(4) + f'"type": "{geometryType}",'
 
@@ -42,20 +42,22 @@ class OutputFormatter():
         return footer
 
     def createFeature(self, feature):
-        header = self.createFeatureHeader(feature.identifier, feature.geometry.type.value)
 
         type = feature.geometry.type
+        coordinates = feature.geometry.coordinates
+
+        header = self.createFeatureHeader(feature.identifier, type)
 
         coords = ""
 
         if type == OutputType.POINT:
-            coords = self.createPointCoords(feature.geometry.coordinates)
+            coords = self.createPointCoords(coordinates)
         elif type == OutputType.LINE:
             coords = self.createLineCoords(feature.geometry.coordinates)
         elif type == OutputType.POLYGON:
-            coords = self.createPolygonCoords(feature.geometry.coordinates)
+            coords = self.createPolygonCoords(coordinates)
         elif type == OutputType.MULTI_POINT:
-            pass
+            coords = self.createMultiPointCoords(coordinates)
         elif type == OutputType.MULTI_LINE:
             pass
         elif type == OutputType.MULTI_POLYGON:
@@ -68,16 +70,14 @@ class OutputFormatter():
     def createPointCoords(self, coordinates):
         util = self.util
 
-        point = util.indent(4) + '"coordinates": ['
+        point = util.indent(4) + '"coordinates": '
 
         for index, element in enumerate(coordinates):
             point += self.createSingleCoord(element, 5)
 
             if index != len(coordinates)-1:
                 point += ','
-
-        point += util.indent(4) + ']'
-
+        
         return point
     
     def createLineCoords(self, coordinates):
@@ -111,6 +111,22 @@ class OutputFormatter():
         polygon += util.indent(4) + ']'
 
         return polygon
+    
+    def createMultiPointCoords(self, coordinates):
+        util = self.util
+
+        point = util.indent(4) + '"coordinates": ['
+
+        for index, element in enumerate(coordinates):
+            point += self.createSingleCoord(element, 5)
+
+            if index != len(coordinates)-1:
+                point += ','
+
+        point += util.indent(4) + ']'
+        
+        return point
+
 
     def createFeatureCollectionHeader(self, type, name):
         util = self.util
