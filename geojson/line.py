@@ -15,7 +15,7 @@ class Line(GeoJsonObject):
         self.coordinates.append(coordinates)
 
     def __str__(self):
-        return f"'type' : {OutputType.LINE.getTitleCase()} 'coordinates' : {self.coordinates}"
+        return f"'type' : {OutputType.LINE.getGeoJSONCase()} 'coordinates' : {self.coordinates}"
 
     def __dict__(self):
         return {
