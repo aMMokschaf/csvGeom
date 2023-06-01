@@ -27,7 +27,7 @@ class OutputFormatter():
         header += util.indent(3) + '},'
         header += util.indent(3) + '"geometry": {'
 
-        geometryType = geometryType.value
+        geometryType = geometryType.getGeoJSONCase()
 
         header += util.indent(4) + f'"type": "{geometryType}",'
 
@@ -53,7 +53,7 @@ class OutputFormatter():
         if type == OutputType.POINT:
             coords = self.createPointCoords(coordinates)
         elif type == OutputType.LINE:
-            coords = self.createLineCoords(feature.geometry.coordinates)
+            coords = self.createLineCoords(coordinates)
         elif type == OutputType.POLYGON:
             coords = self.createPolygonCoords(coordinates)
         elif type == OutputType.MULTI_POINT:

@@ -8,6 +8,9 @@ class OutputType(Enum):
     MULTI_LINE = "MultiLineString"
     MULTI_POLYGON = "MultiPolygon"
 
+    def getGeoJSONCase(self):
+        return self.value
+
     def getUpperCase(self):
         return self.value.upper()
     
