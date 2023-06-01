@@ -65,23 +65,33 @@ class OutputFormatter():
 
         return header + coords + footer
     
-    def createPointCoords(self, coordinates): #, multi):
+    # not implemented for now
+    def createMultiPointCoords(self, coordinates):
         util = self.util
 
         point = util.indent(4) + '"coordinates": '
+        point += util.indent(5) + '['
 
-        # todo: handle multipoint here?
-        #if multi == True: 
-        #    point += '['
+        for index, element in enumerate(coordinates):
+            point += self.createSingleCoord(element, 6)
+
+            if index != len(coordinates)-1:
+                point += ','
+
+        point += util.indent(5) + ']'
+        
+        return point
+
+    def createPointCoords(self, coordinates):
+        util = self.util
+
+        point = util.indent(4) + '"coordinates": '
 
         for index, element in enumerate(coordinates):
             point += self.createSingleCoord(element, 5)
 
             if index != len(coordinates)-1:
                 point += ','
-
-        #if multi == True: 
-        #    point += util.indent(4) + ']'
         
         return point
 
