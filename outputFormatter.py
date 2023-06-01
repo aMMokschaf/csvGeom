@@ -51,7 +51,7 @@ class OutputFormatter():
         if type == OutputType.POINT:
             coords = self.createPointCoords(feature.geometry.coordinates)
         elif type == OutputType.LINE:
-            pass
+            coords = self.createLineCoords(feature.geometry.coordinates)
         elif type == OutputType.POLYGON:
             coords = self.createPolygonCoords(feature.geometry.coordinates)
         elif type == OutputType.MULTI_POINT:
@@ -79,6 +79,21 @@ class OutputFormatter():
         point += util.indent(4) + ']'
 
         return point
+    
+    def createLineCoords(self, coordinates):
+        util = self.util
+
+        line = util.indent(4) + '"coordinates": ['
+
+        for index, element in enumerate(coordinates):
+            line += self.createSingleCoord(element, 5)
+
+            if index != len(coordinates)-1:
+                line += ','
+
+        line += util.indent(4) + ']'
+
+        return line
 
     def createPolygonCoords(self, coordinates):
         util = self.util
