@@ -67,6 +67,10 @@ class Main():
                 self.selectedType = OutputType.POINT
                 self.logger.info("Output-type selected: " + self.selectedType.value)
 
+            if event == "-GEOM_LINE-":
+                self.selectedType = OutputType.LINE
+                self.logger.info("Output-type selected: " + self.selectedType.value)
+
             if event == "-GEOM_POLYGON-":
                 self.selectedType = OutputType.POLYGON
                 self.logger.info("Output-type selected: " + self.selectedType.value)
