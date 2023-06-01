@@ -14,6 +14,9 @@ class MultiPoint(GeoJsonObject):
     def __str__(self):
         return f"'type' : {OutputType.MULTI_POINT.getGeoJSONCase()} 'coordinates' : {self.coordinates}"
     
+    def __repr__(self):
+        return str(self)
+    
     def __dict__(self):
         return {
             'type' : OutputType.MULTI_POINT.value,

@@ -17,6 +17,9 @@ class Polygon(GeoJsonObject):
     def __str__(self):
         return f"'type' : {OutputType.POLYGON.getGeoJSONCase()} 'coordinates' : {self.coordinates}"
 
+    def __repr__(self):
+        return str(self)
+        
     def __dict__(self):
         return {
             'type' : OutputType.POLYGON.value,
