@@ -21,5 +21,5 @@ class OutputType(Enum):
         return self.value.title()
     
     def getAsSuffix(self):
-        return "_" + self.value
+        return "_" + self.getLowerCase()
     

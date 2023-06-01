@@ -12,8 +12,8 @@ class Util():
     
     def createOutputFileName(self, fileName, suffix, ending):
         outputFileName = self.getFileNameWithoutSuffix(fileName)
-        typeSuffix = suffix.getLowerCase()
+        typeSuffix = suffix.getAsSuffix()
         fileEnding = ending.value
         
-        return f"{outputFileName}_{typeSuffix}{fileEnding}"
+        return f"{outputFileName}{typeSuffix}{fileEnding}"
     

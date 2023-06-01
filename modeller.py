@@ -1,8 +1,8 @@
 from geojson.featureCollection import FeatureCollection
 from geojson.feature import Feature
-from geojson.polygon import Polygon
-from geojson.line import Line
 from geojson.point import Point
+from geojson.polygon import Polygon
+from geojson.multiPoint import MultiPoint
 from geojson.coordinate import Coordinate
 
 from enums.outputType import OutputType
@@ -21,78 +21,53 @@ class Modeller():
 
         return Coordinate(east, north, height)
 
-    def createGeometry(self, dict, geometryType):
+    def createGeometry(self, dict, selectedGeometryType):
         geometry = None
 
-        if geometryType == OutputType.POINT:
-            geometry = Point()
+        if selectedGeometryType == OutputType.POINT:
+            if (len(dict) == 1):
+                geometry = Point()
+            if (len(dict) > 1):
+                geometry = MultiPoint()
 
             for dictLine in dict:
                 coordinate = self.createCoordinate(dictLine)
                 geometry.addCoordinate(coordinate)
 
-        if geometryType == OutputType.LINE:
-            geometry = Line()
-
-            for dictLine in dict:
-                coordinate = self.createCoordinate(dictLine)
-                geometry.addCoordinate(coordinate)
-
-        if geometryType == OutputType.POLYGON:
-            geometry = Polygon()
-
-            for dictLine in dict:
-                coordinate = self.createCoordinate(dictLine)
-                geometry.addCoordinate(coordinate)
-
-        if geometryType == OutputType.MULTI_POINT:
+        if selectedGeometryType == OutputType.LINE:
             pass
 
-        if geometryType == OutputType.MULTI_LINE:
-            pass
+        if selectedGeometryType == OutputType.POLYGON:
+            if (len(dict) >= 3):
+                geometry = Polygon()
 
-        if geometryType == OutputType.MULTI_POLYGON:
-            pass
+                for dictLine in dict:
+                    coordinate = self.createCoordinate(dictLine)
+                    geometry.addCoordinate(coordinate)
 
         return geometry
 
-    def createFeature(self, dict, geometryType):
+    def createFeature(self, dict, selectedGeometryType):
         
         identifier = dict[0]['Attribut1']
         
-        eval = True
-
-        # for now, only notify
-        if geometryType == OutputType.POINT and len(dict) > 1:
-            self.logger.info(f"More than one coordinate for: {str(identifier)}. Using only first coordinate!")
-            while len(dict) > 1:
-                dict.pop()
-            eval = True
-        if geometryType == OutputType.LINE and len(dict) < 2:
-            self.logger.error(f"Not enough Coordinates for Line: {str(identifier)}")
-            eval = False
-        if geometryType == OutputType.POLYGON and len(dict) < 3:
-            self.logger.error(f"Not enough Coordinates for Polygon: {str(identifier)}")
-            eval = False
-
-        if eval == True:
-            self.logger.info(f"Success:  {str(identifier)}")
+        geometry = self.createGeometry(dict, selectedGeometryType)
+        if geometry != None:
+            return Feature(identifier, geometry)
         else:
-            self.logger.error(f"Feature {str(identifier)} has invalid geometry!")
-        
-        geometry = self.createGeometry(dict, geometryType)
-        return Feature(identifier, geometry)
+            return None
 
-    def createFeatures(self, dicts, geometryType):
+    def createFeatures(self, dicts, selectedGeometryType):
         list = []
 
         for dict in dicts:
-            feature = self.createFeature(dict, geometryType)
-            list.append(feature)
+            feature = self.createFeature(dict, selectedGeometryType)
+            if feature != None:
+                list.append(feature)
         
         return list
 
-    def createFeatureCollection(self, dicts, geometryType):
-        featureList = self.createFeatures(dicts, geometryType)
+    def createFeatureCollection(self, dicts, selectedGeometryType):
+        featureList = self.createFeatures(dicts, selectedGeometryType)
 
         return FeatureCollection(featureList)
