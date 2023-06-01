@@ -1,12 +1,15 @@
 from enum import Enum
 
 class OutputType(Enum):
-    POINT = "point"
-    LINE = "lineString"
-    POLYGON = "polygon"
-    MULTI_POINT = "multiPoint"
-    MULTI_LINE = "multiLineString"
-    MULTI_POLYGON = "multiPolygon"
+    POINT = "Point"
+    LINE = "LineString"
+    POLYGON = "Polygon"
+    MULTI_POINT = "MultiPoint"
+    MULTI_LINE = "MultiLineString"
+    MULTI_POLYGON = "MultiPolygon"
+
+    def getGeoJSONCase(self):
+        return self.value
 
     def getUpperCase(self):
         return self.value.upper()

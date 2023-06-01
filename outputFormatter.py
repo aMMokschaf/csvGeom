@@ -27,7 +27,7 @@ class OutputFormatter():
         header += util.indent(3) + '},'
         header += util.indent(3) + '"geometry": {'
 
-        geometryType = OutputType(geometryType).getTitleCase()
+        geometryType = OutputType(geometryType).getGeoJSONCase()
 
         header += util.indent(4) + f'"type": "{geometryType}",'
 
