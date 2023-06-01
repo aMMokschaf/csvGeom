@@ -100,16 +100,15 @@ class OutputFormatter():
     def createMultiPointCoords(self, coordinates):
         util = self.util
 
-        point = util.indent(4) + '"coordinates": '
-        point += util.indent(5) + '['
+        point = util.indent(4) + '"coordinates": ['
 
         for index, element in enumerate(coordinates):
-            point += self.createSingleCoord(element, 6)
+            point += self.createSingleCoord(element, 5)
 
             if index != len(coordinates)-1:
                 point += ','
 
-        point += util.indent(5) + ']'
+        point += util.indent(4) + ']'
         
         return point
 
