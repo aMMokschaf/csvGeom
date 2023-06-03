@@ -5,14 +5,16 @@ from enums.outputType import OutputType
 class MultiPoint(GeoJsonObject):
 
     def __init__(self):
-        self.coordinates = []
+        self.points = []
         self.type = OutputType.MULTI_POINT
 
-    def addCoordinate(self, coordinate):
-        self.coordinates.append(coordinate)
+    def addPoint(self, point):
+        self.points.append(point)
 
     def __str__(self):
-        return f'"type": "{OutputType.MULTI_POINT.getGeoJSONCase()}", "coordinates": {self.coordinates}'
+        points = ','.join(str(p.returnCoordinate()) for p in self.points)
+
+        return f'"type": "{OutputType.MULTI_POINT.getGeoJSONCase()}", "coordinates": {points}'
     
     def __repr__(self):
         return str(self)
@@ -20,6 +22,6 @@ class MultiPoint(GeoJsonObject):
     def __dict__(self):
         return {
             'type': OutputType.MULTI_POINT.value,
-            'coordinates': self.coordinates
+            'coordinates': self.points
         }
     

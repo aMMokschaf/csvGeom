@@ -7,10 +7,7 @@ class FeatureCollection():
         self.features = features
 
     def __str__(self):
-        start = '{"type": "FeatureCollection", "features":'
-        end = '}'
-
-        return f'{start}{self.features}{end}'
+        return f'{{"type": "FeatureCollection", "features":{self.features}}}'
     
     def __repr__(self):
         return str(self)
