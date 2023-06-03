@@ -14,7 +14,7 @@ class LineString(GeoJsonObject):
     def addMultipleCoordinates(self, coordinates):
         self.coordinates.append(coordinates)
     
-    def returnCoordinates(self, coordinates):
+    def returnCoordinates(self):
         return self.coordinates
 
     def __str__(self):
