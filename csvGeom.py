@@ -12,7 +12,6 @@ from utils.logger import Logger
 
 class Main():
 
-    PROGRAM_TITLE = "csvGeom v0.2.0"
     PROGRAM_TITLE = "csvGeom v0.3.0"
 
     def __init__(self):
