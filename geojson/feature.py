@@ -7,14 +7,17 @@ class Feature():
         self.geometry = geometry
 
     def __str__(self):
-        return f"'identifier' : {self.identifier} 'geometry' : {self.geometry}"
+        start = '{"type": "Feature", "properties": { "identifier": "' + self.identifier + '"}, "geometry": {'
+        end = '}}'
+
+        return f'{start}{self.geometry}{end}'
 
     def __repr__(self):
         return str(self)
     
     def __dict__(self):
         return {
-            'type' : "Feature",
+            'type': "Feature",
             'properties': {
                 'identifier': self.identifier
             },

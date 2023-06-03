@@ -2,10 +2,10 @@ from enum import Enum
 
 class OutputType(Enum):
     POINT = "Point"
-    LINE = "LineString"
+    LINESTRING = "LineString"
     POLYGON = "Polygon"
     MULTI_POINT = "MultiPoint"
-    MULTI_LINE = "MultiLineString"
+    MULTI_LINESTRING = "MultiLineString"
     MULTI_POLYGON = "MultiPolygon"
 
     def getGeoJSONCase(self):

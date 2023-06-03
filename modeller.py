@@ -1,8 +1,10 @@
 from geojson.featureCollection import FeatureCollection
 from geojson.feature import Feature
 from geojson.point import Point
-from geojson.line import Line
+from geojson.lineString import LineString
+from geojson.multiLineString import MultiLineString
 from geojson.polygon import Polygon
+from geojson.multiPolygon import MultiPolygon
 from geojson.multiPoint import MultiPoint
 from geojson.coordinate import Coordinate
 
@@ -35,9 +37,9 @@ class Modeller():
                 coordinate = self.createCoordinate(dictLine)
                 geometry.addCoordinate(coordinate)
 
-        if selectedGeometryType == OutputType.LINE:
+        if selectedGeometryType == OutputType.LINESTRING:
             if (len(dict) >= 2):
-                geometry = Line()
+                geometry = LineString()
 
                 for dictLine in dict:
                     coordinate = self.createCoordinate(dictLine)
@@ -51,11 +53,42 @@ class Modeller():
                     coordinate = self.createCoordinate(dictLine)
                     geometry.addCoordinate(coordinate)
 
+        if selectedGeometryType == OutputType.MULTI_POLYGON:
+            geometry = MultiPolygon()
+            for item in dict:
+                itemGeometry = Polygon()
+
+                for dictLine in item:
+                    coordinate = self.createCoordinate(dictLine)
+                    itemGeometry.addCoordinate(coordinate)
+                    
+                geometry.addPolygon(itemGeometry.returnCoordinates())
+
+        if selectedGeometryType == OutputType.MULTI_LINESTRING:
+            geometry = MultiLineString()
+            for item in dict:
+                itemGeometry = LineString()
+
+                for dictLine in item:
+                    coordinate = self.createCoordinate(dictLine)
+                    itemGeometry.addCoordinate(coordinate)
+                    
+                geometry.addLine(itemGeometry.returnCoordinates())
+
         return geometry
 
     def createFeature(self, dict, selectedGeometryType):
         
-        identifier = dict[0]['Attribut1']
+        if len(dict) == 1:
+            dict = dict[0]
+            identifier = dict[0]['Attribut1']
+        else:
+            if selectedGeometryType == OutputType.POLYGON:
+                identifier = dict[0][0]['Attribut1']
+                selectedGeometryType = OutputType.MULTI_POLYGON
+            if selectedGeometryType == OutputType.LINESTRING:
+                identifier = dict[0][0]['Attribut1']
+                selectedGeometryType = OutputType.MULTI_LINESTRING
         
         geometry = self.createGeometry(dict, selectedGeometryType)
         if geometry != None:
@@ -74,6 +107,7 @@ class Modeller():
         return list
 
     def createFeatureCollection(self, dicts, selectedGeometryType):
+
         featureList = self.createFeatures(dicts, selectedGeometryType)
 
         return FeatureCollection(featureList)
