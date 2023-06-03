@@ -64,7 +64,7 @@ class Modeller():
                     
                 geometry.addPolygon(itemGeometry.returnCoordinates())
 
-        if selectedGeometryType == OutputType.MULTI_LINE:
+        if selectedGeometryType == OutputType.MULTI_LINESTRING:
             geometry = MultiLineString()
             for item in dict:
                 itemGeometry = LineString()
@@ -88,8 +88,7 @@ class Modeller():
                 selectedGeometryType = OutputType.MULTI_POLYGON
             if selectedGeometryType == OutputType.LINESTRING:
                 identifier = dict[0][0]['Attribut1']
-                selectedGeometryType = OutputType.MULTI_LINE
-        
+                selectedGeometryType = OutputType.MULTI_LINESTRING
         
         geometry = self.createGeometry(dict, selectedGeometryType)
         if geometry != None:
