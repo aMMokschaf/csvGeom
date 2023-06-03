@@ -22,3 +22,4 @@ class MultiPoint(GeoJsonObject):
             'type' : OutputType.MULTI_POINT.value,
             'coordinates': self.coordinates
         }
+    
