@@ -45,6 +45,17 @@ class Modeller():
                     coordinate = self.createCoordinate(dictLine)
                     geometry.addCoordinate(coordinate)
 
+        if selectedGeometryType == OutputType.MULTI_LINESTRING:
+            geometry = MultiLineString()
+            for item in dict:
+                itemGeometry = LineString()
+
+                for dictLine in item:
+                    coordinate = self.createCoordinate(dictLine)
+                    itemGeometry.addCoordinate(coordinate)
+                    
+                geometry.addLineString(itemGeometry)
+
         if selectedGeometryType == OutputType.POLYGON:
             if (len(dict) >= 3):
                 geometry = Polygon()
@@ -63,17 +74,6 @@ class Modeller():
                     itemGeometry.addCoordinate(coordinate)
                     
                 geometry.addPolygon(itemGeometry)
-
-        if selectedGeometryType == OutputType.MULTI_LINESTRING:
-            geometry = MultiLineString()
-            for item in dict:
-                itemGeometry = LineString()
-
-                for dictLine in item:
-                    coordinate = self.createCoordinate(dictLine)
-                    itemGeometry.addCoordinate(coordinate)
-                    
-                geometry.addLineString(itemGeometry)
 
         return geometry
 
