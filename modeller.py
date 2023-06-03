@@ -84,6 +84,25 @@ class Modeller():
                 geometry.addPolygon(itemGeometry)
 
         return geometry
+    
+    def createFeature(self, dict, selectedGeometryType):
+
+        if (len(dict) >= 2):
+            if selectedGeometryType == OutputType.POLYGON:
+                selectedGeometryType = OutputType.MULTI_POLYGON
+
+            elif selectedGeometryType == OutputType.LINESTRING:
+                selectedGeometryType = OutputType.MULTI_LINESTRING
+
+            elif selectedGeometryType == OutputType.POINT:
+                selectedGeometryType = OutputType.MULTI_POINT
+        
+        geometry = self.createGeometry(dict, selectedGeometryType)
+        if geometry != None:
+            identifier = dict[0][0]['Attribut1']
+            return Feature(identifier, geometry)
+        else:
+            return None
 
     def createFeatures(self, dicts, selectedGeometryType):
         list = []
