@@ -2,11 +2,11 @@ from geojson.geojsonObject import GeoJsonObject
 
 from enums.outputType import OutputType
 
-class Line(GeoJsonObject):
+class LineString(GeoJsonObject):
 
     def __init__(self):
         self.coordinates = []
-        self.type = OutputType.LINE
+        self.type = OutputType.LINESTRING
 
     def addCoordinate(self, coordinate):
         self.coordinates.append(coordinate)
@@ -18,14 +18,14 @@ class Line(GeoJsonObject):
         return self.coordinates
 
     def __str__(self):
-        return f"'type': '{OutputType.LINE.getGeoJSONCase()}', 'coordinates': {self.coordinates}"
+        return f"'type': '{OutputType.LINESTRING.getGeoJSONCase()}', 'coordinates': {self.coordinates}"
 
     def __repr__(self):
         return str(self)
 
     def __dict__(self):
         return {
-            'type': OutputType.LINE.value,
+            'type': OutputType.LINESTRING.value,
             'coordinates': self.coordinates
         }
        

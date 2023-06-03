@@ -52,7 +52,7 @@ class OutputFormatter():
 
         if type == OutputType.POINT:
             coords = self.createPointCoords(coordinates)
-        elif type == OutputType.LINE:
+        elif type == OutputType.LINESTRING:
             coords = self.createLineCoords(coordinates)
         elif type == OutputType.POLYGON:
             coords = self.createPolygonCoords(coordinates)

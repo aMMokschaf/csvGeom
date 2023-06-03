@@ -1,7 +1,7 @@
 from geojson.featureCollection import FeatureCollection
 from geojson.feature import Feature
 from geojson.point import Point
-from geojson.line import Line
+from geojson.lineString import LineString
 from geojson.polygon import Polygon
 from geojson.multiPolygon import MultiPolygon
 from geojson.multiPoint import MultiPoint
@@ -36,9 +36,9 @@ class Modeller():
                 coordinate = self.createCoordinate(dictLine)
                 geometry.addCoordinate(coordinate)
 
-        if selectedGeometryType == OutputType.LINE:
+        if selectedGeometryType == OutputType.LINESTRING:
             if (len(dict) >= 2):
-                geometry = Line()
+                geometry = LineString()
 
                 for dictLine in dict:
                     coordinate = self.createCoordinate(dictLine)
@@ -78,7 +78,7 @@ class Modeller():
             if selectedGeometryType == OutputType.POLYGON:
                 identifier = dict[0][0]['Attribut1']
                 selectedGeometryType = OutputType.MULTI_POLYGON
-            if selectedGeometryType == OutputType.LINE:
+            if selectedGeometryType == OutputType.LINESTRING:
                 identifier = dict[0][0]['Attribut1']
                 selectedGeometryType = OutputType.MULTI_LINE
         

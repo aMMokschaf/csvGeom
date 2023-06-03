@@ -2,7 +2,7 @@ from enum import Enum
 
 class OutputType(Enum):
     POINT = "Point"
-    LINE = "LineString"
+    LINESTRING = "LineString"
     POLYGON = "Polygon"
     MULTI_POINT = "MultiPoint"
     MULTI_LINE = "MultiLineString"

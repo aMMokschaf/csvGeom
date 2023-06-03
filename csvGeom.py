@@ -73,7 +73,7 @@ class Main():
                 self.logger.info("Output-type selected: " + self.selectedType.value)
 
             if event == "-GEOM_LINE-":
-                self.selectedType = OutputType.LINE
+                self.selectedType = OutputType.LINESTRING
                 self.logger.info("Output-type selected: " + self.selectedType.value)
 
             if event == "-GEOM_POLYGON-":
