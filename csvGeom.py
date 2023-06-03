@@ -1,4 +1,5 @@
 import PySimpleGUI as sg
+import json
 
 from gui import Gui
 from inputReader import InputReader
@@ -24,6 +25,7 @@ class Main():
 
         self.dict = []
         self.filteredDict = []
+        self.aggregatedData = None
 
         self.selectedFileName = None
         self.selectedType = OutputType.POLYGON
@@ -59,6 +61,9 @@ class Main():
                 self.handleCode(values)
 
                 splitData = self.inputReader.splitByIdentifier(self.filteredDict)
+                self.aggregatedData = self.inputReader.aggregateByIdentifier(splitData)
+                self.writer.writeToFile(json.dumps(self.aggregatedData), "output_agg.json")
+                self.writer.writeToFile(json.dumps(splitData), "output_split.json")
 
                 window["-CONVERT-"].update(disabled=False)
                 self.logger.info(f"Found {str(len(splitData))} objects.", splitData)
@@ -76,7 +81,7 @@ class Main():
                 self.logger.info("Output-type selected: " + self.selectedType.value)
 
             if event == "-CONVERT-":
-                featureCollectionModel = self.modeller.createFeatureCollection(splitData, self.selectedType)
+                featureCollectionModel = self.modeller.createFeatureCollection(self.aggregatedData, self.selectedType)
                 self.logger.info("Converted to object-model.")
 
                 data = self.outputFormatter.createFeatureCollection(featureCollectionModel)
