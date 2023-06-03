@@ -12,7 +12,7 @@ class MultiPolygon(GeoJsonObject):
         self.polygons.append(polygon)
 
     def __str__(self):
-        return f"'type': '{OutputType.MULTI_POLYGON.getGeoJSONCase()}','coordinates': {self.polygons}"
+        return f'"type": "{OutputType.MULTI_POLYGON.getGeoJSONCase()}","coordinates": {self.polygons}'
     
     def __repr__(self):
         return str(self)

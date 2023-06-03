@@ -18,7 +18,7 @@ class LineString(GeoJsonObject):
         return self.coordinates
 
     def __str__(self):
-        return f"'type': '{OutputType.LINESTRING.getGeoJSONCase()}', 'coordinates': {self.coordinates}"
+        return f'"type": "{OutputType.LINESTRING.getGeoJSONCase()}", "coordinates": {self.coordinates}'
 
     def __repr__(self):
         return str(self)

@@ -12,7 +12,7 @@ class MultiLineString(GeoJsonObject):
         self.lines.append(line)
 
     def __str__(self):
-        return f"'type': '{OutputType.MULTI_LINE.getGeoJSONCase()}', 'coordinates' : {self.lines}"
+        return f'"type": "{OutputType.MULTI_LINE.getGeoJSONCase()}", "coordinates" : {self.lines}'
     
     def __repr__(self):
         return str(self)
