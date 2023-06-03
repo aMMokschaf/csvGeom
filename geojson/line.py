@@ -13,16 +13,19 @@ class Line(GeoJsonObject):
     
     def addMultipleCoordinates(self, coordinates):
         self.coordinates.append(coordinates)
+    
+    def returnCoordinates(self, coordinates):
+        return self.coordinates
 
     def __str__(self):
-        return f"'type' : {OutputType.LINE.getGeoJSONCase()} 'coordinates' : {self.coordinates}"
+        return f"'type': '{OutputType.LINE.getGeoJSONCase()}', 'coordinates': {self.coordinates}"
 
     def __repr__(self):
         return str(self)
 
     def __dict__(self):
         return {
-            'type' : OutputType.LINE.value,
+            'type': OutputType.LINE.value,
             'coordinates': self.coordinates
         }
        

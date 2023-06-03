@@ -61,11 +61,12 @@ class Modeller():
                     coordinate = self.createCoordinate(dictLine)
                     itemGeometry.addCoordinate(coordinate)
                     
-                geometry.addPolygon(itemGeometry.returnCoords())
+                geometry.addPolygon(itemGeometry.returnCoordinates())
 
         if selectedGeometryType == OutputType.MULTI_LINE:
             geometry = 'not implemented'
 
+        print(geometry)
         return geometry
 
     def createFeature(self, dict, selectedGeometryType):
