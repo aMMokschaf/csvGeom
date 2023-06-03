@@ -9,11 +9,11 @@ from utils.fileWriter import FileWriter
 from enums.outputType import OutputType
 from enums.fileType import FileType
 from utils.logger import Logger
-from outputFormatter import OutputFormatter
 
 class Main():
 
     PROGRAM_TITLE = "csvGeom v0.2.0"
+    PROGRAM_TITLE = "csvGeom v0.3.0"
 
     def __init__(self):
         self.util = Util()
@@ -21,7 +21,6 @@ class Main():
         self.logger = Logger()
         self.modeller = Modeller()
         self.inputReader = InputReader()
-        self.outputFormatter = OutputFormatter()
 
         self.dict = []
         self.filteredDict = []
@@ -62,8 +61,6 @@ class Main():
 
                 splitData = self.inputReader.splitByIdentifier(self.filteredDict)
                 self.aggregatedData = self.inputReader.aggregateByIdentifier(splitData)
-                self.writer.writeToFile(json.dumps(self.aggregatedData), "output_agg.json")
-                self.writer.writeToFile(json.dumps(splitData), "output_split.json")
 
                 window["-CONVERT-"].update(disabled=False)
                 self.logger.info(f"Found {str(len(splitData))} objects.", splitData)
@@ -83,12 +80,11 @@ class Main():
             if event == "-CONVERT-":
                 featureCollectionModel = self.modeller.createFeatureCollection(self.aggregatedData, self.selectedType)
                 self.logger.info("Converted to object-model.")
-
-                data = self.outputFormatter.createFeatureCollection(featureCollectionModel)
-                self.logger.info("Converted to GeoJSON.")
+                
+                output = str(featureCollectionModel)
 
                 outputFileName = self.util.createOutputFileName(self.selectedFileName, self.selectedType, self.selectedFileType)
-                self.writer.writeToFile(data, outputFileName)
+                self.writer.writeToFile(output, outputFileName)
 
             if event == "-CLOSE-" or event == sg.WIN_CLOSED:
                 break
