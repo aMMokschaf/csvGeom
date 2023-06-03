@@ -52,36 +52,22 @@ class InputReader():
 
         return identifiers
     
-    def aggregateByIdentifier(self, inputlists):
-        identifiers = self.getAllUniqueIdentifiers(inputlists)
+    def aggregateByIdentifier(self, rawGeometries):
+        identifiers = self.getAllUniqueIdentifiers(rawGeometries)
 
-        listMitte = []
-        listGanzOben = []
-
-        '''
-        ListganzOben
-            listMitte1
-                listUntenA
-                listUntenB
-            listMitte2
-                listUntenC
-            listMitte3
-                listuntenD
-                listuntenE
-        
-        '''
-
+        geometryWrapper = []
+        geometryList = []
 
         for identifier in identifiers:
-            for listUnten in inputlists:
-                if identifier == listUnten[0]['Attribut1']:
-                    listMitte.append(listUnten)
-            listGanzOben.append(listMitte)
-            listMitte = []        
+            for rawGeometry in rawGeometries:
+                if identifier == rawGeometry[0]['Attribut1']:
+                    geometryWrapper.append(rawGeometry)
+            geometryList.append(geometryWrapper)
+            geometryWrapper = []        
 
-        self.logger.info(f"Aggregated geometries: {listGanzOben}")
+        self.logger.info(f"Aggregated geometries: {geometryList}")
 
-        return listGanzOben
+        return geometryList
     
     def splitByIdentifier(self, dict):
         if len(dict) == 0:
