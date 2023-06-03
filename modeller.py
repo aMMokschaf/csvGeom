@@ -74,6 +74,7 @@ class Modeller():
         return list
 
     def createFeatureCollection(self, dicts, selectedGeometryType):
+
         featureList = self.createFeatures(dicts, selectedGeometryType)
 
         return FeatureCollection(featureList)
