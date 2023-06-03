@@ -8,7 +8,7 @@ class MultiPolygon(GeoJsonObject):
         self.polygons = []
         self.type = OutputType.MULTI_POLYGON
 
-    def addLine(self, polygon):
+    def addPolygon(self, polygon):
         self.polygons.append(polygon)
 
     def __str__(self):
