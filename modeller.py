@@ -62,7 +62,7 @@ class Modeller():
                     coordinate = self.createCoordinate(dictLine)
                     itemGeometry.addCoordinate(coordinate)
                     
-                geometry.addPolygon(itemGeometry.returnCoordinates())
+                geometry.addPolygon(itemGeometry)
 
         if selectedGeometryType == OutputType.MULTI_LINESTRING:
             geometry = MultiLineString()
@@ -73,7 +73,7 @@ class Modeller():
                     coordinate = self.createCoordinate(dictLine)
                     itemGeometry.addCoordinate(coordinate)
                     
-                geometry.addLine(itemGeometry.returnCoordinates())
+                geometry.addLineString(itemGeometry)
 
         return geometry
 
