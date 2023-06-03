@@ -5,7 +5,7 @@ class OutputType(Enum):
     LINESTRING = "LineString"
     POLYGON = "Polygon"
     MULTI_POINT = "MultiPoint"
-    MULTI_LINESTRINGSTRING = "MultiLineString"
+    MULTI_LINESTRING = "MultiLineString"
     MULTI_POLYGON = "MultiPolygon"
 
     def getGeoJSONCase(self):
