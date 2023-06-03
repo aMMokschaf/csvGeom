@@ -52,16 +52,16 @@ class InputReader():
 
         return identifiers
     
-    def aggregateByIdentifier(self, rawGeometries):
-        identifiers = self.getAllUniqueIdentifiers(rawGeometries)
+    def aggregateByIdentifier(self, splitDict):
+        identifiers = self.getAllUniqueIdentifiers(splitDict)
 
         geometryWrapper = []
         geometryList = []
 
         for identifier in identifiers:
-            for rawGeometry in rawGeometries:
-                if identifier == rawGeometry[0]['Attribut1']:
-                    geometryWrapper.append(rawGeometry)
+            for item in splitDict:
+                if identifier == item[0]['Attribut1']:
+                    geometryWrapper.append(item)
             geometryList.append(geometryWrapper)
             geometryWrapper = []        
 
