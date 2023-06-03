@@ -14,7 +14,7 @@ class MultiLineString(GeoJsonObject):
     def __str__(self):
         lineStrings = ','.join(str(l.returnCoordinates()) for l in self.lineStrings)
 
-        return f'"type": "{OutputType.MULTI_LINESTRING.getGeoJSONCase()}", "coordinates" : {lineStrings}'
+        return f'"type": "{OutputType.MULTI_LINESTRING.getGeoJSONCase()}", "coordinates" : [{lineStrings}]'
     
     def __repr__(self):
         return str(self)
