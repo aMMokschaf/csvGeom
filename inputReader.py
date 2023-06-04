@@ -10,16 +10,16 @@ class InputReader():
     def __init__(self):
         self.logger = Logger()
 
-    def createDictionary(self, inpFileName):
+    def createCsvRowList(self, inpFileName):
         with io.open(inpFileName) as impFile:
-            dict = []
+            rows = []
 
             reader = csv.DictReader(impFile, delimiter=DELIMITER)
             
             for row in reader:
-                dict.append(row)
+                rows.append(row)
 
-            return dict
+            return rows
         
     def createDropDownList(self, dict):
         codes = []

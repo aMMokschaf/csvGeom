@@ -33,7 +33,7 @@ class Main():
     def handleInput(self, values):
         self.selectedFileName = values['-INPUT-']
         self.logger.info("File chosen: " + self.selectedFileName)
-        self.dict = self.inputReader.createDictionary(self.selectedFileName)
+        self.dict = self.inputReader.createCsvRowList(self.selectedFileName)
 
     def handleCode(self, values):
         selectedCode = values['-CODE-']
