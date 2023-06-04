@@ -28,41 +28,44 @@ class Modeller():
         geometry = None
 
         if selectedGeometryType == OutputType.POINT:
-            if (len(dict) == 1):
-                geometry = Point()
-            if (len(dict) > 1):
-                geometry = MultiPoint()
+            coordinates = dict[0]
 
-            for dictLine in dict:
+            if (len(coordinates) == 1):
+                geometry = Point()
+                dictLine = coordinates[0]
                 coordinate = self.createCoordinate(dictLine)
                 geometry.addCoordinate(coordinate)
 
         if selectedGeometryType == OutputType.LINESTRING:
-            if (len(dict) >= 2):
+            coordinates = dict[0]
+
+            if (len(coordinates) >= 2):
                 geometry = LineString()
 
-                for dictLine in dict:
+                for dictLine in coordinates:
                     coordinate = self.createCoordinate(dictLine)
                     geometry.addCoordinate(coordinate)
 
         if selectedGeometryType == OutputType.POLYGON:
-            if (len(dict) >= 3):
+            coordinates = dict[0]
+
+            if (len(coordinates) >= 3):
                 geometry = Polygon()
 
-                for dictLine in dict:
+                for dictLine in coordinates:
                     coordinate = self.createCoordinate(dictLine)
                     geometry.addCoordinate(coordinate)
 
-        if selectedGeometryType == OutputType.MULTI_POLYGON:
-            geometry = MultiPolygon()
+        if selectedGeometryType == OutputType.MULTI_POINT:
+            geometry = MultiPoint()
             for item in dict:
-                itemGeometry = Polygon()
+                itemGeometry = Point()
 
                 for dictLine in item:
                     coordinate = self.createCoordinate(dictLine)
                     itemGeometry.addCoordinate(coordinate)
                     
-                geometry.addPolygon(itemGeometry.returnCoordinates())
+                geometry.addPoint(itemGeometry)
 
         if selectedGeometryType == OutputType.MULTI_LINESTRING:
             geometry = MultiLineString()
@@ -73,25 +76,39 @@ class Modeller():
                     coordinate = self.createCoordinate(dictLine)
                     itemGeometry.addCoordinate(coordinate)
                     
-                geometry.addLine(itemGeometry.returnCoordinates())
+                geometry.addLineString(itemGeometry)
 
+        if selectedGeometryType == OutputType.MULTI_POLYGON:
+            geometry = MultiPolygon()
+            for item in dict:
+                itemGeometry = Polygon()
+
+                for dictLine in item:
+                    coordinate = self.createCoordinate(dictLine)
+                    itemGeometry.addCoordinate(coordinate)
+                    
+                geometry.addPolygon(itemGeometry)
+
+        self.logger.debug(f"Created geometry is: {geometry}")
         return geometry
-
+    
     def createFeature(self, dict, selectedGeometryType):
-        
-        if len(dict) == 1:
-            dict = dict[0]
-            identifier = dict[0]['Attribut1']
-        else:
+
+        if (len(dict) >= 2):
             if selectedGeometryType == OutputType.POLYGON:
-                identifier = dict[0][0]['Attribut1']
                 selectedGeometryType = OutputType.MULTI_POLYGON
-            if selectedGeometryType == OutputType.LINESTRING:
-                identifier = dict[0][0]['Attribut1']
+
+            elif selectedGeometryType == OutputType.LINESTRING:
                 selectedGeometryType = OutputType.MULTI_LINESTRING
+
+            elif selectedGeometryType == OutputType.POINT:
+                selectedGeometryType = OutputType.MULTI_POINT
+            self.logger.debug(f"Set GeometryType to {selectedGeometryType.value}")
         
+        self.logger.debug(f"Creating Geometry of type {selectedGeometryType}.")
         geometry = self.createGeometry(dict, selectedGeometryType)
         if geometry != None:
+            identifier = dict[0][0]['Attribut1']
             return Feature(identifier, geometry)
         else:
             return None

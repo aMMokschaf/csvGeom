@@ -7,10 +7,7 @@ class Feature():
         self.geometry = geometry
 
     def __str__(self):
-        start = '{"type": "Feature", "properties": { "identifier": "' + self.identifier + '"}, "geometry": {'
-        end = '}}'
-
-        return f'{start}{self.geometry}{end}'
+        return f'{{"type": "Feature", "properties": {{ "identifier": "{self.identifier}"}}, "geometry": {{{self.geometry}}}}}'
 
     def __repr__(self):
         return str(self)

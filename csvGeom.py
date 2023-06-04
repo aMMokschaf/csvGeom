@@ -1,5 +1,4 @@
 import PySimpleGUI as sg
-import json
 
 from gui import Gui
 from inputReader import InputReader
@@ -62,7 +61,8 @@ class Main():
                 self.aggregatedData = self.inputReader.aggregateByIdentifier(splitData)
 
                 window["-CONVERT-"].update(disabled=False)
-                self.logger.info(f"Found {str(len(splitData))} objects.", splitData)
+                self.logger.info(f"Found {str(len(splitData))} objects.")
+                self.logger.debug(f"Objects: {splitData}")
 
             if event == "-GEOM_POINT-":
                 self.selectedType = OutputType.POINT
@@ -79,6 +79,8 @@ class Main():
             if event == "-CONVERT-":
                 featureCollectionModel = self.modeller.createFeatureCollection(self.aggregatedData, self.selectedType)
                 self.logger.info("Converted to object-model.")
+                self.logger.debug(f"Object-Model: {featureCollectionModel}")
+                self.logger.debug(featureCollectionModel.features)
                 
                 output = str(featureCollectionModel)
 

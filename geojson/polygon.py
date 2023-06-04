@@ -7,15 +7,15 @@ class Polygon(GeoJsonObject):
     def __init__(self):
         self.coordinates = []
         self.type = OutputType.POLYGON
-    
+
     def addCoordinate(self, coordinate):
         self.coordinates.append(coordinate)
-    
+   
     def addMultipleCoordinate(self, coordinates):
         self.coordinates.append(coordinates)
 
     def returnCoordinates(self):
-        return [self.coordinates]
+        return self.coordinates
 
     def __str__(self): 
         return f'"type": "{OutputType.POLYGON.getGeoJSONCase()}","coordinates": [{self.coordinates}]'

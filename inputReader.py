@@ -22,13 +22,15 @@ class InputReader():
             return dict
         
     def createDropDownList(self, dict):
-        list = []
+        codes = []
 
         for obj in dict:
-            if obj['Code'] not in list:
-                list.append(obj['Code'])
+            if obj['Code'] not in codes:
+                codes.append(obj['Code'])
 
-        return list
+        self.logger.info(f"Found {len(codes)} unique codes: {codes}")
+
+        return codes
         
     def filterByCode(self, dict, code):
         list = []
@@ -36,6 +38,8 @@ class InputReader():
         for obj in dict:
             if obj['Code'] == code:
                 list.append(obj)
+
+        self.logger.info(f"Filtered by code {code}.")
 
         return list
     
@@ -52,20 +56,21 @@ class InputReader():
 
         return identifiers
     
-    def aggregateByIdentifier(self, rawGeometries):
-        identifiers = self.getAllUniqueIdentifiers(rawGeometries)
+    def aggregateByIdentifier(self, splitDict):
+        identifiers = self.getAllUniqueIdentifiers(splitDict)
 
         geometryWrapper = []
         geometryList = []
 
         for identifier in identifiers:
-            for rawGeometry in rawGeometries:
-                if identifier == rawGeometry[0]['Attribut1']:
-                    geometryWrapper.append(rawGeometry)
+            for item in splitDict:
+                if identifier == item[0]['Attribut1']:
+                    geometryWrapper.append(item)
             geometryList.append(geometryWrapper)
             geometryWrapper = []        
 
-        self.logger.info(f"Aggregated geometries: {geometryList}")
+        self.logger.info(f"Aggregated {len(geometryList)} geometries.")
+        self.logger.debug(f"Aggregated geometries: {geometryList}")
 
         return geometryList
     
