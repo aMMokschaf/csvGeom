@@ -68,7 +68,7 @@ class Main():
                 self.selectedType = OutputType.POINT
                 self.logger.info("Output-type selected: " + self.selectedType.value)
 
-            if event == "-GEOM_LINE-":
+            if event == "-GEOM_LINESTRING-":
                 self.selectedType = OutputType.LINESTRING
                 self.logger.info("Output-type selected: " + self.selectedType.value)
 

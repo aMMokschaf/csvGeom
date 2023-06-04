@@ -27,7 +27,7 @@ class Gui():
                         sg.Radio(OutputType.POINT.getTitleCase(), "GEOMTYPE", enable_events=True, default=False, key='-GEOM_POINT-')
                     ],
                     [
-                        sg.Radio(OutputType.LINESTRING.getTitleCase(), "GEOMTYPE", enable_events=True, default=False, key='-GEOM_LINE-')
+                        sg.Radio(OutputType.LINESTRING.getTitleCase(), "GEOMTYPE", enable_events=True, default=False, key='-GEOM_LINESTRING-')
                     ],
                     [
                         sg.Button("Convert", key="-CONVERT-", disabled=True)
