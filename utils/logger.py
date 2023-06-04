@@ -9,10 +9,10 @@ class LogType(Enum):
 
 class Logger():
 
-    INFO_DELIMITER = ">"
-    DEBUG_DELIMITER = "-->"
-    ERROR_DELIMITER = "!"
-    CRITICAL_DELIMITER = "X"
+    INFO_DEL = ">>>"
+    DEBUG_DEL = "---"
+    ERROR_DEL = "!!!"
+    CRITICAL_DEL = "-X-"
 
     def __init__(self):
         pass
@@ -27,19 +27,20 @@ class Logger():
         return TAB * n
 
     def info(self, msg, objects=[]):
-        self.printMsg(LogType.INFO.value, self.INFO_DELIMITER, msg)
+        self.printMsg(LogType.INFO.value, self.INFO_DEL, msg)
+
         if len(objects) > 0:
-            for obj in objects:
-                print(self.indent(1), str(obj), '\n')
+            for index,obj in enumerate(objects):
+                print(f"Object {index}:{self.indent(2)}{str(obj)}\n")
 
     def debug(self, msg):
-        self.printMsg(LogType.DEBUG.value, self.DEBUG_DELIMITER, msg)
+        self.printMsg(LogType.DEBUG.value, self.DEBUG_DEL, msg)
 
     def error(self, msg):
-        self.printMsg(LogType.ERR.value, self.ERROR_DELIMITER,msg)
+        self.printMsg(LogType.ERR.value, self.ERROR_DEL, msg)
 
     def critical(self, msg):
-        self.printMsg(LogType.CRIT.value, self.CRITICAL_DELIMITER, msg)
+        self.printMsg(LogType.CRIT.value, self.CRITICAL_DEL, msg)
     
     def printMsg(self, logType, delimiter, msg):
         print(logType, delimiter, msg)
