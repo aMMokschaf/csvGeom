@@ -5,9 +5,9 @@ Python script that converts csv-Lists to [GeoJSON](https://en.wikipedia.org/wiki
 
 As of version 0.3.0 the following geometry-types are available:
 
-Point/MultiPoint
-LineString/MultiLineString
-Polygon/MultiPolygon
+- Point/MultiPoint
+- LineString/MultiLineString
+- Polygon/MultiPolygon
 
 ## Format of the csv-File
 Currently, the format of the csv-File **has** to be exactly: "PtID,East,North,Height,Attribut1" in the first row, and corresponding coordinates in the rows below (see examples). The decimal separator is "**.**". Currently, the height value has to exist or there will be redundant commata and the geometry will not work. Set to 0 if necessary. For example, the csv-File may look like this: 
