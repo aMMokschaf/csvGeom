@@ -1,0 +1,32 @@
+name: release
+on: 
+  workflow_dispatch:
+  
+  
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: Setup Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+          architecture: 'x64'
+
+      - name: Create Executable
+        uses: Nuitka/Nuitka-Action@main
+        with:
+          nuitka-version: main
+          script-name: csvGeom.py
+          onefile: true
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: exe
+          path: build/csvGeom.exe
+          

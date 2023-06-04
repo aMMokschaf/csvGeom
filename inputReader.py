@@ -1,12 +1,14 @@
 import csv
 import io
 
+from utils.logger import Logger
+
 DELIMITER = ','
 
 class InputReader():
 
     def __init__(self):
-        pass
+        self.logger = Logger()
 
     def createDictionary(self, inpFileName):
         with io.open(inpFileName) as impFile:
@@ -37,12 +39,44 @@ class InputReader():
 
         return list
     
-    def splitByIdentifier(self, dict):
-        listOfLists = []
-        list = []
-        listOfLists.append(list)
+    def getAllUniqueIdentifiers(self, lists):
+        identifiers = []
 
-        #Catch empty dict
+        for list in lists:
+            identifier = list[0]['Attribut1']
+
+            if identifier not in identifiers:
+                identifiers.append(identifier)
+
+        self.logger.info(f"Found {len(identifiers)} unique identifiers: {identifiers}")
+
+        return identifiers
+    
+    def aggregateByIdentifier(self, splitDict):
+        identifiers = self.getAllUniqueIdentifiers(splitDict)
+
+        geometryWrapper = []
+        geometryList = []
+
+        for identifier in identifiers:
+            for item in splitDict:
+                if identifier == item[0]['Attribut1']:
+                    geometryWrapper.append(item)
+            geometryList.append(geometryWrapper)
+            geometryWrapper = []        
+
+        self.logger.info(f"Aggregated geometries: {geometryList}")
+
+        return geometryList
+    
+    def splitByIdentifier(self, dict):
+        if len(dict) == 0:
+            return []
+        
+        lists = []
+        list = []
+        lists.append(list)
+        
         identifier = dict[0]['Attribut1']
 
         for obj in dict:
@@ -52,6 +86,6 @@ class InputReader():
                 identifier = obj['Attribut1']
                 list = []
                 list.append(obj)
-                listOfLists.append(list)
+                lists.append(list)
 
-        return listOfLists
+        return lists
