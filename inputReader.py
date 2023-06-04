@@ -22,13 +22,15 @@ class InputReader():
             return dict
         
     def createDropDownList(self, dict):
-        list = []
+        codes = []
 
         for obj in dict:
-            if obj['Code'] not in list:
-                list.append(obj['Code'])
+            if obj['Code'] not in codes:
+                codes.append(obj['Code'])
 
-        return list
+        self.logger.info(f"Found {len(codes)} unique codes: {codes}")
+
+        return codes
         
     def filterByCode(self, dict, code):
         list = []
@@ -36,6 +38,8 @@ class InputReader():
         for obj in dict:
             if obj['Code'] == code:
                 list.append(obj)
+
+        self.logger.info(f"Filtered by code {code}.")
 
         return list
     
@@ -65,7 +69,8 @@ class InputReader():
             geometryList.append(geometryWrapper)
             geometryWrapper = []        
 
-        self.logger.info(f"Aggregated geometries: {geometryList}")
+        self.logger.info(f"Aggregated {len(geometryList)} geometries.")
+        self.logger.debug(f"Aggregated geometries: {geometryList}")
 
         return geometryList
     
