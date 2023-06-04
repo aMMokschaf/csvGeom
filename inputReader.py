@@ -10,21 +10,21 @@ class InputReader():
     def __init__(self):
         self.logger = Logger()
 
-    def createDictionary(self, inpFileName):
+    def createCsvRowList(self, inpFileName):
         with io.open(inpFileName) as impFile:
-            dict = []
+            rows = []
 
             reader = csv.DictReader(impFile, delimiter=DELIMITER)
             
             for row in reader:
-                dict.append(row)
+                rows.append(row)
 
-            return dict
+            return rows
         
-    def createDropDownList(self, dict):
+    def createDropDownList(self, rows):
         codes = []
 
-        for obj in dict:
+        for obj in rows:
             if obj['Code'] not in codes:
                 codes.append(obj['Code'])
 
@@ -32,10 +32,10 @@ class InputReader():
 
         return codes
         
-    def filterByCode(self, dict, code):
+    def filterByCode(self, rows, code):
         list = []
 
-        for obj in dict:
+        for obj in rows:
             if obj['Code'] == code:
                 list.append(obj)
 
@@ -56,14 +56,14 @@ class InputReader():
 
         return identifiers
     
-    def aggregateByIdentifier(self, splitDict):
-        identifiers = self.getAllUniqueIdentifiers(splitDict)
+    def aggregateByIdentifier(self, splitList):
+        identifiers = self.getAllUniqueIdentifiers(splitList)
 
         geometryWrapper = []
         geometryList = []
 
         for identifier in identifiers:
-            for item in splitDict:
+            for item in splitList:
                 if identifier == item[0]['Attribut1']:
                     geometryWrapper.append(item)
             geometryList.append(geometryWrapper)
@@ -74,23 +74,23 @@ class InputReader():
 
         return geometryList
     
-    def splitByIdentifier(self, dict):
-        if len(dict) == 0:
+    def splitByIdentifier(self, rows):
+        if len(rows) == 0:
             return []
         
         lists = []
         list = []
         lists.append(list)
         
-        identifier = dict[0]['Attribut1']
+        identifier = rows[0]['Attribut1']
 
-        for obj in dict:
-            if obj['Attribut1'] == identifier:
-                list.append(obj)
+        for row in rows:
+            if row['Attribut1'] == identifier:
+                list.append(row)
             else:
-                identifier = obj['Attribut1']
+                identifier = row['Attribut1']
                 list = []
-                list.append(obj)
+                list.append(row)
                 lists.append(list)
 
         return lists

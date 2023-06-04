@@ -20,8 +20,8 @@ class Main():
         self.modeller = Modeller()
         self.inputReader = InputReader()
 
-        self.dict = []
-        self.filteredDict = []
+        self.rows = []
+        self.filteredRows = []
         self.aggregatedData = None
 
         self.selectedFileName = None
@@ -33,12 +33,12 @@ class Main():
     def handleInput(self, values):
         self.selectedFileName = values['-INPUT-']
         self.logger.info("File chosen: " + self.selectedFileName)
-        self.dict = self.inputReader.createDictionary(self.selectedFileName)
+        self.rows = self.inputReader.createCsvRowList(self.selectedFileName)
 
     def handleCode(self, values):
         selectedCode = values['-CODE-']
         self.logger.info("Code selected: " + selectedCode)
-        self.filteredDict = self.inputReader.filterByCode(self.dict, selectedCode)
+        self.filteredRows = self.inputReader.filterByCode(self.rows, selectedCode)
         
     def main(self):
 
@@ -51,13 +51,13 @@ class Main():
             if event == "-INPUT-":
                 self.handleInput(values)
 
-                list = self.inputReader.createDropDownList(self.dict)
+                list = self.inputReader.createDropDownList(self.rows)
                 window["-CODE-"].update(values=list, disabled=False)
 
             if event == "-CODE-":
                 self.handleCode(values)
 
-                splitData = self.inputReader.splitByIdentifier(self.filteredDict)
+                splitData = self.inputReader.splitByIdentifier(self.filteredRows)
                 self.aggregatedData = self.inputReader.aggregateByIdentifier(splitData)
 
                 window["-CONVERT-"].update(disabled=False)
@@ -68,7 +68,7 @@ class Main():
                 self.selectedType = OutputType.POINT
                 self.logger.info("Output-type selected: " + self.selectedType.value)
 
-            if event == "-GEOM_LINE-":
+            if event == "-GEOM_LINESTRING-":
                 self.selectedType = OutputType.LINESTRING
                 self.logger.info("Output-type selected: " + self.selectedType.value)
 

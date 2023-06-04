@@ -17,74 +17,74 @@ class Modeller():
     def __init__(self):
         self.logger = Logger()
 
-    def createCoordinate(self, dictLine):
-        east = str(dictLine['East']).replace(' ', '')
-        north = str(dictLine['North']).replace(' ', '')
-        height = str(dictLine['Height']).replace(' ', '')
+    def createCoordinate(self, row):
+        east = str(row['East']).replace(' ', '')
+        north = str(row['North']).replace(' ', '')
+        height = str(row['Height']).replace(' ', '')
 
         return Coordinate(east, north, height)
 
-    def createGeometry(self, dict, selectedGeometryType):
+    def createGeometry(self, rowList, selectedGeometryType):
         geometry = None
 
         if selectedGeometryType == OutputType.POINT:
-            coordinates = dict[0]
+            coordinates = rowList[0]
 
             if (len(coordinates) == 1):
                 geometry = Point()
-                dictLine = coordinates[0]
-                coordinate = self.createCoordinate(dictLine)
+                rows = coordinates[0]
+                coordinate = self.createCoordinate(rows)
                 geometry.addCoordinate(coordinate)
 
         if selectedGeometryType == OutputType.LINESTRING:
-            coordinates = dict[0]
+            coordinates = rowList[0]
 
             if (len(coordinates) >= 2):
                 geometry = LineString()
 
-                for dictLine in coordinates:
-                    coordinate = self.createCoordinate(dictLine)
+                for rows in coordinates:
+                    coordinate = self.createCoordinate(rows)
                     geometry.addCoordinate(coordinate)
 
         if selectedGeometryType == OutputType.POLYGON:
-            coordinates = dict[0]
+            coordinates = rowList[0]
 
             if (len(coordinates) >= 3):
                 geometry = Polygon()
 
-                for dictLine in coordinates:
-                    coordinate = self.createCoordinate(dictLine)
+                for rows in coordinates:
+                    coordinate = self.createCoordinate(rows)
                     geometry.addCoordinate(coordinate)
 
         if selectedGeometryType == OutputType.MULTI_POINT:
             geometry = MultiPoint()
-            for item in dict:
+            for item in rowList:
                 itemGeometry = Point()
 
-                for dictLine in item:
-                    coordinate = self.createCoordinate(dictLine)
+                for rows in item:
+                    coordinate = self.createCoordinate(rows)
                     itemGeometry.addCoordinate(coordinate)
                     
                 geometry.addPoint(itemGeometry)
 
         if selectedGeometryType == OutputType.MULTI_LINESTRING:
             geometry = MultiLineString()
-            for item in dict:
+            for item in rowList:
                 itemGeometry = LineString()
 
-                for dictLine in item:
-                    coordinate = self.createCoordinate(dictLine)
+                for rows in item:
+                    coordinate = self.createCoordinate(rows)
                     itemGeometry.addCoordinate(coordinate)
                     
                 geometry.addLineString(itemGeometry)
 
         if selectedGeometryType == OutputType.MULTI_POLYGON:
             geometry = MultiPolygon()
-            for item in dict:
+            for item in rowList:
                 itemGeometry = Polygon()
 
-                for dictLine in item:
-                    coordinate = self.createCoordinate(dictLine)
+                for rows in item:
+                    coordinate = self.createCoordinate(rows)
                     itemGeometry.addCoordinate(coordinate)
                     
                 geometry.addPolygon(itemGeometry)
@@ -92,9 +92,9 @@ class Modeller():
         self.logger.debug(f"Created geometry is: {geometry}")
         return geometry
     
-    def createFeature(self, dict, selectedGeometryType):
+    def createFeature(self, rowList, selectedGeometryType):
 
-        if (len(dict) >= 2):
+        if (len(rowList) >= 2):
             if selectedGeometryType == OutputType.POLYGON:
                 selectedGeometryType = OutputType.MULTI_POLYGON
 
@@ -106,25 +106,25 @@ class Modeller():
             self.logger.debug(f"Set GeometryType to {selectedGeometryType.value}")
         
         self.logger.debug(f"Creating Geometry of type {selectedGeometryType}.")
-        geometry = self.createGeometry(dict, selectedGeometryType)
+        geometry = self.createGeometry(rowList, selectedGeometryType)
         if geometry != None:
-            identifier = dict[0][0]['Attribut1']
+            identifier = rowList[0][0]['Attribut1']
             return Feature(identifier, geometry)
         else:
             return None
 
-    def createFeatures(self, dicts, selectedGeometryType):
+    def createFeatures(self, rowLists, selectedGeometryType):
         list = []
 
-        for dict in dicts:
-            feature = self.createFeature(dict, selectedGeometryType)
+        for rowList in rowLists:
+            feature = self.createFeature(rowList, selectedGeometryType)
             if feature != None:
                 list.append(feature)
         
         return list
 
-    def createFeatureCollection(self, dicts, selectedGeometryType):
+    def createFeatureCollection(self, rowLists, selectedGeometryType):
 
-        featureList = self.createFeatures(dicts, selectedGeometryType)
+        featureList = self.createFeatures(rowLists, selectedGeometryType)
 
         return FeatureCollection(featureList)
