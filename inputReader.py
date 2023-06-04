@@ -21,10 +21,10 @@ class InputReader():
 
             return rows
         
-    def createDropDownList(self, dict):
+    def createDropDownList(self, rows):
         codes = []
 
-        for obj in dict:
+        for obj in rows:
             if obj['Code'] not in codes:
                 codes.append(obj['Code'])
 
