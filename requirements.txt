@@ -1,0 +1,4 @@
+# Install all requirements with 'pip install -r requirements.txt'
+
+#GUI-Framework
+PySimpleGUI
