@@ -18,9 +18,9 @@ class Modeller():
         self.logger = Logger()
 
     def createCoordinate(self, row):
-        east = row.east.replace(' ', '')
-        north = row.north.replace(' ', '')
-        height = row.height.replace(' ', '')
+        east = row.east.strip()
+        north = row.north.strip()
+        height = row.height.strip()
 
         return Coordinate(east, north, height)
 
