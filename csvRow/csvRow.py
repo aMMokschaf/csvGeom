@@ -1,9 +1,9 @@
 class CsvRow():
 
     def __init__(self):
-        self.east = 0
-        self.north = 0
-        self.height = 0
+        self.east = ""
+        self.north = ""
+        self.height = ""
 
         self.id = ""
         self.code = ""

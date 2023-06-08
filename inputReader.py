@@ -17,11 +17,16 @@ class InputReader():
             rowObj.id = row['PtID']
             rowObj.east = row['East']
             rowObj.north = row['North']
-            rowObj.height = row['Height']
+            
             rowObj.code = row['Code']
             rowObj.identifier = row['Identifier']
         except:
             raise KeyError
+        
+        try:
+            rowObj.height = row['Height']
+        except:
+            rowObj.height = "0"
 
         return rowObj
 
