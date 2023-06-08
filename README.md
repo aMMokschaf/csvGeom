@@ -3,7 +3,7 @@ Convert Lists of Coordinates to GeoJSON-geometry-Format for iDAI.field / Field D
 
 Python script that converts csv-Lists to [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON)-files. The chosen file will be saved as "*filename*_*geometryType*.geojson" in the same place as the original file. The contents of the resulting file can be copied into the "Geometry"-Field of a Resource in [iDAI.field 2 / Field Desktop client](https://github.com/dainst/idai-field). This way, exports from total stations can be relatively easy transferred to the database.
 
-As of version 0.3.0 the following geometry-types are available:
+As of version 0.3.1 the following geometry-types are available:
 
 - Point/MultiPoint
 - LineString/MultiLineString
@@ -21,7 +21,7 @@ python3 csvGeom.py
 ```
 
 ## Format of the csv-File
-Currently, the format of the csv-File **has** to have exactly these column-headers (in any order, case-sensitive): "PtID,East,North,Height,Code,Identifier" in the first row, and corresponding coordinates in the rows below (see examples). The decimal separator is "**.**". Currently, the height value has to exist or there will be redundant commata and the geometry will not work. Set to 0 if necessary. For example, the csv-File may look like this: 
+Currently, the format of the csv-File **has** to have at least these column-headers (in any order, case-sensitive): "PtID,East,North,Code,Identifier" in the first row, and corresponding coordinates in the rows below (see examples). The decimal separator is "**.**". Optionally, you can specify the height value. For example, the csv-File may look like this: 
 
 | PtID    |               East |              North | Height |    Code | Identifier|
 |---------|-------------------:|-------------------:|-------:|--------:|----------:|
