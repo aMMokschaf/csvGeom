@@ -53,6 +53,7 @@ class Main():
 
                 list = self.inputReader.createDropDownList(self.rows)
                 window["-CODE-"].update(values=list, disabled=False)
+                window["-CONVERT-"].update(disabled=True)
 
             if event == "-CODE-":
                 self.handleCode(values)
