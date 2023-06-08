@@ -1,12 +1,14 @@
-from geojson.featureCollection import FeatureCollection
+from geojson.coordinate import Coordinate
 from geojson.feature import Feature
+from geojson.featureCollection import FeatureCollection
+
 from geojson.point import Point
 from geojson.lineString import LineString
-from geojson.multiLineString import MultiLineString
 from geojson.polygon import Polygon
-from geojson.multiPolygon import MultiPolygon
+
 from geojson.multiPoint import MultiPoint
-from geojson.coordinate import Coordinate
+from geojson.multiLineString import MultiLineString
+from geojson.multiPolygon import MultiPolygon
 
 from enums.outputType import OutputType
 
