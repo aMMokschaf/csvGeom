@@ -18,9 +18,9 @@ class Modeller():
         self.logger = Logger()
 
     def createCoordinate(self, row):
-        east = str(row['East']).replace(' ', '')
-        north = str(row['North']).replace(' ', '')
-        height = str(row['Height']).replace(' ', '')
+        east = row.east.replace(' ', '')
+        north = row.north.replace(' ', '')
+        height = row.height.replace(' ', '')
 
         return Coordinate(east, north, height)
 
@@ -108,7 +108,7 @@ class Modeller():
         self.logger.debug(f"Creating Geometry of type {selectedGeometryType}.")
         geometry = self.createGeometry(rowList, selectedGeometryType)
         if geometry != None:
-            identifier = rowList[0][0]['Attribut1']
+            identifier = rowList[0][0].identifier
             return Feature(identifier, geometry)
         else:
             return None

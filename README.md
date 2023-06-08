@@ -21,9 +21,9 @@ python3 csvGeom.py
 ```
 
 ## Format of the csv-File
-Currently, the format of the csv-File **has** to be exactly: "PtID,East,North,Height,Code,Attribut1" in the first row, and corresponding coordinates in the rows below (see examples). The decimal separator is "**.**". Currently, the height value has to exist or there will be redundant commata and the geometry will not work. Set to 0 if necessary. For example, the csv-File may look like this: 
+Currently, the format of the csv-File **has** to have exactly these column-headers (in any order, case-sensitive): "PtID,East,North,Height,Code,Identifier" in the first row, and corresponding coordinates in the rows below (see examples). The decimal separator is "**.**". Currently, the height value has to exist or there will be redundant commata and the geometry will not work. Set to 0 if necessary. For example, the csv-File may look like this: 
 
-| PtID    |               East |              North | Height |    Code | Attribut1 |
+| PtID    |               East |              North | Height |    Code | Identifier|
 |---------|-------------------:|-------------------:|-------:|--------:|----------:|
 | TE33_01 | 10.000765844571617 | 53.564714308986836 |      0 | Polygon | Attribut1 |
 | TE33_02 | 10.003275866953757 | 53.566722326892553 |      0 | Polygon | Attribut1 |
