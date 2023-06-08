@@ -34,8 +34,8 @@ class Modeller():
 
             if (len(coordinates) == 1):
                 geometry = Point()
-                rows = coordinates[0]
-                coordinate = self.createCoordinate(rows)
+                row = coordinates[0]
+                coordinate = self.createCoordinate(row)
                 geometry.addCoordinate(coordinate)
 
         if selectedGeometryType == OutputType.LINESTRING:
