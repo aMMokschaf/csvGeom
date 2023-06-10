@@ -34,6 +34,8 @@ class Main():
 
         self.featureCollectionModel = None
 
+        self.gui = Gui(self.PROGRAM_TITLE, self.args.l)
+
     def handleInput(self, values):
         self.selectedFileName = values['-INPUT-']
         self.logger.info("File chosen: " + self.selectedFileName)
@@ -46,53 +48,56 @@ class Main():
         
     def main(self):
 
-        gui = Gui(self.PROGRAM_TITLE, self.args.l)
-        window = gui.initializeGui()
+        if self.args.cli:
+            self.logger.debug("Using CLI")
+        else:
+            while True:
+                event, values = self.gui.readValues()
 
-        while True:
-            event, values = window.read()
+                if event == "-INPUT-":
+                    self.handleInput(values)
 
-            if event == "-INPUT-":
-                self.handleInput(values)
+                    entries = self.inputReader.createCodeDropDownEntries(self.rows)
+                    self.gui.updateValues("-CODE-", entries)
+                    self.gui.enableElement("-CODE-")
 
-                list = self.inputReader.createDropDownList(self.rows)
-                window["-CODE-"].update(values=list, disabled=False)
-                window["-CONVERT-"].update(disabled=True)
+                    self.gui.disableElement("-CONVERT-")
 
-            if event == "-CODE-":
-                self.handleCode(values)
+                if event == "-CODE-":
+                    self.handleCode(values)
 
-                splitData = self.inputReader.splitByIdentifier(self.filteredRows)
-                self.aggregatedData = self.inputReader.aggregateByIdentifier(splitData)
+                    splitData = self.inputReader.splitByIdentifier(self.filteredRows)
+                    self.aggregatedData = self.inputReader.aggregateByIdentifier(splitData)
 
-                window["-CONVERT-"].update(disabled=False)
-                self.logger.info(f"Found {str(len(splitData))} objects.")
+                    self.gui.enableElement("-CONVERT-")
+                    self.logger.info(f"Found {str(len(splitData))} objects.")
 
-            if event == "-GEOM_POINT-":
-                self.selectedType = OutputType.POINT
-                self.logger.info("Output-type selected: " + self.selectedType.value)
+                if event == "-GEOM_POINT-":
+                    self.selectedType = OutputType.POINT
+                    self.logger.info("Output-type selected: " + self.selectedType.value)
 
-            if event == "-GEOM_LINESTRING-":
-                self.selectedType = OutputType.LINESTRING
-                self.logger.info("Output-type selected: " + self.selectedType.value)
+                if event == "-GEOM_LINESTRING-":
+                    self.selectedType = OutputType.LINESTRING
+                    self.logger.info("Output-type selected: " + self.selectedType.value)
 
-            if event == "-GEOM_POLYGON-":
-                self.selectedType = OutputType.POLYGON
-                self.logger.info("Output-type selected: " + self.selectedType.value)
+                if event == "-GEOM_POLYGON-":
+                    self.selectedType = OutputType.POLYGON
+                    self.logger.info("Output-type selected: " + self.selectedType.value)
 
-            if event == "-CONVERT-":
-                featureCollectionModel = self.modeller.createFeatureCollection(self.aggregatedData, self.selectedType)
-                self.logger.info("Converted to object-model.")
-                
-                output = str(featureCollectionModel)
+                if event == "-CONVERT-":
+                    featureCollectionModel = self.modeller.createFeatureCollection(self.aggregatedData, self.selectedType)
+                    self.logger.info("Converted to object-model.")
+                    
+                    output = str(featureCollectionModel)
 
-                outputFileName = self.util.createOutputFileName(self.selectedFileName, self.selectedType, self.selectedFileType)
-                self.writer.writeToFile(output, outputFileName)
+                    outputFileName = self.util.createOutputFileName(self.selectedFileName, self.selectedType, self.selectedFileType)
+                    self.writer.writeToFile(output, outputFileName)
 
-            if event == "-CLOSE-" or event == sg.WIN_CLOSED:
-                break
+                if event == "-CLOSE-" or event == sg.WIN_CLOSED:
+                    break
 
-        window.close()
+            self.gui.destroy()
+
 
 if __name__ == '__main__':
     app = Main()

@@ -5,12 +5,13 @@ from utils.util import Util
 from enums.outputType import OutputType
 
 class Gui():
-    programTitle = ''
 
     def __init__(self, programTitle, language):
         self.programTitle = programTitle
         self.util = Util()
         self.translations = self.util.loadTranslations(language)
+        self.layout = self.createLayout()
+        self.window = sg.Window(self.programTitle, self.layout)
 
     def createLayout(self):
         return [
@@ -40,8 +41,18 @@ class Gui():
                         sg.Button(self.translations["gui_close"], key="-CLOSE-")
                     ]
                 ]
+    
+    def enableElement(self, element):
+        self.window[element].update(disabled=False)
 
-    def initializeGui(self):
-        layout = self.createLayout()
+    def disableElement(self, element):
+        self.window[element].update(disabled=True)
+    
+    def updateValues(self, element, values):
+        self.window[element].update(values=values)
 
-        return sg.Window(self.programTitle, layout)
+    def readValues(self):
+        return self.window.read()
+
+    def destroy(self):
+        self.window.close()

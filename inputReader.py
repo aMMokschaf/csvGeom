@@ -46,7 +46,7 @@ class InputReader():
                 
             return rows
         
-    def createDropDownList(self, rows):
+    def createCodeDropDownEntries(self, rows):
         codes = []
 
         for obj in rows:
