@@ -3,7 +3,7 @@ Convert Lists of Coordinates to GeoJSON-geometry-Format for iDAI.field / Field D
 
 Python script that converts csv-Lists to [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON)-files. The chosen file will be saved as "*filename*_*geometryType*.geojson" in the same place as the original file. The contents of the resulting file can be copied into the "Geometry"-Field of a Resource in [iDAI.field 2 / Field Desktop client](https://github.com/dainst/idai-field). This way, exports from total stations can be relatively easy transferred to the database.
 
-As of version 0.3.5 the following geometry-types are available:
+As of version 0.5.0 the following geometry-types are available:
 
 - Point/MultiPoint
 - LineString/MultiLineString
@@ -16,13 +16,13 @@ pip install -r requirements.txt
 ```
 
 ### Usage with GUI
-Simple run
+Simply run
 ```
 python3 csvGeom.py
 ```
 
 ### Localization
-The gui currently supports german and english languages. The default-language is english. If you wish to use the german version, please run
+The gui currently supports german and english languages. The default-language is english. If you wish to use another language, please run
 
 ```
 python3 csvGeom.py --l [language]
@@ -30,17 +30,22 @@ python3 csvGeom.py --l [language]
 
 replacing [language] with one of the following:
 
-German: de
-English: en
+- German: de
+- English: en
+
+e.g.
+```
+python3 csvGeom.py --l de
+```
 
 ### Usage with CLI
 csvGeom supports several commandline-arguments:
 
---l: The language. You can specify a language here, but this only works for the GUI. The CLI is in english for now.
---cli: This switch turns on the cli-mode and disables the GUI.
---i: Specify the complete path to the input-file, e.g. './examples/alster_testpolygon.csv'.
---o: Specify the complete path and filename to the output-file. You don't need to type the .geojson-file-ending.
---g: The geometry-type: 'Point', 'LineString' or 'Polygon'. If you don't specify a type or the type can't be parsed, it will revert to 'Polygon' as a default.
+- --l: The language. You can specify a language here, but this only works for the GUI. The CLI is in english for now.
+- --cli: This switch turns on the cli-mode and disables the GUI.
+- --i: Specify the complete path to the input-file, e.g. './examples/alster_testpolygon.csv'.
+- --o: Specify the complete path and filename to the output-file. You don't need to type the .geojson-file-ending.
+- --g: The geometry-type: 'Point', 'LineString' or 'Polygon'. If you don't specify a type or the type can't be parsed, it will revert to 'Polygon' as a default.
 
 ## Format of the csv-File
 Currently, the format of the csv-File **has** to have at least these column-headers (in any order, case-sensitive): "PtID,East,North,Code,Identifier" in the first row, and corresponding coordinates in the rows below (see examples). The decimal separator is "**.**". Optionally, you can specify the height value. For example, the csv-File may look like this: 
