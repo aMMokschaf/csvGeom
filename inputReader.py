@@ -95,7 +95,6 @@ class InputReader():
             geometryWrapper = []        
 
         self.logger.info(f"Aggregated {len(geometryList)} geometries.")
-        self.logger.debug(f"Aggregated geometries: {geometryList}")
 
         return geometryList
     
