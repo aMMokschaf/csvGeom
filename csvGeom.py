@@ -12,7 +12,7 @@ from utils.argParser import ArgParser
 
 class Main():
 
-    PROGRAM_TITLE = "csvGeom v0.3.1"
+    PROGRAM_TITLE = "csvGeom v0.3.5"
 
     def __init__(self):
         self.util = Util()
