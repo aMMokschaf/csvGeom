@@ -91,7 +91,6 @@ class Modeller():
                     
                 geometry.addPolygon(itemGeometry)
 
-        self.logger.debug(f"Created geometry is: {geometry}")
         return geometry
     
     def createFeature(self, rowList, selectedGeometryType):
@@ -105,9 +104,7 @@ class Modeller():
 
             elif selectedGeometryType == OutputType.POINT:
                 selectedGeometryType = OutputType.MULTI_POINT
-            self.logger.debug(f"Set GeometryType to {selectedGeometryType.value}")
         
-        self.logger.debug(f"Creating Geometry of type {selectedGeometryType}.")
         geometry = self.createGeometry(rowList, selectedGeometryType)
         if geometry != None:
             identifier = rowList[0][0].identifier

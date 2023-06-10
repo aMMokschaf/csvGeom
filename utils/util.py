@@ -1,3 +1,5 @@
+import json
+
 class Util():
 
     def getFileNameWithoutEnding(self, filename):
@@ -9,4 +11,9 @@ class Util():
         fileEnding = ending.value
         
         return f"{outputFileName}{type}{fileEnding}"
+    
+    def loadTranslations(self, language):
+        with open(f"./localization/{language}.json", "r", encoding="utf-8") as file:
+            translations = json.load(file)
+        return translations
     

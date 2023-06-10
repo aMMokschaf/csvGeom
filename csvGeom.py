@@ -42,7 +42,7 @@ class Main():
         
     def main(self):
 
-        gui = Gui(self.PROGRAM_TITLE)
+        gui = Gui(self.PROGRAM_TITLE, "en")
         window = gui.initializeGui()
 
         while True:
@@ -63,7 +63,6 @@ class Main():
 
                 window["-CONVERT-"].update(disabled=False)
                 self.logger.info(f"Found {str(len(splitData))} objects.")
-                self.logger.debug(f"Objects: {splitData}")
 
             if event == "-GEOM_POINT-":
                 self.selectedType = OutputType.POINT
@@ -80,8 +79,6 @@ class Main():
             if event == "-CONVERT-":
                 featureCollectionModel = self.modeller.createFeatureCollection(self.aggregatedData, self.selectedType)
                 self.logger.info("Converted to object-model.")
-                self.logger.debug(f"Object-Model: {featureCollectionModel}")
-                self.logger.debug(featureCollectionModel.features)
                 
                 output = str(featureCollectionModel)
 
