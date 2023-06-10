@@ -8,6 +8,7 @@ from utils.fileWriter import FileWriter
 from enums.outputType import OutputType
 from enums.fileType import FileType
 from utils.logger import Logger
+from utils.argParser import ArgParser
 
 class Main():
 
@@ -19,6 +20,9 @@ class Main():
         self.logger = Logger()
         self.modeller = Modeller()
         self.inputReader = InputReader()
+        self.argParser = ArgParser()
+
+        self.args = self.argParser.args
 
         self.rows = []
         self.filteredRows = []
@@ -42,7 +46,7 @@ class Main():
         
     def main(self):
 
-        gui = Gui(self.PROGRAM_TITLE, "en")
+        gui = Gui(self.PROGRAM_TITLE, self.args.l)
         window = gui.initializeGui()
 
         while True:

@@ -20,6 +20,13 @@ After that, run
 python3 csvGeom.py
 ```
 
+### Localization
+The gui currently supports german and english languages. The default-language is english. If you wish to use the german version, please run
+
+```
+python3 csvGeom.py --l de
+```
+
 ## Format of the csv-File
 Currently, the format of the csv-File **has** to have at least these column-headers (in any order, case-sensitive): "PtID,East,North,Code,Identifier" in the first row, and corresponding coordinates in the rows below (see examples). The decimal separator is "**.**". Optionally, you can specify the height value. For example, the csv-File may look like this: 
 
