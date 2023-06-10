@@ -13,7 +13,10 @@ class Util():
         return f"{outputFileName}{type}{fileEnding}"
     
     def loadTranslations(self, language):
-        with open(f"./localization/{language}.json", "r", encoding="utf-8") as file:
-            translations = json.load(file)
-        return translations
+        try:
+            with open(f"./localization/{language}.json", "r", encoding="utf-8") as file:
+                translations = json.load(file)
+            return translations
+        except:
+            pass
     
