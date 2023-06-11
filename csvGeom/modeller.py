@@ -1,18 +1,18 @@
-from geojson.coordinate import Coordinate
-from geojson.feature import Feature
-from geojson.featureCollection import FeatureCollection
+from csvGeom.geojson.coordinate import Coordinate
+from csvGeom.geojson.feature import Feature
+from csvGeom.geojson.featureCollection import FeatureCollection
 
-from geojson.point import Point
-from geojson.lineString import LineString
-from geojson.polygon import Polygon
+from csvGeom.geojson.point import Point
+from csvGeom.geojson.lineString import LineString
+from csvGeom.geojson.polygon import Polygon
 
-from geojson.multiPoint import MultiPoint
-from geojson.multiLineString import MultiLineString
-from geojson.multiPolygon import MultiPolygon
+from csvGeom.geojson.multiPoint import MultiPoint
+from csvGeom.geojson.multiLineString import MultiLineString
+from csvGeom.geojson.multiPolygon import MultiPolygon
 
-from enums.outputType import OutputType
+from csvGeom.enums.outputType import OutputType
 
-from utils.logger import Logger
+from csvGeom.utils.logger import Logger
 
 class Modeller():
 

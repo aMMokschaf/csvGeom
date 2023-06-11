@@ -1,5 +1,4 @@
 from enum import Enum
-from utils.util import Util
 
 class LogType(Enum):
     INFO = "INFO"

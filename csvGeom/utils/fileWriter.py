@@ -1,6 +1,6 @@
 import io
 
-from utils.logger import Logger
+from csvGeom.utils.logger import Logger
 
 class FileWriter():
 

@@ -1,8 +1,8 @@
 import PySimpleGUI as sg
 
-from utils.util import Util
+from csvGeom.utils.util import Util
 
-from enums.outputType import OutputType
+from csvGeom.enums.outputType import OutputType
 
 class Gui():
 
@@ -20,7 +20,7 @@ class Gui():
                     ],
                     [
                         sg.Input(visible=True, enable_events=True, key='-INPUT-', size=(30,1)),
-                        sg.FilesBrowse(self.translations["gui_browse"],file_types=(("CSV Files","*.csv"),))
+                        sg.FilesBrowse(self.translations["gui_browse"], file_types=(("CSV Files","*.csv"),))
                     ],
                     [
                         sg.DropDown(values=[], enable_events=True, key='-CODE-', disabled=True, size=(30,1))
