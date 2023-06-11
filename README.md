@@ -30,10 +30,10 @@ python3 csvGeom.py --l [language]
 
 replacing [language] with one of the following:
 
-German: de
-Turkish: tr
-English: en
-French: fr
+- German: de
+- Turkish: tr
+- English: en
+- French: fr
 
 ### Usage with CLI
 csvGeom supports several commandline-arguments:
