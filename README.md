@@ -24,7 +24,6 @@ python3 csvGeom.py
 ### Usage with CLI
 csvGeom supports several commandline-arguments:
 
-- --l: The language. You can specify a language here, but this only works for the GUI. The CLI is in english for now.
 - --cli: This switch turns on the cli-mode and disables the GUI.
 - --i: Specify the complete path to the input-file, e.g. './examples/alster_testpolygon.csv'.
 - --o: Specify the complete path and filename to the output-file. You don't need to type the .geojson-file-ending.
