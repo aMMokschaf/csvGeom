@@ -35,6 +35,11 @@ replacing [language] with one of the following:
 - English: en
 - French: fr
 
+e.g. for turkish run
+```
+python3 csvGeom.py --l tr
+```
+
 ### Usage with CLI
 csvGeom supports several commandline-arguments:
 
