@@ -3,13 +3,16 @@ import io
 
 from csvGeom.utils.logger import Logger
 from csvGeom.csvRow import CsvRow
+from csvGeom.utils.util import Util
 
 DELIMITER = ','
 
 class InputReader():
 
-    def __init__(self):
+    def __init__(self, language):
         self.logger = Logger()
+        self.util = Util()
+        self.translations = self.util.loadTranslations(language)
 
     def parseRow(self, row):
         rowObj = CsvRow()
@@ -41,7 +44,7 @@ class InputReader():
                     rowObj = self.parseRow(row)
                     rows.append(rowObj)
                 except KeyError:
-                    self.logger.error("Could not find all columns needed to process the file.")
+                    self.logger.error(self.translations["missingColumn"])
                     break
                 
             return rows
@@ -53,7 +56,7 @@ class InputReader():
             if obj.code not in codes:
                 codes.append(obj.code)
 
-        self.logger.info(f"Found {len(codes)} unique codes: {codes}")
+        self.logger.info(self.translations["cli_uniqueCodes"], [len(codes), codes])
 
         return codes
         
@@ -64,7 +67,7 @@ class InputReader():
             if obj.code == code:
                 list.append(obj)
 
-        self.logger.info(f"Filtered by code {code}.")
+        self.logger.info(self.translations["cli_filteredByCode"], [code])
 
         return list
     
@@ -77,7 +80,7 @@ class InputReader():
             if identifier not in identifiers:
                 identifiers.append(identifier)
 
-        self.logger.info(f"Found {len(identifiers)} unique identifiers: {identifiers}")
+        self.logger.info(self.translations["cli_uniqueIdentifiers"], [len(identifiers), identifiers])
 
         return identifiers
     
@@ -94,7 +97,7 @@ class InputReader():
             geometryList.append(geometryWrapper)
             geometryWrapper = []        
 
-        self.logger.info(f"Aggregated {len(geometryList)} geometries.")
+        self.logger.info(self.translations["cli_aggregatedGeometries"], [len(geometryList)])
 
         return geometryList
     

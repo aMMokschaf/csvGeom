@@ -20,3 +20,13 @@ class Util():
         except:
             pass
     
+    def createFormattedMsg(self, msg, replacements):
+        formattedMsg = msg
+
+        replacementStrings = [str(element) for element in replacements]
+
+        for index, replacement in enumerate(replacementStrings):
+            toBeReplaced = f"{{{index}}}"
+            formattedMsg = formattedMsg.replace(toBeReplaced, replacement)
+
+        return formattedMsg

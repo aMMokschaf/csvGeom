@@ -12,12 +12,10 @@ from csvGeom.geojson.multiPolygon import MultiPolygon
 
 from csvGeom.enums.outputType import OutputType
 
-from csvGeom.utils.logger import Logger
-
 class Modeller():
 
     def __init__(self):
-        self.logger = Logger()
+        pass
 
     def createCoordinate(self, row):
         east = row.east.strip()

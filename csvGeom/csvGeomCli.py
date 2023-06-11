@@ -9,13 +9,14 @@ from csvGeom.utils.logger import Logger
 class CsvGeomCli():
 
     def __init__(self, args):
+        self.args = args
+
         self.util = Util()
-        self.writer = FileWriter()
+        self.translations = self.util.loadTranslations(args.l)
+        self.writer = FileWriter(args.l)
         self.logger = Logger()
         self.modeller = Modeller()
-        self.inputReader = InputReader()
-
-        self.args = args
+        self.inputReader = InputReader(args.l)
 
         self.selectedFileType = FileType.GEO_JSON
 
@@ -24,7 +25,7 @@ class CsvGeomCli():
         try:
             type = OutputType(arg)
         except ValueError:
-            self.logger.error(f"Unable to parse GeometryType {arg}. Reverting to default: 'Polygon'.")
+            self.logger.error(self.translations["err_parseGeometry"], [arg])
             type = OutputType.POLYGON
 
         return type
@@ -38,12 +39,14 @@ class CsvGeomCli():
     def handleCodeSelection(self, entries):
         selectedCode = None
         while True:
-            selectedCode = input(f"Found {len(entries)} codes. Please select one of the following: {entries}\n")
+            msg = self.util.createFormattedMsg(self.translations["cli_selectCode"], [len(entries), entries])
+
+            selectedCode = input(msg)
             if self.checkValidCodeSelection(entries, selectedCode):
-                self.logger.info(f"{selectedCode} selected.")
+                self.logger.info(self.translations["cli_codeSelected"], [selectedCode])
                 return selectedCode
             else:
-                self.logger.error(f"{selectedCode} is not a valid selection. Please try again.")
+                self.logger.error(self.translations["err_invalidCode"], [selectedCode])
 
     def handleOutputPath(self, selectedFileName, selectedType):
         outputFilePath = self.args.o

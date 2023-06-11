@@ -1,11 +1,14 @@
 import io
 
 from csvGeom.utils.logger import Logger
+from csvGeom.utils.util import Util
 
 class FileWriter():
 
-    def __init__(self):
+    def __init__(self, language):
         self.logger = Logger()
+        self.util = Util()
+        self.translations = self.util.loadTranslations(language)
 
     def writeToFile(self, data, filename):
         try:
@@ -13,11 +16,11 @@ class FileWriter():
             file.write(data)
             file.close()
 
-            self.logger.info(f"File succesfully written: {filename}")
+            self.logger.info(self.translations["cli_fileWritten"], [filename])
             
         except FileNotFoundError:
-            self.logger.error("File not found!")
+            self.logger.error(self.translations["err_fileNotFound"])
         except PermissionError:
-            self.logger.error("You don't have permission to write this file.")
+            self.logger.error(self.translations["err_permissionError"])
         except IOError:
-            self.logger.error(f"Error while writing the file {filename}.")
+            self.logger.error(self.translations["err_io"], [filename])

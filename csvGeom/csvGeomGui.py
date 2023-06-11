@@ -7,18 +7,16 @@ from csvGeom.utils.util import Util
 from csvGeom.utils.fileWriter import FileWriter
 from csvGeom.enums.outputType import OutputType
 from csvGeom.enums.fileType import FileType
-from csvGeom.utils.logger import Logger
 
 class CsvGeomGui():
 
     def __init__(self, args):
-        self.util = Util()
-        self.writer = FileWriter()
-        self.logger = Logger()
-        self.modeller = Modeller()
-        self.inputReader = InputReader()
-
         self.args = args
+
+        self.util = Util()
+        self.writer = FileWriter(args.l)
+        self.modeller = Modeller()
+        self.inputReader = InputReader(args.l)
 
         self.rows = None
         self.aggregatedData = None
@@ -27,7 +25,7 @@ class CsvGeomGui():
         self.selectedType = OutputType.POLYGON
         self.selectedFileType = FileType.GEO_JSON
 
-        self.gui = Gui("csvGeom v0.5.0", self.args.l)
+        self.gui = Gui("csvGeom v0.5.1", self.args.l)
 
     def handleInput(self, values):
         self.selectedFileName = values['-INPUT-']
