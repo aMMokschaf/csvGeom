@@ -21,25 +21,6 @@ Simply run
 python3 csvGeom.py
 ```
 
-### Localization
-The gui currently supports german, turkish, english and french languages. The default-language is english. If you wish to use another language, please run
-
-```
-python3 csvGeom.py --l [language]
-```
-
-replacing [language] with one of the following:
-
-- German: de
-- Turkish: tr
-- English: en
-- French: fr
-
-e.g. for turkish run
-```
-python3 csvGeom.py --l tr
-```
-
 ### Usage with CLI
 csvGeom supports several commandline-arguments:
 
