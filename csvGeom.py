@@ -91,58 +91,54 @@ class Main():
 
     def handleInput(self, values):
         self.selectedFileName = values['-INPUT-']
-        self.logger.info("File chosen: " + self.selectedFileName)
         self.rows = self.inputReader.createCsvRowList(self.selectedFileName)
+
+        entries = self.inputReader.createCodeDropDownEntries(self.rows)
+        self.gui.updateValues("-CODE-", entries)
+        self.gui.enableElement("-CODE-")
+
+        self.gui.disableElement("-CONVERT-")
 
     def handleCode(self, values):
         selectedCode = values['-CODE-']
-        self.logger.info("Code selected: " + selectedCode)
         self.filteredRows = self.inputReader.filterByCode(self.rows, selectedCode)
 
-    def handleGui(self):
-        self.gui = Gui(self.PROGRAM_TITLE, self.args.l)
+        splitData = self.inputReader.splitByIdentifier(self.filteredRows)
+        self.aggregatedData = self.inputReader.aggregateByIdentifier(splitData)
 
+        self.gui.enableElement("-CONVERT-")
+        self.logger.info(f"Found {str(len(splitData))} objects.")
+
+    def handleConvert(self):
+        featureCollectionModel = self.modeller.createFeatureCollection(self.aggregatedData, self.selectedType)
+        
+        output = str(featureCollectionModel)
+
+        outputFileName = self.util.createOutputFileName(self.selectedFileName, self.selectedType, self.selectedFileType)
+        self.writer.writeToFile(output, outputFileName)
+
+    def handleGui(self):
+        
         while True:
             event, values = self.gui.readValues()
 
             if event == "-INPUT-":
                 self.handleInput(values)
 
-                entries = self.inputReader.createCodeDropDownEntries(self.rows)
-                self.gui.updateValues("-CODE-", entries)
-                self.gui.enableElement("-CODE-")
-
-                self.gui.disableElement("-CONVERT-")
-
             if event == "-CODE-":
                 self.handleCode(values)
 
-                splitData = self.inputReader.splitByIdentifier(self.filteredRows)
-                self.aggregatedData = self.inputReader.aggregateByIdentifier(splitData)
-
-                self.gui.enableElement("-CONVERT-")
-                self.logger.info(f"Found {str(len(splitData))} objects.")
-
             if event == "-GEOM_POINT-":
                 self.selectedType = OutputType.POINT
-                self.logger.info("Output-type selected: " + self.selectedType.value)
 
             if event == "-GEOM_LINESTRING-":
                 self.selectedType = OutputType.LINESTRING
-                self.logger.info("Output-type selected: " + self.selectedType.value)
 
             if event == "-GEOM_POLYGON-":
                 self.selectedType = OutputType.POLYGON
-                self.logger.info("Output-type selected: " + self.selectedType.value)
 
             if event == "-CONVERT-":
-                featureCollectionModel = self.modeller.createFeatureCollection(self.aggregatedData, self.selectedType)
-                self.logger.info("Converted to object-model.")
-                
-                output = str(featureCollectionModel)
-
-                outputFileName = self.util.createOutputFileName(self.selectedFileName, self.selectedType, self.selectedFileType)
-                self.writer.writeToFile(output, outputFileName)
+                self.handleConvert()
 
             if event == "-CLOSE-" or event == sg.WIN_CLOSED:
                 break
@@ -155,6 +151,7 @@ class Main():
             self.handleCli()
 
         else:
+            self.gui = Gui(self.PROGRAM_TITLE, self.args.l)
             self.handleGui()
 
 if __name__ == '__main__':
