@@ -1,6 +1,6 @@
-from geojson.geojsonObject import GeoJsonObject
+from csvGeom.geojson.geojsonObject import GeoJsonObject
 
-from enums.outputType import OutputType
+from csvGeom.enums.outputType import OutputType
 
 class MultiPoint(GeoJsonObject):
 

@@ -1,8 +1,8 @@
 import csv
 import io
 
-from utils.logger import Logger
-from csvRow.csvRow import CsvRow
+from csvGeom.utils.logger import Logger
+from csvGeom.csvRow import CsvRow
 
 DELIMITER = ','
 

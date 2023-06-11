@@ -1,6 +1,6 @@
-from utils.argParser import ArgParser
-from csvGeomGui import CsvGeomGui
-from csvGeomCli import CsvGeomCli
+from csvGeom.utils.argParser import ArgParser
+from csvGeom.csvGeomGui import CsvGeomGui
+from csvGeom.csvGeomCli import CsvGeomCli
 
 class Main():
 
@@ -11,7 +11,8 @@ class Main():
         
     def main(self):
         if self.args.cli:
-            CsvGeomCli(self.args)
+            cli = CsvGeomCli(self.args)
+            cli.handleCli()
         else:
             gui = CsvGeomGui(self.args)
             gui.handleGui()

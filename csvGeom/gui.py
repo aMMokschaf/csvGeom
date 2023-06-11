@@ -1,8 +1,8 @@
 import PySimpleGUI as sg
 
-from utils.util import Util
+from csvGeom.utils.util import Util
 
-from enums.outputType import OutputType
+from csvGeom.enums.outputType import OutputType
 
 class Gui():
 

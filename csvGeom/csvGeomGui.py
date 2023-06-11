@@ -1,13 +1,13 @@
 import PySimpleGUI as sg
 
-from gui import Gui
-from inputReader import InputReader
-from modeller import Modeller
-from utils.util import Util
-from utils.fileWriter import FileWriter
-from enums.outputType import OutputType
-from enums.fileType import FileType
-from utils.logger import Logger
+from csvGeom.gui import Gui
+from csvGeom.inputReader import InputReader
+from csvGeom.modeller import Modeller
+from csvGeom.utils.util import Util
+from csvGeom.utils.fileWriter import FileWriter
+from csvGeom.enums.outputType import OutputType
+from csvGeom.enums.fileType import FileType
+from csvGeom.utils.logger import Logger
 
 class CsvGeomGui():
 
