@@ -3,7 +3,7 @@ Convert Lists of Coordinates to GeoJSON-geometry-Format for iDAI.field / Field D
 
 Python script that converts csv-Lists to [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON)-files. The chosen file will be saved as "*filename*_*geometryType*.geojson" in the same place as the original file. The contents of the resulting file can be copied into the "Geometry"-Field of a Resource in [iDAI.field 2 / Field Desktop client](https://github.com/dainst/idai-field). This way, exports from total stations can be relatively easy transferred to the database.
 
-As of version 0.3.5 the following geometry-types are available:
+As of version 0.5.1 the following geometry-types are available:
 
 - Point/MultiPoint
 - LineString/MultiLineString
@@ -22,7 +22,7 @@ python3 csvGeom.py
 ```
 
 ### Localization
-The gui currently supports german and english languages. The default-language is english. If you wish to use the german version, please run
+The gui currently supports german, turkish, english and french languages. The default-language is english. If you wish to use another language, please run
 
 ```
 python3 csvGeom.py --l [language]
@@ -31,7 +31,9 @@ python3 csvGeom.py --l [language]
 replacing [language] with one of the following:
 
 German: de
+Turkish: tr
 English: en
+French: fr
 
 ### Usage with CLI
 csvGeom supports several commandline-arguments:
