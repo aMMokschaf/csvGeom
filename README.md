@@ -1,7 +1,7 @@
 # csvGeom
-Convert Lists of Coordinates to GeoJSON-geometry-Format for iDAI.field / Field Desktop
+Convert Lists of Coordinates to a GeoJSON-FeatureCollection that can be imported to Field Desktop
 
-Python script that converts csv-Lists to [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON)-files. The chosen file will be saved as "*filename*_*geometryType*.geojson" in the same place as the original file. The contents of the resulting file can be copied into the "Geometry"-Field of a Resource in [iDAI.field 2 / Field Desktop client](https://github.com/dainst/idai-field). This way, exports from total stations can be relatively easy transferred to the database.
+This is a Python script that converts csv-Lists of coordinates and attributes to [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON)-files. The chosen file will be saved as "*filename*_*geometryType*.geojson" in the same place as the original file. The resulting file can be imported into any [iDAI.field 2 / Field Desktop](https://github.com/dainst/idai-field) database project, provided the identifiers for each object already exist in the database. Alternatively, the contents of each features Geometry can be copied into the "Geometry"-Field of a Resource in Field Desktop. This way, exports from total stations can be seamlessly transferred to the database.
 
 As of version 0.5.1 the following geometry-types are available:
 
@@ -22,7 +22,7 @@ python3 csvGeom.py
 ```
 
 ### Localization
-The gui currently supports german, turkish, english and french languages. The default-language is english. If you wish to use another language, please run
+The gui currently supports German, Turkish, English and French. The default-language is English. If you wish to use another language, please run
 
 ```
 python3 csvGeom.py --l [language]
@@ -35,7 +35,7 @@ replacing [language] with one of the following:
 - English: en
 - French: fr
 
-e.g. for turkish run
+e.g. for Turkish run
 ```
 python3 csvGeom.py --l tr
 ```
@@ -49,8 +49,16 @@ csvGeom supports several commandline-arguments:
 - --o: Specify the complete path and filename to the output-file. You don't need to type the .geojson-file-ending.
 - --g: The geometry-type: 'Point', 'LineString' or 'Polygon'. If you don't specify a type or the type can't be parsed, it will revert to 'Polygon' as a default.
 
+### Using csvGeom to import geometries into Field Desktop
+
+You have to select the data according to the value in the *Code*-column, and choose the type of geometry that should be returned for your selection. Each different value in the *Identifier* column corresponds to one feature in the resulting FeatureCollection. When choosing Point, multiple rows with the same *Identifier* will be converted to MultiPoint. When choosing Polygon or LineString, consecutive rows with the same *Identifier* will be treated as one Polygon/Linestring. If the file contains multiple non-consecutive stretches of coordinates with the same *Identifier* separated by rows with different *Identifier*s, these will be treated as a MultiPolygon or MultiLineString of the same Feature. Thus, each *Identifier* corresponds to one Feature.
+
+The GeoJSON-file can be imported into Field Desktop with 'Tools' > 'Import'. The *Identifiers* have to exist in the project database you want to import the file to, and their resources will be automatically updated with the corresponding geometry from the GeoJSON-file.
+
+Alternatively, you can copy and paste the contents of each Features *coordinates* under *geometry* manually into the corresponding field in each form in Field Desktop.
+
 ## Format of the csv-File
-Currently, the format of the csv-File **has** to have at least these column-headers (in any order, case-sensitive): "PtID,East,North,Code,Identifier" in the first row, and corresponding coordinates in the rows below (see examples). The decimal separator is "**.**". Optionally, you can specify the height value. For example, the csv-File may look like this: 
+Currently, the format of the csv-File **has** to have at least these column-headers (in any order, case-sensitive): "PtID,East,North,Code,Identifier" in the first row, and corresponding coordinates and data in the rows below (see examples). The decimal separator is "**.**". Optionally, you can specify the height value. For example, the csv-File may look like this: 
 
 | PtID    |               East |              North | Height |    Code | Identifier|
 |---------|-------------------:|-------------------:|-------:|--------:|----------:|
@@ -72,8 +80,9 @@ Currently, the format of the csv-File **has** to have at least these column-head
 | TE33_16 |  9.998925161491382 | 53.562204286604697 |      0 | Polygon | Attribut1 |
 | TE33_17 | 10.000765844571617 | 53.564714308986836 |      0 | Polygon | Attribut1 |
 
+### Output
 
-And the resulting geojson-file will contain this: 
+The resulting GeoJSON-file will contain this: 
 
 ```
 {
@@ -181,7 +190,7 @@ And the resulting geojson-file will contain this:
 }
 ```
 
-And look like this:
+And look like this on a map:
 
 ```geojson
 {
@@ -290,4 +299,4 @@ And look like this:
 ```
 
 ## Context
-The first version of this script was produced during @lsteinmann-s work for the [Miletus Excavation](https://www.miletgrabung.uni-hamburg.de/) in the course of the DFG/ANR-funded project ["Life Forms in the Megapolis: Miletus in the Longue Durée"](https://www.kulturwissenschaften.uni-hamburg.de/ka/forschung/lebensformen-megapolis.html). This tool has since been developed by @lsteinmann and @msingr.
+The first version of this script was produced during @lsteinmann-s work for the [Miletus Excavation](https://www.miletgrabung.uni-hamburg.de/) in the course of the DFG/ANR-funded project ["Life Forms in the Megapolis: Miletus in the Longue Durée"](https://www.kulturwissenschaften.uni-hamburg.de/ka/forschung/lebensformen-megapolis.html). This tool has since been significantly updated and developed by @lsteinmann and @msingr.
