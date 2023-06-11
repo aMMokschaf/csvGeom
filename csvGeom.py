@@ -28,6 +28,7 @@ class Main():
         self.filteredRows = None
         self.aggregatedData = None
 
+        self.selectedCode = None
         self.selectedFileName = None
         self.selectedType = OutputType.POLYGON
         self.selectedFileType = FileType.GEO_JSON
@@ -100,14 +101,13 @@ class Main():
         self.gui.disableElement("-CONVERT-")
 
     def handleCode(self, values):
-        selectedCode = values['-CODE-']
-        self.filteredRows = self.inputReader.filterByCode(self.rows, selectedCode)
+        self.selectedCode = values['-CODE-']
+        self.filteredRows = self.inputReader.filterByCode(self.rows, self.selectedCode)
 
         splitData = self.inputReader.splitByIdentifier(self.filteredRows)
         self.aggregatedData = self.inputReader.aggregateByIdentifier(splitData)
 
         self.gui.enableElement("-CONVERT-")
-        self.logger.info(f"Found {str(len(splitData))} objects.")
 
     def handleConvert(self):
         featureCollectionModel = self.modeller.createFeatureCollection(self.aggregatedData, self.selectedType)
@@ -115,6 +115,7 @@ class Main():
         output = str(featureCollectionModel)
 
         outputFileName = self.util.createOutputFileName(self.selectedFileName, self.selectedType, self.selectedFileType)
+        
         self.writer.writeToFile(output, outputFileName)
 
     def handleGui(self):
