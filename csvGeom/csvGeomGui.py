@@ -4,19 +4,18 @@ from csvGeom.gui import Gui
 from csvGeom.inputReader import InputReader
 from csvGeom.modeller import Modeller
 from csvGeom.utils.util import Util
-from csvGeom.utils.fileWriter import FileWriter
 from csvGeom.enums.outputType import OutputType
 from csvGeom.enums.fileType import FileType
 
 class CsvGeomGui():
 
-    def __init__(self, args):
+    def __init__(self, args, logger):
         self.args = args
 
         self.util = Util()
-        self.writer = FileWriter(args.l)
-        self.modeller = Modeller(args.l)
-        self.inputReader = InputReader(args.l)
+        self.logger = logger
+        self.modeller = Modeller(args.l, logger)
+        self.inputReader = InputReader(args.l, logger)
 
         self.rows = None
         self.aggregatedData = None
@@ -27,6 +26,10 @@ class CsvGeomGui():
 
         self.gui = Gui("csvGeom v0.5.2", self.args.l)
 
+    def resetErrors(self):
+        self.modeller.errCount = 0
+        self.gui.resetErrMsg()
+
     def handleInput(self, values):
         self.selectedFileName = values['-INPUT-']
         self.rows = self.inputReader.createCsvRowList(self.selectedFileName)
@@ -34,6 +37,7 @@ class CsvGeomGui():
         entries = self.inputReader.createCodeDropDownEntries(self.rows)
         self.gui.updateValues("-CODE-", entries)
         self.gui.enableElement("-CODE-")
+        self.resetErrors()
 
         self.gui.disableElement("-CONVERT-")
 
@@ -48,15 +52,17 @@ class CsvGeomGui():
 
     def handleConvert(self):
         featureCollectionModel = self.modeller.createFeatureCollection(self.aggregatedData, self.selectedType)
+
+        errCount = self.modeller.errCount
+        self.gui.updateErrMsg(errCount)
         
         output = str(featureCollectionModel)
 
         outputFileName = self.util.createOutputFileName(self.selectedFileName, self.selectedType, self.selectedFileType)
         
-        self.writer.writeToFile(output, outputFileName)
+        self.logger.writer.writeToFile(output, outputFileName)
 
-    def handleGui(self):
-        
+    def handleGui(self):        
         while True:
             event, values = self.gui.readValues()
 

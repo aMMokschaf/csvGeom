@@ -1,7 +1,6 @@
 import csv
 import io
 
-from csvGeom.utils.logger import Logger
 from csvGeom.csvRow import CsvRow
 from csvGeom.utils.util import Util
 
@@ -9,8 +8,8 @@ DELIMITER = ','
 
 class InputReader():
 
-    def __init__(self, language):
-        self.logger = Logger()
+    def __init__(self, language, logger):
+        self.logger = logger
         self.util = Util()
         self.translations = self.util.loadTranslations(language)
 

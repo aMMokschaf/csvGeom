@@ -35,6 +35,9 @@ class Gui():
                         sg.Radio(OutputType.LINESTRING.getTitleCase(), "GEOMTYPE", enable_events=True, default=False, key='-GEOM_LINESTRING-')
                     ],
                     [
+                        sg.Graph((700, 50), (0, 0), (700, 50), background_color='white', key='errRectangle')
+                    ],
+                    [
                         sg.Button(self.translations["gui_convert"], key="-CONVERT-", disabled=True)
                     ],
                     [
@@ -53,6 +56,23 @@ class Gui():
 
     def readValues(self):
         return self.window.read()
+    
+    def resetErrMsg(self):
+        self.window["errRectangle"].update(background_color='white')
+        self.window["errRectangle"].erase()
+    
+    def updateErrMsg(self, count):
+        color = 'white'
+        if count > 0:
+            color = 'red'
+            errMsg = self.translations["gui_error_validation"]
+            formattedMsg = self.util.createFormattedMsg(errMsg, [count])
+
+            self.window["errRectangle"].draw_text(formattedMsg, (350, 25), color='black')
+        else:
+            color = "green"
+
+        self.window["errRectangle"].update(background_color=color)
 
     def destroy(self):
         self.window.close()

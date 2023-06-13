@@ -4,19 +4,18 @@ from csvGeom.utils.util import Util
 from csvGeom.utils.fileWriter import FileWriter
 from csvGeom.enums.outputType import OutputType
 from csvGeom.enums.fileType import FileType
-from csvGeom.utils.logger import Logger
 
 class CsvGeomCli():
 
-    def __init__(self, args):
+    def __init__(self, args, logger):
         self.args = args
 
         self.util = Util()
         self.translations = self.util.loadTranslations(args.l)
         self.writer = FileWriter(args.l)
-        self.logger = Logger()
+        self.logger = logger
         self.modeller = Modeller(args.l)
-        self.inputReader = InputReader(args.l)
+        self.inputReader = InputReader(args.l, logger)
 
         self.selectedFileType = FileType.GEO_JSON
 

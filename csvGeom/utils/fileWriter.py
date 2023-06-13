@@ -1,26 +1,22 @@
 import io
 
-from csvGeom.utils.logger import Logger
 from csvGeom.utils.util import Util
 
 class FileWriter():
 
-    def __init__(self, language):
-        self.logger = Logger()
+    def __init__(self):
         self.util = Util()
-        self.translations = self.util.loadTranslations(language)
 
-    def writeToFile(self, data, filename):
+    def write(self, data, filename, mode):
         try:
-            file = io.open(filename, "w")
+            file = io.open(filename, mode)
             file.write(data)
             file.close()
+        except:
+            raise Exception
 
-            self.logger.info(self.translations["cli_fileWritten"], [filename])
-            
-        except FileNotFoundError:
-            self.logger.error(self.translations["err_fileNotFound"])
-        except PermissionError:
-            self.logger.error(self.translations["err_permissionError"])
-        except IOError:
-            self.logger.error(self.translations["err_io"], [filename])
+    def writeToFile(self, data, filename):
+        self.write(data, filename, "w")
+
+    def appendToFile(self, data, filename):
+        self.write(data, filename, "a")

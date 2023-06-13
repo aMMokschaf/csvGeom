@@ -14,22 +14,24 @@ from csvGeom.enums.outputType import OutputType
 
 from csvGeom.utils.util import Util
 from csvGeom.validator import Validator
-from csvGeom.utils.logger import Logger
 
 class Modeller():
 
-    def __init__(self, language):
+    def __init__(self, language, logger):
         self.util = Util()
         self.validator = Validator()
-        self.logger = Logger()
+        self.logger = logger
         self.translations = self.util.loadTranslations(language)
 
+        self.errCount = 0
+
     def createCoordinate(self, row):
+        ptId = row.id.strip()
         east = row.east.strip()
         north = row.north.strip()
         height = row.height.strip()
 
-        return Coordinate(east, north, height)
+        return Coordinate(ptId, east, north, height)
     
     def createPointGeometry(self, rowList):
         geometry = None
@@ -38,12 +40,14 @@ class Modeller():
         geometry = Point()
         row = self.util.getFirstElement(coordinates)
         coordinate = self.createCoordinate(row)
-        
+
+        geometry.addCoordinate(coordinate)
+
         try:
-            self.validator.validateCoordinates([coordinate])
-            geometry.addCoordinate(coordinate)
+            self.validator.validate(geometry)
         except:
-            self.logger.error(self.translations["err_validation"], [geometry.type])
+            self.logger.error(self.translations["err_validation"], [geometry.type, coordinate.ptId], logToFile=True)
+            self.errCount += 1
         
         return geometry
 
@@ -52,17 +56,18 @@ class Modeller():
 
         coordinates = self.util.getFirstElement(rowList)
 
-        if (len(coordinates) >= 2):
-            geometry = LineString()
+        geometry = LineString()
 
-            for rows in coordinates:
-                coordinate = self.createCoordinate(rows)
+        for rows in coordinates:
+            coordinate = self.createCoordinate(rows)
 
-                try:
-                    self.validator.validateCoordinates([coordinate])
-                    geometry.addCoordinate(coordinate)
-                except:
-                    self.logger.error(self.translations["err_validation"], [geometry.type])
+            geometry.addCoordinate(coordinate)
+
+        try:
+            self.validator.validate(geometry)
+        except:
+            self.logger.error(self.translations["err_validation"], [geometry.type, coordinate.ptId], logToFile=True)
+            self.errCount += 1
 
         return geometry
 
@@ -71,17 +76,18 @@ class Modeller():
 
         coordinates = self.util.getFirstElement(rowList)
 
-        if (len(coordinates) >= 3):
-            geometry = Polygon()
+        geometry = Polygon()
 
-            for rows in coordinates:
-                coordinate = self.createCoordinate(rows)
+        for rows in coordinates:
+            coordinate = self.createCoordinate(rows)
 
-                try:
-                    self.validator.validateCoordinates([coordinate])
-                    geometry.addCoordinate(coordinate)
-                except:
-                    self.logger.error(self.translations["err_validation"], [geometry.type])
+            geometry.addCoordinate(coordinate)
+
+        try:
+            self.validator.validate(geometry)
+        except:
+            self.logger.error(self.translations["err_validation"], [geometry.type, coordinate.ptId], logToFile=True)
+            self.errCount += 1
 
         return geometry
 
@@ -101,7 +107,8 @@ class Modeller():
                 self.validator.validate(itemGeometry)
                 geometry.addPoint(itemGeometry)
             except:
-                self.logger.error(self.translations["err_validation"], [itemGeometry.type])
+                self.logger.error(self.translations["err_validation"], [itemGeometry.type], logToFile=True)
+                self.errCount += 1
 
         return geometry
 
@@ -121,7 +128,8 @@ class Modeller():
                 self.validator.validate(itemGeometry)
                 geometry.addLineString(itemGeometry)
             except:
-                self.logger.error(self.translations["err_validation"], [itemGeometry.type])
+                self.logger.error(self.translations["err_validation"], [itemGeometry.type], logToFile=True)
+                self.errCount += 1
 
         return geometry
 
@@ -140,7 +148,8 @@ class Modeller():
                 self.validator.validate(itemGeometry)
                 geometry.addPolygon(itemGeometry)
             except:
-                self.logger.error(self.translations["err_validation"], [itemGeometry.type])
+                self.logger.error(self.translations["err_validation"], [itemGeometry.type], logToFile=True)
+                self.errCount += 1
 
         return geometry
 
