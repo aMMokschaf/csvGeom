@@ -25,7 +25,7 @@ class CsvGeomGui():
         self.selectedType = OutputType.POLYGON
         self.selectedFileType = FileType.GEO_JSON
 
-        self.gui = Gui("csvGeom v0.5.1", self.args.l)
+        self.gui = Gui("csvGeom v0.5.2", self.args.l)
 
     def handleInput(self, values):
         self.selectedFileName = values['-INPUT-']
