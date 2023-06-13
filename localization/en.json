@@ -15,5 +15,6 @@
     "err_invalidCode": "{0} is not a valid selection. Please try again.",
     "err_fileNotFound": "File not found!",
     "err_permissionError": "You don't have permission to write this file.",
-    "err_io": "Error while writing the file {0}."
+    "err_io": "Error while writing the file {0}.",
+    "err_validation": "Error while validating geometry of type {0}."
 }

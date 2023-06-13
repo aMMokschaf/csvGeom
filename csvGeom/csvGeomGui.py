@@ -15,7 +15,7 @@ class CsvGeomGui():
 
         self.util = Util()
         self.writer = FileWriter(args.l)
-        self.modeller = Modeller()
+        self.modeller = Modeller(args.l)
         self.inputReader = InputReader(args.l)
 
         self.rows = None

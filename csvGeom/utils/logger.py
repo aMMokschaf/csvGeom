@@ -18,21 +18,8 @@ class Logger():
     def __init__(self):
         self.util = Util()
 
-    def indent(self, n):
-        if n <= 0 or n > 10:
-            self.error("Invalid number of requested indents.")
-            return ""
-
-        TAB = "    " # Four Spaces
-
-        return TAB * n
-
     def info(self, msg, objects=[]):
         self.printMsg(LogType.INFO.value, self.INFO_DEL, msg, objects)
-
-        #if len(objects) > 0:
-        #    for index,obj in enumerate(objects):
-        #        print(f"Object {index}:{self.indent(2)}{str(obj)}\n")
 
     def debug(self, msg, objects=[]):
         self.printMsg(LogType.DEBUG.value, self.DEBUG_DEL, msg, objects)

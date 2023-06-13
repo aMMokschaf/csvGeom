@@ -15,7 +15,7 @@ class CsvGeomCli():
         self.translations = self.util.loadTranslations(args.l)
         self.writer = FileWriter(args.l)
         self.logger = Logger()
-        self.modeller = Modeller()
+        self.modeller = Modeller(args.l)
         self.inputReader = InputReader(args.l)
 
         self.selectedFileType = FileType.GEO_JSON

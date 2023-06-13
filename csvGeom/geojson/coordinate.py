@@ -1,6 +1,6 @@
 class Coordinate():
 
-    def __init__(self, east, north, height):
+    def __init__(self, east, north, height="0"):
         self.east = east
         self.north = north
         self.height = height
