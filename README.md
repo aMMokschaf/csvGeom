@@ -3,7 +3,7 @@ Convert Lists of Coordinates to a GeoJSON-FeatureCollection that can be imported
 
 This is a Python script that converts csv-Lists of coordinates and attributes to [GeoJSON](https://en.wikipedia.org/wiki/GeoJSON)-files. The chosen file will be saved as "*filename*_*geometryType*.geojson" in the same place as the original file. The resulting file can be imported into any [iDAI.field 2 / Field Desktop](https://github.com/dainst/idai-field) database project, provided the identifiers for each object already exist in the database. Alternatively, the contents of each features Geometry can be copied into the "Geometry"-Field of a Resource in Field Desktop. This way, exports from total stations can be seamlessly transferred to the database.
 
-As of version 0.5.2 the following geometry-types are available:
+As of version 0.6.0 the following geometry-types are available:
 
 - Point/MultiPoint
 - LineString/MultiLineString

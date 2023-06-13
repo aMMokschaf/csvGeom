@@ -24,7 +24,7 @@ class CsvGeomGui():
         self.selectedType = OutputType.POLYGON
         self.selectedFileType = FileType.GEO_JSON
 
-        self.gui = Gui("csvGeom v0.5.2", self.args.l)
+        self.gui = Gui("csvGeom v0.6.0", self.args.l)
 
     def resetErrors(self):
         self.modeller.errCount = 0
