@@ -44,7 +44,7 @@ class InputReader():
                     rowObj = self.parseRow(row)
                     rows.append(rowObj)
                 except KeyError:
-                    self.logger.error(self.translations["missingColumn"])
+                    self.logger.error(self.translations["err_missingColumn"])
                     break
                 
             return rows
