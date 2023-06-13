@@ -12,10 +12,12 @@ from csvGeom.geojson.multiPolygon import MultiPolygon
 
 from csvGeom.enums.outputType import OutputType
 
+from csvGeom.utils.util import Util
+
 class Modeller():
 
     def __init__(self):
-        pass
+        self.util = Util()
 
     def createCoordinate(self, row):
         east = row.east.strip()
@@ -23,89 +25,133 @@ class Modeller():
         height = row.height.strip()
 
         return Coordinate(east, north, height)
+    
+    def createPointGeometry(self, rowList):
+        geometry = None
+        coordinates = self.util.getFirstElement(rowList)
 
-    def createGeometry(self, rowList, selectedGeometryType):
+        if (len(coordinates) == 1):
+            geometry = Point()
+            row = self.util.getFirstElement(0)
+            coordinate = self.createCoordinate(row)
+            geometry.addCoordinate(coordinate)
+        
+        return geometry
+
+    def createLineStringGeometry(self, rowList):
         geometry = None
 
-        if selectedGeometryType == OutputType.POINT:
-            coordinates = rowList[0]
+        coordinates = self.util.getFirstElement(rowList)
 
-            if (len(coordinates) == 1):
-                geometry = Point()
-                row = coordinates[0]
-                coordinate = self.createCoordinate(row)
+        if (len(coordinates) >= 2):
+            geometry = LineString()
+
+            for rows in coordinates:
+                coordinate = self.createCoordinate(rows)
                 geometry.addCoordinate(coordinate)
 
-        if selectedGeometryType == OutputType.LINESTRING:
-            coordinates = rowList[0]
+        return geometry
 
-            if (len(coordinates) >= 2):
-                geometry = LineString()
+    def createPolygonGeometry(self, rowList):
+        geometry = None
 
-                for rows in coordinates:
-                    coordinate = self.createCoordinate(rows)
-                    geometry.addCoordinate(coordinate)
+        coordinates = self.util.getFirstElement(rowList)
 
-        if selectedGeometryType == OutputType.POLYGON:
-            coordinates = rowList[0]
+        if (len(coordinates) >= 3):
+            geometry = Polygon()
 
-            if (len(coordinates) >= 3):
-                geometry = Polygon()
-
-                for rows in coordinates:
-                    coordinate = self.createCoordinate(rows)
-                    geometry.addCoordinate(coordinate)
-
-        if selectedGeometryType == OutputType.MULTI_POINT:
-            geometry = MultiPoint()
-            for item in rowList:
-                itemGeometry = Point()
-
-                for rows in item:
-                    coordinate = self.createCoordinate(rows)
-                    itemGeometry.addCoordinate(coordinate)
-                    
-                geometry.addPoint(itemGeometry)
-
-        if selectedGeometryType == OutputType.MULTI_LINESTRING:
-            geometry = MultiLineString()
-            for item in rowList:
-                itemGeometry = LineString()
-
-                for rows in item:
-                    coordinate = self.createCoordinate(rows)
-                    itemGeometry.addCoordinate(coordinate)
-                    
-                geometry.addLineString(itemGeometry)
-
-        if selectedGeometryType == OutputType.MULTI_POLYGON:
-            geometry = MultiPolygon()
-            for item in rowList:
-                itemGeometry = Polygon()
-
-                for rows in item:
-                    coordinate = self.createCoordinate(rows)
-                    itemGeometry.addCoordinate(coordinate)
-                    
-                geometry.addPolygon(itemGeometry)
+            for rows in coordinates:
+                coordinate = self.createCoordinate(rows)
+                geometry.addCoordinate(coordinate)
 
         return geometry
+
+    def createMultiPointGeometry(self, rowList):
+        geometry = None
+
+        geometry = MultiPoint()
+
+        for item in rowList:
+            itemGeometry = Point()
+
+            for rows in item:
+                coordinate = self.createCoordinate(rows)
+                itemGeometry.addCoordinate(coordinate)
+                
+            geometry.addPoint(itemGeometry)
+
+        return geometry
+
+    def createMultiLineStringGeometry(self, rowList):
+        geometry = None
+
+        geometry = MultiLineString()
+
+        for item in rowList:
+            itemGeometry = LineString()
+
+            for rows in item:
+                coordinate = self.createCoordinate(rows)
+                itemGeometry.addCoordinate(coordinate)
+                
+            geometry.addLineString(itemGeometry)
+
+        return geometry
+
+    def createMultiPolygonGeometry(self, rowList):
+        geometry = None
+
+        geometry = MultiPolygon()
+        for item in rowList:
+            itemGeometry = Polygon()
+
+            for rows in item:
+                coordinate = self.createCoordinate(rows)
+                itemGeometry.addCoordinate(coordinate)
+                
+            geometry.addPolygon(itemGeometry)
+
+        return geometry
+
+    def createGeometry(self, rowList, selectedGeometryType):
+
+        if selectedGeometryType == OutputType.POINT:
+            return self.createPointGeometry(rowList)
+
+        if selectedGeometryType == OutputType.LINESTRING:
+            return self.createLineStringGeometry(rowList)
+
+        if selectedGeometryType == OutputType.POLYGON:
+            return self.createPolygonGeometry(rowList)
+
+        if selectedGeometryType == OutputType.MULTI_POINT:
+            return self.createMultiPointGeometry(rowList)
+
+        if selectedGeometryType == OutputType.MULTI_LINESTRING:
+            return self.createMultiLineStringGeometry(rowList)
+
+        if selectedGeometryType == OutputType.MULTI_POLYGON:
+            return self.createMultiPolygonGeometry(rowList)
+        
+    def switchToMultiGeometry(self, selectedGeometryType):
+        if selectedGeometryType == OutputType.POLYGON:
+            return OutputType.MULTI_POLYGON
+
+        elif selectedGeometryType == OutputType.LINESTRING:
+            return OutputType.MULTI_LINESTRING
+
+        elif selectedGeometryType == OutputType.POINT:
+            return OutputType.MULTI_POINT
     
     def createFeature(self, rowList, selectedGeometryType):
 
         if (len(rowList) >= 2):
-            if selectedGeometryType == OutputType.POLYGON:
-                selectedGeometryType = OutputType.MULTI_POLYGON
-
-            elif selectedGeometryType == OutputType.LINESTRING:
-                selectedGeometryType = OutputType.MULTI_LINESTRING
-
-            elif selectedGeometryType == OutputType.POINT:
-                selectedGeometryType = OutputType.MULTI_POINT
+            selectedGeometryType = self.switchToMultiGeometry(selectedGeometryType)
         
         geometry = self.createGeometry(rowList, selectedGeometryType)
         if geometry != None:
-            identifier = rowList[0][0].identifier
+            firstCoordinateList = self.util.getFirstElement(rowList)
+            identifier = self.util.getIdentifierFromList(firstCoordinateList)
             return Feature(identifier, geometry)
         else:
             return None

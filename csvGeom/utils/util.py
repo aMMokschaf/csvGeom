@@ -30,3 +30,16 @@ class Util():
             formattedMsg = formattedMsg.replace(toBeReplaced, replacement)
 
         return formattedMsg
+
+    def getFirstElement(self, list):
+        if len(list) == 0:
+            raise IndexError
+        else:
+            return list[0]
+
+    def getIdentifierFromList(self, list):
+        try:
+            firstElement = self.getFirstElement(list)
+            return firstElement.identifier
+        except IndexError:
+            raise IndexError

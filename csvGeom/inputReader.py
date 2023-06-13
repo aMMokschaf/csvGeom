@@ -75,7 +75,7 @@ class InputReader():
         identifiers = []
 
         for list in lists:
-            identifier = list[0].identifier
+            identifier = self.util.getIdentifierFromList(list)
 
             if identifier not in identifiers:
                 identifiers.append(identifier)
@@ -92,7 +92,7 @@ class InputReader():
 
         for identifier in identifiers:
             for item in splitList:
-                if identifier == item[0].identifier:
+                if identifier == self.util.getIdentifierFromList(item):
                     geometryWrapper.append(item)
             geometryList.append(geometryWrapper)
             geometryWrapper = []        
@@ -109,7 +109,7 @@ class InputReader():
         list = []
         lists.append(list)
         
-        identifier = rows[0].identifier
+        identifier = self.util.getIdentifierFromList(rows)
 
         for row in rows:
             if row.identifier == identifier:
