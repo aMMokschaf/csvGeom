@@ -32,7 +32,7 @@ class Modeller():
 
         if (len(coordinates) == 1):
             geometry = Point()
-            row = self.util.getFirstElement(0)
+            row = self.util.getFirstElement(coordinates)
             coordinate = self.createCoordinate(row)
             geometry.addCoordinate(coordinate)
         
