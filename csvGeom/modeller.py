@@ -48,6 +48,7 @@ class Modeller():
         except:
             self.logger.error(self.translations["err_validation"], [geometry.type, coordinate.ptId], logToFile=True)
             self.errCount += 1
+            return None
         
         return geometry
 
@@ -68,6 +69,7 @@ class Modeller():
         except:
             self.logger.error(self.translations["err_validation"], [geometry.type, coordinate.ptId], logToFile=True)
             self.errCount += 1
+            return None
 
         return geometry
 
@@ -88,6 +90,7 @@ class Modeller():
         except:
             self.logger.error(self.translations["err_validation"], [geometry.type, coordinate.ptId], logToFile=True)
             self.errCount += 1
+            return None
 
         return geometry
 
@@ -109,6 +112,7 @@ class Modeller():
             except:
                 self.logger.error(self.translations["err_validation"], [itemGeometry.type], logToFile=True)
                 self.errCount += 1
+                return None
 
         return geometry
 
@@ -130,6 +134,7 @@ class Modeller():
             except:
                 self.logger.error(self.translations["err_validation"], [itemGeometry.type], logToFile=True)
                 self.errCount += 1
+                return None
 
         return geometry
 
@@ -150,6 +155,7 @@ class Modeller():
             except:
                 self.logger.error(self.translations["err_validation"], [itemGeometry.type], logToFile=True)
                 self.errCount += 1
+                return None
 
         return geometry
 
