@@ -31,17 +31,20 @@ class CsvGeomGui():
         self.gui.resetErrMsg()
 
     def handleInput(self, values):
+        self.resetErrors()
+
         self.selectedFileName = values['-INPUT-']
         self.rows = self.inputReader.createCsvRowList(self.selectedFileName)
 
         entries = self.inputReader.createCodeDropDownEntries(self.rows)
         self.gui.updateValues("-CODE-", entries)
         self.gui.enableElement("-CODE-")
-        self.resetErrors()
-
+        
         self.gui.disableElement("-CONVERT-")
 
     def handleCode(self, values):
+        self.resetErrors()
+
         selectedCode = values['-CODE-']
         filteredRows = self.inputReader.filterByCode(self.rows, selectedCode)
 
@@ -51,6 +54,8 @@ class CsvGeomGui():
         self.gui.enableElement("-CONVERT-")
 
     def handleConvert(self):
+        self.resetErrors()
+
         featureCollectionModel = self.modeller.createFeatureCollection(self.aggregatedData, self.selectedType)
 
         errCount = self.modeller.errCount
