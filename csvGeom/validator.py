@@ -155,5 +155,6 @@ class Validator():
                 validModel.addFeature(feature)
             except:
                 self.logger.error(self.translations["err_validation_feature"], [element.identifier], logToFile=True)
+                self.errCount += 1
         
         return validModel
