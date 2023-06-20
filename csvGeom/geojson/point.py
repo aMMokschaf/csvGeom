@@ -12,10 +12,10 @@ class Point(GeoJsonObject):
         self.coordinates.append(coordinate)
 
     def returnCoordinates(self):
-        return self.coordinates
+        return self.coordinates[0]
 
     def __str__(self):
-        return f'"type": "{OutputType.POINT.getGeoJSONCase()}", "coordinates": {self.coordinates}'
+        return f'"type": "{OutputType.POINT.getGeoJSONCase()}", "coordinates": {self.returnCoordinates()}'
     
     def __repr__(self):
         return str(self)
