@@ -11,7 +11,7 @@ class Polygon(GeoJsonObject):
     def addCoordinate(self, coordinate):
         self.coordinates.append(coordinate)
    
-    def addMultipleCoordinate(self, coordinates):
+    def addMultipleCoordinates(self, coordinates):
         self.coordinates.append(coordinates)
 
     def returnCoordinates(self):

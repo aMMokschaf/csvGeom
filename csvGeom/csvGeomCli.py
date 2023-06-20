@@ -1,9 +1,9 @@
 from csvGeom.inputReader import InputReader
 from csvGeom.modeller import Modeller
 from csvGeom.utils.util import Util
-from csvGeom.utils.fileWriter import FileWriter
 from csvGeom.enums.outputType import OutputType
 from csvGeom.enums.fileType import FileType
+from csvGeom.validator import Validator
 
 class CsvGeomCli():
 
@@ -12,9 +12,9 @@ class CsvGeomCli():
 
         self.util = Util()
         self.translations = self.util.loadTranslations(args.l)
-        self.writer = FileWriter(args.l)
+        self.writer = logger.writer
         self.logger = logger
-        self.modeller = Modeller(args.l)
+        self.modeller = Modeller(args.l, logger)
         self.inputReader = InputReader(args.l, logger)
 
         self.selectedFileType = FileType.GEO_JSON
@@ -50,7 +50,7 @@ class CsvGeomCli():
     def handleOutputPath(self, selectedFileName, selectedType):
         outputFilePath = self.args.o
 
-        if self.args.o == "":
+        if self.args.o == "" or self.args.o == None:
             outputFilePath = self.util.createOutputFileName(selectedFileName, selectedType, self.selectedFileType)
 
         return outputFilePath
@@ -73,9 +73,18 @@ class CsvGeomCli():
             aggregatedData = self.inputReader.aggregateByIdentifier(splitData)
 
             featureCollectionModel = self.modeller.createFeatureCollection(aggregatedData, selectedType)
+
+            validator = Validator(self.logger, self.args.l)
+
+            validModel = validator.validate(featureCollectionModel)
             
-            output = str(featureCollectionModel)
+            output = str(validModel)
 
             outputFilePath = self.handleOutputPath(selectedFileName, selectedType)
 
-            self.writer.writeToFile(output, outputFilePath + self.selectedFileType.value)
+            print("outputfilePath", outputFilePath)
+
+            try:
+                self.logger.writer.writeToFile(output, outputFilePath)
+            except:
+                self.logger.error(self.translations["err_io"], [outputFilePath])

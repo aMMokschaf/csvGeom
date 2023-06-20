@@ -6,6 +6,7 @@ from csvGeom.modeller import Modeller
 from csvGeom.utils.util import Util
 from csvGeom.enums.outputType import OutputType
 from csvGeom.enums.fileType import FileType
+from csvGeom.validator import Validator
 
 class CsvGeomGui():
 
@@ -58,10 +59,14 @@ class CsvGeomGui():
 
         featureCollectionModel = self.modeller.createFeatureCollection(self.aggregatedData, self.selectedType)
 
-        errCount = self.modeller.errCount
+        validator = Validator(self.logger, self.args.l)
+
+        validatedModel = validator.validate(featureCollectionModel)
+
+        errCount = validator.errCount
         self.gui.updateErrMsg(errCount)
         
-        output = str(featureCollectionModel)
+        output = str(validatedModel)
 
         outputFileName = self.util.createOutputFileName(self.selectedFileName, self.selectedType, self.selectedFileType)
         

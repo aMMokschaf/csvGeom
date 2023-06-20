@@ -16,7 +16,14 @@ class FileWriter():
             raise Exception
 
     def writeToFile(self, data, filename):
-        self.write(data, filename, "w")
+        try:
+            self.write(data, filename, "w")
+        except:
+            raise Exception
 
     def appendToFile(self, data, filename):
-        self.write(data, filename, "a")
+        try:
+            self.write(data, filename, "a")
+        except:
+            raise Exception
+        

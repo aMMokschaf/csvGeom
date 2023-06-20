@@ -17,5 +17,6 @@
     "err_fileNotFound": "File not found!",
     "err_permissionError": "You don't have permission to write this file.",
     "err_io": "Error while writing the file {0}.",
-    "err_validation": "Error while validating geometry of type {0} with coordinate-id {1}."
+    "err_validation": "Error while validating geometry of type {0} with coordinate-id {1}.",
+    "err_validation_feature": "Error while validating feature with identifier {0}."
 }

@@ -12,7 +12,7 @@ class MultiPoint(GeoJsonObject):
         self.points.append(point)
 
     def __str__(self):
-        points = ','.join(str(p.returnCoordinate()) for p in self.points)
+        points = ','.join(str(p.returnCoordinates()) for p in self.points)
 
         return f'"type": "{OutputType.MULTI_POINT.getGeoJSONCase()}", "coordinates": [{points}]'
     
