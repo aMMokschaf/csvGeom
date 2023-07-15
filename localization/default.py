@@ -1,0 +1,22 @@
+default_localization = {
+    "gui_header": "Convert Lists of Coordinates to GeoJSON for Field Desktop",
+    "gui_browse": "Browse",
+    "gui_convert": "Convert",
+    "gui_close": "Close",
+    "gui_error_validation": "There were {0} error(s). See log.txt for details.",
+    "cli_filteredByCode": "Filtered by code {0}.",
+    "cli_uniqueIdentifiers": "Found {0} unique identifiers: {1}",
+    "cli_uniqueCodes": "Found {0} unique codes: {1}",
+    "cli_aggregatedGeometries": "Aggregated {0} geometries.",
+    "cli_codeSelected": "{0} selected.",
+    "cli_fileWritten": "File succesfully written: {0}",
+    "cli_selectCode": "Found {0} codes. Please select one of the following: {1}\n",
+    "err_missingColumn": "Could not find all columns needed to process the file.",
+    "err_parseGeometry": "Unable to parse GeometryType {0}. Reverting to default: 'Polygon'.",
+    "err_invalidCode": "{0} is not a valid selection. Please try again.",
+    "err_fileNotFound": "File not found!",
+    "err_permissionError": "You don't have permission to write this file.",
+    "err_io": "Error while writing the file {0}.",
+    "err_validation": "Error while validating geometry of type {0} with coordinate-id {1}.",
+    "err_validation_feature": "Error while validating feature with identifier {0}."
+}

@@ -1,4 +1,5 @@
 import json
+from localization.default import default_localization
 
 class Util():
 
@@ -18,7 +19,7 @@ class Util():
                 translations = json.load(file)
             return translations
         except:
-            pass
+            return default_localization
     
     def createFormattedMsg(self, msg, replacements):
         formattedMsg = msg
