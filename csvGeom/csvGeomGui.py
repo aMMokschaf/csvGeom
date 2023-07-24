@@ -7,6 +7,7 @@ from csvGeom.utils.util import Util
 from csvGeom.enums.outputType import OutputType
 from csvGeom.enums.fileType import FileType
 from csvGeom.validator import Validator
+from csvGeom.aggregator import Aggregator
 
 class CsvGeomGui():
 
@@ -17,9 +18,10 @@ class CsvGeomGui():
         self.logger = logger
         self.modeller = Modeller(args.l, logger)
         self.inputReader = InputReader(args.l, logger)
+        self.aggregator = Aggregator(args.l, logger)
 
         self.rows = None
-        self.aggregatedData = None
+        self.filteredRows = None
 
         self.selectedFileName = None
         self.selectedType = OutputType.POLYGON
@@ -47,17 +49,16 @@ class CsvGeomGui():
         self.resetErrors()
 
         selectedCode = values['-CODE-']
-        filteredRows = self.inputReader.filterByCode(self.rows, selectedCode)
-
-        splitData = self.inputReader.splitByIdentifier(filteredRows)
-        self.aggregatedData = self.inputReader.aggregateByIdentifier(splitData)
+        self.filteredRows = self.inputReader.filterByCode(self.rows, selectedCode)
 
         self.gui.enableElement("-CONVERT-")
 
     def handleConvert(self):
         self.resetErrors()
 
-        featureCollectionModel = self.modeller.createFeatureCollection(self.aggregatedData, self.selectedType)
+        aggregatedData = self.aggregator.aggregate(self.filteredRows)
+
+        featureCollectionModel = self.modeller.createFeatureCollection(aggregatedData, self.selectedType)
 
         validator = Validator(self.logger, self.args.l)
 

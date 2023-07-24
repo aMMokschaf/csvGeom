@@ -3,13 +3,6 @@ from csvGeom.utils.util import Util
 
 from csvGeom.geojson.featureCollection import FeatureCollection
 from csvGeom.geojson.feature import Feature
-from csvGeom.geojson.coordinate import Coordinate
-from csvGeom.geojson.point import Point
-from csvGeom.geojson.lineString import LineString
-from csvGeom.geojson.polygon import Polygon
-from csvGeom.geojson.multiPoint import MultiPoint
-from csvGeom.geojson.multiLineString import MultiLineString
-from csvGeom.geojson.multiPolygon import MultiPolygon
 
 class Validator():
     
@@ -114,7 +107,7 @@ class Validator():
     def validateMultiPolygon(self, geometry):
         numberOfPolygons = len(geometry.polygons)
 
-        if numberOfPolygons < 3:
+        if numberOfPolygons < 2:
             raise Exception
         
         for element in geometry.polygons:

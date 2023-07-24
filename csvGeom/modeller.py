@@ -144,9 +144,6 @@ class Modeller():
             return OutputType.MULTI_POINT
     
     def createFeature(self, rowList, selectedGeometryType):
-
-        if (len(rowList) >= 2):
-            selectedGeometryType = self.switchToMultiGeometry(selectedGeometryType)
         
         geometry = self.createGeometry(rowList, selectedGeometryType)
         if geometry != None:
@@ -155,12 +152,44 @@ class Modeller():
             return Feature(identifier, geometry)
         else:
             return None
+        
+    def transformRowListForMultiPoint(self, rowList):
+        list = []
+
+        for subList in rowList:
+            for coordinate in subList:
+                list2 = []
+                list2.append(coordinate)
+                list.append(list2)
+
+        return list
 
     def createFeatures(self, rowLists, selectedGeometryType):
         list = []
 
         for rowList in rowLists:
-            feature = self.createFeature(rowList, selectedGeometryType)
+
+            geometryType = None
+
+            feature = None
+
+            if selectedGeometryType == OutputType.POINT and len(rowList[0]) >= 2:
+
+                geometryType = self.switchToMultiGeometry(selectedGeometryType)
+
+                transformedList = self.transformRowListForMultiPoint(rowList)
+
+                feature = self.createFeature(transformedList, geometryType)
+                
+            else:
+
+                if (len(rowList) >= 2):
+                    geometryType = self.switchToMultiGeometry(selectedGeometryType)
+                else:
+                    geometryType = selectedGeometryType
+
+                feature = self.createFeature(rowList, geometryType)
+
             if feature != None:
                 list.append(feature)
         
