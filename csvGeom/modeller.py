@@ -54,8 +54,6 @@ class Modeller:
         return geometry
 
     def create_polygon_geometry(self, row_list):
-        geometry = None
-
         coordinates = self.util.get_first_element(row_list)
 
         geometry = Polygon()
@@ -68,8 +66,6 @@ class Modeller:
         return geometry
 
     def create_multi_point_geometry(self, row_list):
-        geometry = None
-
         geometry = Multipoint()
 
         for item in row_list:
@@ -83,8 +79,6 @@ class Modeller:
         return geometry
 
     def create_multi_linestring_geometry(self, rowList):
-        geometry = None
-
         geometry = MultiLineString()
 
         for item in rowList:
@@ -98,8 +92,6 @@ class Modeller:
         return geometry
 
     def create_multi_polygon_geometry(self, row_list):
-        geometry = None
-
         geometry = MultiPolygon()
         for item in row_list:
             item_geometry = Polygon()

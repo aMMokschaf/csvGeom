@@ -18,7 +18,7 @@ class Validator:
         return geometry.type
 
     def validate_coordinate_element(self, value):
-        return value != None
+        return value is not None
 
     def validate_coordinate(self, coordinate):
         return self.validate_coordinate_element(coordinate.north) and self.validate_coordinate_element(coordinate.east)
