@@ -1,12 +1,9 @@
-from csvGeom.geojson.geojsonObject import GeoJsonObject
-
 from csvGeom.enums.outputType import OutputType
 
 
-class LineString(GeoJsonObject):
+class LineString:
 
     def __init__(self):
-        super().__init__()
         self.coordinates = []
         self.type = OutputType.LINESTRING
 

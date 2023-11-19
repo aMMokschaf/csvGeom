@@ -1,12 +1,9 @@
-from csvGeom.geojson.geojsonObject import GeoJsonObject
-
 from csvGeom.enums.outputType import OutputType
 
 
-class Multipoint(GeoJsonObject):
+class Multipoint:
 
     def __init__(self):
-        super().__init__()
         self.points = []
         self.type = OutputType.MULTI_POINT
 

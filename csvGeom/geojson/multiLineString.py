@@ -1,12 +1,9 @@
-from csvGeom.geojson.geojsonObject import GeoJsonObject
-
 from csvGeom.enums.outputType import OutputType
 
 
-class MultiLineString(GeoJsonObject):
+class MultiLineString:
 
     def __init__(self):
-        super().__init__()
         self.lineStrings = []
         self.type = OutputType.MULTI_LINESTRING
 

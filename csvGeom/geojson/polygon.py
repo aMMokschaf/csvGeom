@@ -1,12 +1,9 @@
-from csvGeom.geojson.geojsonObject import GeoJsonObject
-
 from csvGeom.enums.outputType import OutputType
 
 
-class Polygon(GeoJsonObject):
+class Polygon:
 
     def __init__(self):
-        super().__init__()
         self.coordinates = []
         self.type = OutputType.POLYGON
 

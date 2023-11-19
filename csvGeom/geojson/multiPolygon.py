@@ -1,12 +1,9 @@
-from csvGeom.geojson.geojsonObject import GeoJsonObject
-
 from csvGeom.enums.outputType import OutputType
 
 
-class MultiPolygon(GeoJsonObject):
+class MultiPolygon:
 
     def __init__(self):
-        super().__init__()
         self.polygons = []
         self.type = OutputType.MULTI_POLYGON
 
