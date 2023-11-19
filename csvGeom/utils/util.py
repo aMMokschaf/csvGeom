@@ -1,19 +1,20 @@
 import json
 from localization.default import default_localization
 
-class Util():
 
-    def getFileNameWithoutEnding(self, filename):
+class Util:
+
+    def get_file_name_without_ending(self, filename):
         return filename.rsplit(".", 1)[0]
     
-    def createOutputFileName(self, fileName, geometryType, ending):
-        outputFileName = self.getFileNameWithoutEnding(fileName)
-        type = geometryType.getAsSuffix()
-        fileEnding = ending.value
+    def create_output_file_name(self, file_name, geometry_type, ending):
+        outputFileName = self.get_file_name_without_ending(file_name)
+        type = geometry_type.get_as_suffix()
+        file_ending = ending.value
         
-        return f"{outputFileName}{type}{fileEnding}"
+        return f"{outputFileName}{type}{file_ending}"
     
-    def loadTranslations(self, language):
+    def load_translations(self, language):
         try:
             with open(f"./localization/{language}.json", "r", encoding="utf-8") as file:
                 translations = json.load(file)
@@ -21,26 +22,26 @@ class Util():
         except:
             return default_localization
     
-    def createFormattedMsg(self, msg, replacements):
-        formattedMsg = msg
+    def create_formatted_msg(self, msg, replacements):
+        formatted_msg = msg
 
-        replacementStrings = [str(element) for element in replacements]
+        replacement_strings = [str(element) for element in replacements]
 
-        for index, replacement in enumerate(replacementStrings):
-            toBeReplaced = f"{{{index}}}"
-            formattedMsg = formattedMsg.replace(toBeReplaced, replacement)
+        for index, replacement in enumerate(replacement_strings):
+            to_be_replaced = f"{{{index}}}"
+            formatted_msg = formatted_msg.replace(to_be_replaced, replacement)
 
-        return formattedMsg
+        return formatted_msg
 
-    def getFirstElement(self, list):
+    def get_first_element(self, list):
         if len(list) == 0:
             raise IndexError
         else:
             return list[0]
 
-    def getIdentifierFromList(self, list):
+    def get_identifier_from_list(self, list):
         try:
-            firstElement = self.getFirstElement(list)
-            return firstElement.identifier
+            first_element = self.get_first_element(list)
+            return first_element.identifier
         except IndexError:
             raise IndexError

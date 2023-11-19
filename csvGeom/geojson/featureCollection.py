@@ -1,4 +1,4 @@
-class FeatureCollection():
+class FeatureCollection:
 
     type = "FeatureCollection"
     name = "csvGeom-Export"
@@ -6,7 +6,7 @@ class FeatureCollection():
     def __init__(self):
         self.features = []
 
-    def addFeature(self, feature):
+    def add_feature(self, feature):
         self.features.append(feature)
 
     def __str__(self):

@@ -1,4 +1,4 @@
-import PySimpleGUI as sg
+import PySimpleGUI as sG
 
 from csvGeom.gui import Gui
 from csvGeom.inputReader import InputReader
@@ -9,7 +9,8 @@ from csvGeom.enums.fileType import FileType
 from csvGeom.validator import Validator
 from csvGeom.aggregator import Aggregator
 
-class CsvGeomGui():
+
+class CsvGeomGui:
 
     def __init__(self, args, logger):
         self.args = args
@@ -29,59 +30,59 @@ class CsvGeomGui():
 
         self.gui = Gui("csvGeom v0.6.0", self.args.l)
 
-    def resetErrors(self):
+    def reset_errors(self):
         self.modeller.errCount = 0
-        self.gui.resetErrMsg()
+        self.gui.reset_err_msg()
 
-    def handleInput(self, values):
-        self.resetErrors()
+    def handle_input(self, values):
+        self.reset_errors()
 
         self.selectedFileName = values['-INPUT-']
-        self.rows = self.inputReader.createCsvRowList(self.selectedFileName)
+        self.rows = self.inputReader.create_csv_row_list(self.selectedFileName)
 
-        entries = self.inputReader.createCodeDropDownEntries(self.rows)
-        self.gui.updateValues("-CODE-", entries)
-        self.gui.enableElement("-CODE-")
+        entries = self.inputReader.create_code_drop_down_entries(self.rows)
+        self.gui.update_values("-CODE-", entries)
+        self.gui.enable_element("-CODE-")
         
-        self.gui.disableElement("-CONVERT-")
+        self.gui.disable_element("-CONVERT-")
 
-    def handleCode(self, values):
-        self.resetErrors()
+    def handle_code(self, values):
+        self.reset_errors()
 
-        selectedCode = values['-CODE-']
-        self.filteredRows = self.inputReader.filterByCode(self.rows, selectedCode)
+        selected_code = values['-CODE-']
+        self.filteredRows = self.inputReader.filter_by_code(self.rows, selected_code)
 
-        self.gui.enableElement("-CONVERT-")
+        self.gui.enable_element("-CONVERT-")
 
-    def handleConvert(self):
-        self.resetErrors()
+    def handle_convert(self):
+        self.reset_errors()
 
-        aggregatedData = self.aggregator.aggregate(self.filteredRows)
+        aggregated_data = self.aggregator.aggregate(self.filteredRows)
 
-        featureCollectionModel = self.modeller.createFeatureCollection(aggregatedData, self.selectedType)
+        feature_collection_model = self.modeller.create_feature_collection(aggregated_data, self.selectedType)
 
         validator = Validator(self.logger, self.args.l)
 
-        validatedModel = validator.validate(featureCollectionModel)
+        validated_model = validator.validate(feature_collection_model)
 
-        errCount = validator.errCount
-        self.gui.updateErrMsg(errCount)
+        err_count = validator.errCount
+        self.gui.update_err_msg(err_count)
         
-        output = str(validatedModel)
+        output = str(validated_model)
 
-        outputFileName = self.util.createOutputFileName(self.selectedFileName, self.selectedType, self.selectedFileType)
+        output_file_name = self.util.create_output_file_name(self.selectedFileName, self.selectedType, self.selectedFileType)
         
-        self.logger.writer.writeToFile(output, outputFileName)
+        self.logger.writer.writeToFile(output, output_file_name)
 
-    def handleGui(self):        
+    def handle_gui(self):
         while True:
-            event, values = self.gui.readValues()
+            event, values = self.gui.read_values()
 
             if event == "-INPUT-":
-                self.handleInput(values)
+                self.handle_input(values)
 
             if event == "-CODE-":
-                self.handleCode(values)
+                self.handle_code(values)
 
             if event == "-GEOM_POINT-":
                 self.selectedType = OutputType.POINT
@@ -93,9 +94,9 @@ class CsvGeomGui():
                 self.selectedType = OutputType.POLYGON
 
             if event == "-CONVERT-":
-                self.handleConvert()
+                self.handle_convert()
 
-            if event == "-CLOSE-" or event == sg.WIN_CLOSED:
+            if event == "-CLOSE-" or event == sG.WIN_CLOSED:
                 break
 
         self.gui.destroy()       

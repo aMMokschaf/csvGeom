@@ -2,7 +2,8 @@ import io
 
 from csvGeom.utils.util import Util
 
-class FileWriter():
+
+class FileWriter:
 
     def __init__(self):
         self.util = Util()

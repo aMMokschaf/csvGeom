@@ -1,18 +1,18 @@
 from csvGeom.utils.util import Util
-from csvGeom.enums.outputType import OutputType
 
-class Aggregator():
+
+class Aggregator:
 
     def __init__(self, language, logger):
         self.logger = logger
         self.util = Util()
-        self.translations = self.util.loadTranslations(language)
+        self.translations = self.util.load_translations(language)
 
-    def getAllUniqueIdentifiers(self, lists):
+    def get_all_unique_identifiers(self, lists):
         identifiers = []
 
-        for list in lists:
-            identifier = self.util.getIdentifierFromList(list)
+        for element in lists:
+            identifier = self.util.get_identifier_from_list(element)
 
             if identifier not in identifiers:
                 identifiers.append(identifier)
@@ -21,48 +21,47 @@ class Aggregator():
 
         return identifiers    
 
-    def aggregateByIdentifier(self, splitList):
-        identifiers = self.getAllUniqueIdentifiers(splitList)
+    def aggregate_by_identifier(self, split_list):
+        identifiers = self.get_all_unique_identifiers(split_list)
 
-        geometryWrapper = []
-        geometryList = []
+        geometry_wrapper = []
+        geometry_list = []
 
         for identifier in identifiers:
-            for item in splitList:
-                if identifier == self.util.getIdentifierFromList(item):
-                    geometryWrapper.append(item)
-            geometryList.append(geometryWrapper)
-            geometryWrapper = []        
+            for item in split_list:
+                if identifier == self.util.get_identifier_from_list(item):
+                    geometry_wrapper.append(item)
+            geometry_list.append(geometry_wrapper)
+            geometry_wrapper = []
 
-        self.logger.info(self.translations["cli_aggregatedGeometries"], [len(geometryList)])
+        self.logger.info(self.translations["cli_aggregatedGeometries"], [len(geometry_list)])
 
-        return geometryList
+        return geometry_list
     
-    def splitByIdentifier(self, rows):
+    def split_by_identifier(self, rows):
         if len(rows) == 0:
             return []
         
         lists = []
-        list = []
-        lists.append(list)
+        element = []
+        lists.append(element)
         
-        identifier = self.util.getIdentifierFromList(rows)
+        identifier = self.util.get_identifier_from_list(rows)
 
         for row in rows:
             if row.identifier == identifier:
-                list.append(row)
+                element.append(row)
             else:
                 identifier = row.identifier
-                list = []
-                list.append(row)
-                lists.append(list)
+                element = [row]
+                lists.append(element)
 
         return lists
     
-    def aggregate(self, filteredRows):
+    def aggregate(self, filtered_rows):
         
-        splitData = self.splitByIdentifier(filteredRows)
+        split_data = self.split_by_identifier(filtered_rows)
 
-        aggregatedData = self.aggregateByIdentifier(splitData)
+        aggregated_data = self.aggregate_by_identifier(split_data)
 
-        return aggregatedData
+        return aggregated_data

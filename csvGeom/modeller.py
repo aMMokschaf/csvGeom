@@ -6,7 +6,7 @@ from csvGeom.geojson.point import Point
 from csvGeom.geojson.lineString import LineString
 from csvGeom.geojson.polygon import Polygon
 
-from csvGeom.geojson.multiPoint import MultiPoint
+from csvGeom.geojson.multipoint import Multipoint
 from csvGeom.geojson.multiLineString import MultiLineString
 from csvGeom.geojson.multiPolygon import MultiPolygon
 
@@ -14,193 +14,186 @@ from csvGeom.enums.outputType import OutputType
 
 from csvGeom.utils.util import Util
 
-class Modeller():
+
+class Modeller:
 
     def __init__(self, language, logger):
         self.util = Util()
         self.logger = logger
-        self.translations = self.util.loadTranslations(language)
+        self.translations = self.util.load_translations(language)
 
-    def createCoordinate(self, row):
-        ptId = row.id.strip()
+    def create_coordinate(self, row):
+        pt_id = row.id.strip()
         east = row.east.strip()
         north = row.north.strip()
         height = row.height.strip()
 
-        return Coordinate(ptId, east, north, height)
+        return Coordinate(pt_id, east, north, height)
     
-    def createPointGeometry(self, rowList):
-        geometry = None
-        coordinates = self.util.getFirstElement(rowList)
+    def create_point_geometry(self, row_list):
+        coordinates = self.util.get_first_element(row_list)
 
         geometry = Point()
-        row = self.util.getFirstElement(coordinates)
-        coordinate = self.createCoordinate(row)
+        row = self.util.get_first_element(coordinates)
+        coordinate = self.create_coordinate(row)
 
-        geometry.addCoordinate(coordinate)
+        geometry.add_coordinate(coordinate)
         
         return geometry
 
-    def createLineStringGeometry(self, rowList):
-        geometry = None
-
-        coordinates = self.util.getFirstElement(rowList)
+    def create_line_string_geometry(self, row_list):
+        coordinates = self.util.get_first_element(row_list)
 
         geometry = LineString()
 
         for rows in coordinates:
-            coordinate = self.createCoordinate(rows)
+            coordinate = self.create_coordinate(rows)
 
-            geometry.addCoordinate(coordinate)
+            geometry.add_coordinate(coordinate)
 
         return geometry
 
-    def createPolygonGeometry(self, rowList):
+    def create_polygon_geometry(self, row_list):
         geometry = None
 
-        coordinates = self.util.getFirstElement(rowList)
+        coordinates = self.util.get_first_element(row_list)
 
         geometry = Polygon()
 
         for rows in coordinates:
-            coordinate = self.createCoordinate(rows)
+            coordinate = self.create_coordinate(rows)
 
-            geometry.addCoordinate(coordinate)
+            geometry.add_coordinate(coordinate)
 
         return geometry
 
-    def createMultiPointGeometry(self, rowList):
+    def create_multi_point_geometry(self, row_list):
         geometry = None
 
-        geometry = MultiPoint()
+        geometry = Multipoint()
 
-        for item in rowList:
-            itemGeometry = Point()
+        for item in row_list:
+            item_geometry = Point()
 
             for rows in item:
-                coordinate = self.createCoordinate(rows)
-                itemGeometry.addCoordinate(coordinate)
-                geometry.addPoint(itemGeometry)
+                coordinate = self.create_coordinate(rows)
+                item_geometry.add_coordinate(coordinate)
+                geometry.add_point(item_geometry)
 
         return geometry
 
-    def createMultiLineStringGeometry(self, rowList):
+    def create_multi_linestring_geometry(self, rowList):
         geometry = None
 
         geometry = MultiLineString()
 
         for item in rowList:
-            itemGeometry = LineString()
+            item_geometry = LineString()
 
             for rows in item:
-                coordinate = self.createCoordinate(rows)
-                itemGeometry.addCoordinate(coordinate)
-                geometry.addLineString(itemGeometry)
+                coordinate = self.create_coordinate(rows)
+                item_geometry.add_coordinate(coordinate)
+                geometry.add_line_string(item_geometry)
 
         return geometry
 
-    def createMultiPolygonGeometry(self, rowList):
+    def create_multi_polygon_geometry(self, row_list):
         geometry = None
 
         geometry = MultiPolygon()
-        for item in rowList:
-            itemGeometry = Polygon()
+        for item in row_list:
+            item_geometry = Polygon()
 
             for rows in item:
-                coordinate = self.createCoordinate(rows)
-                itemGeometry.addCoordinate(coordinate)
-                geometry.addPolygon(itemGeometry)
+                coordinate = self.create_coordinate(rows)
+                item_geometry.add_coordinate(coordinate)
+                geometry.add_polygon(item_geometry)
 
         return geometry
 
-    def createGeometry(self, rowList, selectedGeometryType):
+    def create_geometry(self, row_list, selected_geometry_type):
 
-        if selectedGeometryType == OutputType.POINT:
-            return self.createPointGeometry(rowList)
+        if selected_geometry_type == OutputType.POINT:
+            return self.create_point_geometry(row_list)
 
-        if selectedGeometryType == OutputType.LINESTRING:
-            return self.createLineStringGeometry(rowList)
+        if selected_geometry_type == OutputType.LINESTRING:
+            return self.create_line_string_geometry(row_list)
 
-        if selectedGeometryType == OutputType.POLYGON:
-            return self.createPolygonGeometry(rowList)
+        if selected_geometry_type == OutputType.POLYGON:
+            return self.create_polygon_geometry(row_list)
 
-        if selectedGeometryType == OutputType.MULTI_POINT:
-            return self.createMultiPointGeometry(rowList)
+        if selected_geometry_type == OutputType.MULTI_POINT:
+            return self.create_multi_point_geometry(row_list)
 
-        if selectedGeometryType == OutputType.MULTI_LINESTRING:
-            return self.createMultiLineStringGeometry(rowList)
+        if selected_geometry_type == OutputType.MULTI_LINESTRING:
+            return self.create_multi_linestring_geometry(row_list)
 
-        if selectedGeometryType == OutputType.MULTI_POLYGON:
-            return self.createMultiPolygonGeometry(rowList)
+        if selected_geometry_type == OutputType.MULTI_POLYGON:
+            return self.create_multi_polygon_geometry(row_list)
         
-    def switchToMultiGeometry(self, selectedGeometryType):
-        if selectedGeometryType == OutputType.POLYGON:
+    def switch_to_multi_geometry(self, selected_geometry_type):
+        if selected_geometry_type == OutputType.POLYGON:
             return OutputType.MULTI_POLYGON
 
-        elif selectedGeometryType == OutputType.LINESTRING:
+        elif selected_geometry_type == OutputType.LINESTRING:
             return OutputType.MULTI_LINESTRING
 
-        elif selectedGeometryType == OutputType.POINT:
+        elif selected_geometry_type == OutputType.POINT:
             return OutputType.MULTI_POINT
     
-    def createFeature(self, rowList, selectedGeometryType):
+    def create_feature(self, row_list, selected_geometry_type):
         
-        geometry = self.createGeometry(rowList, selectedGeometryType)
-        if geometry != None:
-            firstCoordinateList = self.util.getFirstElement(rowList)
-            identifier = self.util.getIdentifierFromList(firstCoordinateList)
+        geometry = self.create_geometry(row_list, selected_geometry_type)
+        if geometry is not None:
+            first_coordinate_list = self.util.get_first_element(row_list)
+            identifier = self.util.get_identifier_from_list(first_coordinate_list)
             return Feature(identifier, geometry)
         else:
             return None
         
-    def transformRowListForMultiPoint(self, rowList):
+    def transform_row_list_for_multi_point(self, rowList):
         list = []
 
         for subList in rowList:
             for coordinate in subList:
-                list2 = []
-                list2.append(coordinate)
+                list2 = [coordinate]
                 list.append(list2)
 
         return list
 
-    def createFeatures(self, rowLists, selectedGeometryType):
+    def create_features(self, rowLists, selectedGeometryType):
         list = []
 
         for rowList in rowLists:
 
-            geometryType = None
-
-            feature = None
-
             if selectedGeometryType == OutputType.POINT and len(rowList[0]) >= 2:
 
-                geometryType = self.switchToMultiGeometry(selectedGeometryType)
+                geometry_type = self.switch_to_multi_geometry(selectedGeometryType)
 
-                transformedList = self.transformRowListForMultiPoint(rowList)
+                transformed_list = self.transform_row_list_for_multi_point(rowList)
 
-                feature = self.createFeature(transformedList, geometryType)
+                feature = self.create_feature(transformed_list, geometry_type)
                 
             else:
 
-                if (len(rowList) >= 2):
-                    geometryType = self.switchToMultiGeometry(selectedGeometryType)
+                if len(rowList) >= 2:
+                    geometry_type = self.switch_to_multi_geometry(selectedGeometryType)
                 else:
-                    geometryType = selectedGeometryType
+                    geometry_type = selectedGeometryType
 
-                feature = self.createFeature(rowList, geometryType)
+                feature = self.create_feature(rowList, geometry_type)
 
-            if feature != None:
+            if feature is not None:
                 list.append(feature)
         
         return list
 
-    def createFeatureCollection(self, rowLists, selectedGeometryType):
+    def create_feature_collection(self, row_lists, selected_geometry_type):
 
-        featureList = self.createFeatures(rowLists, selectedGeometryType)
+        feature_list = self.create_features(row_lists, selected_geometry_type)
 
-        featureCollection = FeatureCollection()
+        feature_collection = FeatureCollection()
 
-        featureCollection.features = featureList
+        feature_collection.features = feature_list
 
-        return featureCollection
+        return feature_collection

@@ -4,7 +4,8 @@ from csvGeom.csvGeomCli import CsvGeomCli
 from csvGeom.utils.fileWriter import FileWriter
 from csvGeom.utils.logger import Logger
 
-class Main():
+
+class Main:
 
     def __init__(self):
         self.argParser = ArgParser()
@@ -12,14 +13,15 @@ class Main():
 
         self.writer = FileWriter()
         self.logger = Logger(self.writer)
-        
+
     def main(self):
         if self.args.cli:
             cli = CsvGeomCli(self.args, self.logger)
-            cli.handleCli()
+            cli.handle_cli()
         else:
             gui = CsvGeomGui(self.args, self.logger)
-            gui.handleGui()
+            gui.handle_gui()
+
 
 if __name__ == '__main__':
     app = Main()

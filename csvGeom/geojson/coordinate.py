@@ -1,7 +1,7 @@
-class Coordinate():
+class Coordinate:
 
-    def __init__(self, ptId, east, north, height="0"):
-        self.ptId = ptId
+    def __init__(self, id, east, north, height="0"):
+        self.ptId = id
         self.east = east
         self.north = north
         self.height = height
@@ -14,8 +14,8 @@ class Coordinate():
 
     def __dict__(self):
         return {
-            'east' : self.east,
-            'north' : self.north,
-            'height' : self.height
+            'east': self.east,
+            'north': self.north,
+            'height': self.height
         }
     

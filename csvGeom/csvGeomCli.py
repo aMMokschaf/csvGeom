@@ -5,13 +5,14 @@ from csvGeom.enums.outputType import OutputType
 from csvGeom.enums.fileType import FileType
 from csvGeom.validator import Validator
 
-class CsvGeomCli():
+
+class CsvGeomCli:
 
     def __init__(self, args, logger):
         self.args = args
 
         self.util = Util()
-        self.translations = self.util.loadTranslations(args.l)
+        self.translations = self.util.load_translations(args.l)
         self.writer = logger.writer
         self.logger = logger
         self.modeller = Modeller(args.l, logger)
@@ -19,72 +20,70 @@ class CsvGeomCli():
 
         self.selectedFileType = FileType.GEO_JSON
 
-    def parseGeometryType(self, arg):
-        type = None
+    def parse_geometry_type(self, arg):
         try:
-            type = OutputType(arg)
+            geometry_type = OutputType(arg)
         except ValueError:
             self.logger.error(self.translations["err_parseGeometry"], [arg])
-            type = OutputType.POLYGON
+            geometry_type = OutputType.POLYGON
 
-        return type
+        return geometry_type
 
-    def checkValidCodeSelection(self, entries, selection):
+    def check_valid_code_selection(self, entries, selection):
         if selection in entries:
             return True
         else:
             return False
         
-    def handleCodeSelection(self, entries):
-        selectedCode = None
+    def handle_code_selection(self, entries):
         while True:
-            msg = self.util.createFormattedMsg(self.translations["cli_selectCode"], [len(entries), entries])
+            msg = self.util.create_formatted_msg(self.translations["cli_selectCode"], [len(entries), entries])
 
-            selectedCode = input(msg)
-            if self.checkValidCodeSelection(entries, selectedCode):
-                self.logger.info(self.translations["cli_codeSelected"], [selectedCode])
-                return selectedCode
+            selected_code = input(msg)
+            if self.check_valid_code_selection(entries, selected_code):
+                self.logger.info(self.translations["cli_codeSelected"], [selected_code])
+                return selected_code
             else:
-                self.logger.error(self.translations["err_invalidCode"], [selectedCode])
+                self.logger.error(self.translations["err_invalidCode"], [selected_code])
 
-    def handleOutputPath(self, selectedFileName, selectedType):
-        outputFilePath = self.args.o
+    def handle_output_path(self, selected_file_name, selected_type):
+        output_file_path = self.args.o
 
-        if self.args.o == "" or self.args.o == None:
-            outputFilePath = self.util.createOutputFileName(selectedFileName, selectedType, self.selectedFileType)
+        if self.args.o == "" or self.args.o is None:
+            output_file_path = self.util.create_output_file_name(selected_file_name, selected_type, self.selectedFileType)
 
-        return outputFilePath
+        return output_file_path
                 
-    def handleCli(self):
-            selectedFileName = self.args.i
+    def handle_cli(self):
+        selected_file_name = self.args.i
 
-            selectedType = self.parseGeometryType(self.args.g)
+        selected_type = self.parse_geometry_type(self.args.g)
 
-            rows = self.inputReader.createCsvRowList(selectedFileName)
+        rows = self.inputReader.create_csv_row_list(selected_file_name)
 
-            entries = self.inputReader.createCodeDropDownEntries(rows)
+        entries = self.inputReader.create_code_drop_down_entries(rows)
 
-            selectedCode = self.handleCodeSelection(entries)
+        selected_code = self.handle_code_selection(entries)
 
-            filteredRows = self.inputReader.filterByCode(rows, selectedCode)
+        filtered_rows = self.inputReader.filter_by_code(rows, selected_code)
 
-            splitData = self.inputReader.splitByIdentifier(filteredRows)
+        split_data = self.aggregator.split_by_identifier(filtered_rows)
 
-            aggregatedData = self.inputReader.aggregateByIdentifier(splitData)
+        aggregated_data = self.aggregator.aggregate_by_identifier(split_data)
 
-            featureCollectionModel = self.modeller.createFeatureCollection(aggregatedData, selectedType)
+        feature_collection_model = self.modeller.create_feature_collection(aggregated_data, selected_type)
 
-            validator = Validator(self.logger, self.args.l)
+        validator = Validator(self.logger, self.args.l)
 
-            validModel = validator.validate(featureCollectionModel)
-            
-            output = str(validModel)
+        valid_model = validator.validate(feature_collection_model)
 
-            outputFilePath = self.handleOutputPath(selectedFileName, selectedType)
+        output = str(valid_model)
 
-            print("outputfilePath", outputFilePath)
+        output_file_path = self.handle_output_path(selected_file_name, selected_type)
 
-            try:
-                self.logger.writer.writeToFile(output, outputFilePath)
-            except:
-                self.logger.error(self.translations["err_io"], [outputFilePath])
+        print("outputfilePath", output_file_path)
+
+        try:
+            self.logger.writer.writeToFile(output, output_file_path)
+        except:
+            self.logger.error(self.translations["err_io"], [output_file_path])

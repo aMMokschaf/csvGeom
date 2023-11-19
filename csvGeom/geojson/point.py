@@ -2,24 +2,26 @@ from csvGeom.geojson.geojsonObject import GeoJsonObject
 
 from csvGeom.enums.outputType import OutputType
 
+
 class Point(GeoJsonObject):
 
     def __init__(self):
+        super().__init__()
         self.coordinates = []
         self.type = OutputType.POINT
 
-    def addCoordinate(self, coordinate):
+    def add_coordinate(self, coordinate):
         self.coordinates.append(coordinate)
 
     def returnCoordinates(self):
         return self.coordinates[0]
 
     def __str__(self):
-        return f'"type": "{OutputType.POINT.getGeoJSONCase()}", "coordinates": {self.returnCoordinates()}'
-    
+        return f'"type": "{OutputType.POINT.get_geo_json_case()}", "coordinates": {self.returnCoordinates()}'
+
     def __repr__(self):
         return str(self)
-    
+
     def __dict__(self):
         return {
             'type': OutputType.POINT.value,
