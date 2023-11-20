@@ -1,55 +1,55 @@
 import csv
 import io
 
-from csvGeom.utils.logger import Logger
 from csvGeom.csvRow import CsvRow
 from csvGeom.utils.util import Util
 
 DELIMITER = ','
 
-class InputReader():
 
-    def __init__(self, language):
-        self.logger = Logger()
+class InputReader:
+
+    def __init__(self, language, logger):
+        self.logger = logger
         self.util = Util()
-        self.translations = self.util.loadTranslations(language)
+        self.translations = self.util.load_translations(language)
 
-    def parseRow(self, row):
-        rowObj = CsvRow()
+    def parse_row(self, row):
+        row_obj = CsvRow()
         try:
-            rowObj.id = row['PtID']
-            rowObj.east = row['East']
-            rowObj.north = row['North']
+            row_obj.id = row['PtID']
+            row_obj.east = row['East']
+            row_obj.north = row['North']
             
-            rowObj.code = row['Code']
-            rowObj.identifier = row['Identifier']
+            row_obj.code = row['Code']
+            row_obj.identifier = row['Identifier']
         except:
             raise KeyError
         
         try:
-            rowObj.height = row['Height']
+            row_obj.height = row['Height']
         except:
-            rowObj.height = "0"
+            row_obj.height = "0"
 
-        return rowObj
+        return row_obj
 
-    def createCsvRowList(self, inpFileName):
-        with io.open(inpFileName) as impFile:
+    def create_csv_row_list(self, inp_file_name):
+        with io.open(inp_file_name) as impFile:
             rows = []
 
             reader = csv.DictReader(impFile, delimiter=DELIMITER)
             
             for row in reader:
                 try:
-                    rowObj = self.parseRow(row)
-                    rows.append(rowObj)
+                    row_obj = self.parse_row(row)
+                    rows.append(row_obj)
                 except KeyError:
                     self.logger.error(self.translations["err_missingColumn"])
                     break
                 
             return rows
         
-    def createCodeDropDownEntries(self, rows):
+    def create_code_drop_down_entries(self, rows):
         codes = []
 
         for obj in rows:
@@ -60,7 +60,7 @@ class InputReader():
 
         return codes
         
-    def filterByCode(self, rows, code):
+    def filter_by_code(self, rows, code):
         list = []
 
         for obj in rows:
@@ -70,54 +70,3 @@ class InputReader():
         self.logger.info(self.translations["cli_filteredByCode"], [code])
 
         return list
-    
-    def getAllUniqueIdentifiers(self, lists):
-        identifiers = []
-
-        for list in lists:
-            identifier = self.util.getIdentifierFromList(list)
-
-            if identifier not in identifiers:
-                identifiers.append(identifier)
-
-        self.logger.info(self.translations["cli_uniqueIdentifiers"], [len(identifiers), identifiers])
-
-        return identifiers
-    
-    def aggregateByIdentifier(self, splitList):
-        identifiers = self.getAllUniqueIdentifiers(splitList)
-
-        geometryWrapper = []
-        geometryList = []
-
-        for identifier in identifiers:
-            for item in splitList:
-                if identifier == self.util.getIdentifierFromList(item):
-                    geometryWrapper.append(item)
-            geometryList.append(geometryWrapper)
-            geometryWrapper = []        
-
-        self.logger.info(self.translations["cli_aggregatedGeometries"], [len(geometryList)])
-
-        return geometryList
-    
-    def splitByIdentifier(self, rows):
-        if len(rows) == 0:
-            return []
-        
-        lists = []
-        list = []
-        lists.append(list)
-        
-        identifier = self.util.getIdentifierFromList(rows)
-
-        for row in rows:
-            if row.identifier == identifier:
-                list.append(row)
-            else:
-                identifier = row.identifier
-                list = []
-                list.append(row)
-                lists.append(list)
-
-        return lists

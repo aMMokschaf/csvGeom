@@ -1,4 +1,4 @@
-{
+default_localization = {
     "gui_header": "Convert Lists of Coordinates to GeoJSON for Field Desktop",
     "gui_browse": "Browse",
     "gui_convert": "Convert",
@@ -9,7 +9,7 @@
     "cli_uniqueCodes": "Found {0} unique codes: {1}",
     "cli_aggregatedGeometries": "Aggregated {0} geometries.",
     "cli_codeSelected": "{0} selected.",
-    "cli_fileWritten": "File succesfully written: {0}",
+    "cli_fileWritten": "File successfully written: {0}",
     "cli_selectCode": "Found {0} codes. Please select one of the following: {1}\n",
     "err_missingColumn": "Could not find all columns needed to process the file.",
     "err_parseGeometry": "Unable to parse GeometryType {0}. Reverting to default: 'Polygon'.",

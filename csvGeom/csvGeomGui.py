@@ -1,70 +1,88 @@
-import PySimpleGUI as sg
+import PySimpleGUI as sG
 
 from csvGeom.gui import Gui
 from csvGeom.inputReader import InputReader
 from csvGeom.modeller import Modeller
 from csvGeom.utils.util import Util
-from csvGeom.utils.fileWriter import FileWriter
 from csvGeom.enums.outputType import OutputType
 from csvGeom.enums.fileType import FileType
+from csvGeom.validator import Validator
+from csvGeom.aggregator import Aggregator
 
-class CsvGeomGui():
 
-    def __init__(self, args):
+class CsvGeomGui:
+
+    def __init__(self, args, logger):
         self.args = args
 
         self.util = Util()
-        self.writer = FileWriter(args.l)
-        self.modeller = Modeller()
-        self.inputReader = InputReader(args.l)
+        self.logger = logger
+        self.modeller = Modeller(args.l, logger)
+        self.inputReader = InputReader(args.l, logger)
+        self.aggregator = Aggregator(args.l, logger)
 
         self.rows = None
-        self.aggregatedData = None
+        self.filteredRows = None
 
         self.selectedFileName = None
         self.selectedType = OutputType.POLYGON
         self.selectedFileType = FileType.GEO_JSON
 
-        self.gui = Gui("csvGeom v0.5.2", self.args.l)
+        self.gui = Gui("csvGeom v0.6.0", self.args.l)
 
-    def handleInput(self, values):
+    def reset_errors(self):
+        self.modeller.errCount = 0
+        self.gui.reset_err_msg()
+
+    def handle_input(self, values):
+        self.reset_errors()
+
         self.selectedFileName = values['-INPUT-']
-        self.rows = self.inputReader.createCsvRowList(self.selectedFileName)
+        self.rows = self.inputReader.create_csv_row_list(self.selectedFileName)
 
-        entries = self.inputReader.createCodeDropDownEntries(self.rows)
-        self.gui.updateValues("-CODE-", entries)
-        self.gui.enableElement("-CODE-")
-
-        self.gui.disableElement("-CONVERT-")
-
-    def handleCode(self, values):
-        selectedCode = values['-CODE-']
-        filteredRows = self.inputReader.filterByCode(self.rows, selectedCode)
-
-        splitData = self.inputReader.splitByIdentifier(filteredRows)
-        self.aggregatedData = self.inputReader.aggregateByIdentifier(splitData)
-
-        self.gui.enableElement("-CONVERT-")
-
-    def handleConvert(self):
-        featureCollectionModel = self.modeller.createFeatureCollection(self.aggregatedData, self.selectedType)
+        entries = self.inputReader.create_code_drop_down_entries(self.rows)
+        self.gui.update_values("-CODE-", entries)
+        self.gui.enable_element("-CODE-")
         
-        output = str(featureCollectionModel)
+        self.gui.disable_element("-CONVERT-")
 
-        outputFileName = self.util.createOutputFileName(self.selectedFileName, self.selectedType, self.selectedFileType)
-        
-        self.writer.writeToFile(output, outputFileName)
+    def handle_code(self, values):
+        self.reset_errors()
 
-    def handleGui(self):
+        selected_code = values['-CODE-']
+        self.filteredRows = self.inputReader.filter_by_code(self.rows, selected_code)
+
+        self.gui.enable_element("-CONVERT-")
+
+    def handle_convert(self):
+        self.reset_errors()
+
+        aggregated_data = self.aggregator.aggregate(self.filteredRows)
+
+        feature_collection_model = self.modeller.create_feature_collection(aggregated_data, self.selectedType)
+
+        validator = Validator(self.logger, self.args.l)
+
+        validated_model = validator.validate(feature_collection_model)
+
+        err_count = validator.errCount
+        self.gui.update_err_msg(err_count)
         
+        output = str(validated_model)
+
+        output_file_name = self.util.create_output_file_name(self.selectedFileName, self.selectedType, self.selectedFileType)
+        
+        self.logger.writer.writeToFile(output, output_file_name)
+
+    def handle_gui(self):
         while True:
-            event, values = self.gui.readValues()
+            event, values = self.gui.read_values()
 
             if event == "-INPUT-":
-                self.handleInput(values)
+                self.handle_input(values)
 
             if event == "-CODE-":
-                self.handleCode(values)
+                self.handle_code(values)
 
             if event == "-GEOM_POINT-":
                 self.selectedType = OutputType.POINT
@@ -76,9 +94,9 @@ class CsvGeomGui():
                 self.selectedType = OutputType.POLYGON
 
             if event == "-CONVERT-":
-                self.handleConvert()
+                self.handle_convert()
 
-            if event == "-CLOSE-" or event == sg.WIN_CLOSED:
+            if event == "-CLOSE-" or event == sG.WIN_CLOSED:
                 break
 
         self.gui.destroy()       

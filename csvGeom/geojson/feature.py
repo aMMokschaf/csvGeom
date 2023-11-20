@@ -1,4 +1,4 @@
-class Feature():
+class Feature:
 
     type = "Feature"
 

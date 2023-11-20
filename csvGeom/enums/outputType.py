@@ -1,5 +1,6 @@
 from enum import Enum
 
+
 class OutputType(Enum):
     POINT = "Point"
     LINESTRING = "LineString"
@@ -8,18 +9,17 @@ class OutputType(Enum):
     MULTI_LINESTRING = "MultiLineString"
     MULTI_POLYGON = "MultiPolygon"
 
-    def getGeoJSONCase(self):
+    def get_geo_json_case(self):
         return self.value
 
-    def getUpperCase(self):
+    def get_upper_case(self):
         return self.value.upper()
-    
-    def getLowerCase(self):
+
+    def get_lower_case(self):
         return self.value.lower()
-    
-    def getTitleCase(self):
+
+    def get_title_case(self):
         return self.value.title()
-    
-    def getAsSuffix(self):
-        return "_" + self.getLowerCase()
-    
+
+    def get_as_suffix(self):
+        return "_" + self.get_lower_case()

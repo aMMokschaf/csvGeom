@@ -1,4 +1,4 @@
-class CsvRow():
+class CsvRow:
 
     def __init__(self):
         self.east = ""

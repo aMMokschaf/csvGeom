@@ -1,24 +1,23 @@
-from csvGeom.geojson.geojsonObject import GeoJsonObject
-
 from csvGeom.enums.outputType import OutputType
 
-class LineString(GeoJsonObject):
+
+class LineString:
 
     def __init__(self):
         self.coordinates = []
         self.type = OutputType.LINESTRING
 
-    def addCoordinate(self, coordinate):
+    def add_coordinate(self, coordinate):
         self.coordinates.append(coordinate)
-    
-    def addMultipleCoordinates(self, coordinates):
+
+    def add_multiple_coordinates(self, coordinates):
         self.coordinates.append(coordinates)
-    
+
     def returnCoordinates(self):
         return self.coordinates
 
     def __str__(self):
-        return f'"type": "{OutputType.LINESTRING.getGeoJSONCase()}", "coordinates": {self.coordinates}'
+        return f'"type": "{OutputType.LINESTRING.get_geo_json_case()}", "coordinates": {self.coordinates}'
 
     def __repr__(self):
         return str(self)
@@ -28,4 +27,3 @@ class LineString(GeoJsonObject):
             'type': OutputType.LINESTRING.value,
             'coordinates': self.coordinates
         }
-       
