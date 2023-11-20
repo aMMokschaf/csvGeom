@@ -1,5 +1,6 @@
 from csvGeom.inputReader import InputReader
 from csvGeom.modeller import Modeller
+from csvGeom.aggregator import Aggregator
 from csvGeom.utils.util import Util
 from csvGeom.utils.logger import Logger
 from csvGeom.utils.fileWriter import FileWriter
@@ -14,8 +15,8 @@ class CsvGeomCli:
         self.args = args
 
         self.translations = Util.load_translations(args.l)
-        self.modeller = Modeller(args.l)
         self.inputReader = InputReader(args.l)
+        self.aggregator = Aggregator(args.l)
 
         self.selectedFileType = FileType.GEO_JSON
 
@@ -70,7 +71,7 @@ class CsvGeomCli:
 
         aggregated_data = self.aggregator.aggregate_by_identifier(split_data)
 
-        feature_collection_model = self.modeller.create_feature_collection(aggregated_data, selected_type)
+        feature_collection_model = Modeller.create_feature_collection(aggregated_data, selected_type)
 
         validator = Validator(self.args.l)
 

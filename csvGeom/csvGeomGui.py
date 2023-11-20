@@ -16,7 +16,6 @@ class CsvGeomGui:
     def __init__(self, args):
         self.args = args
 
-        self.modeller = Modeller(args.l)
         self.inputReader = InputReader(args.l)
         self.aggregator = Aggregator(args.l)
 
@@ -30,7 +29,6 @@ class CsvGeomGui:
         self.gui = Gui("csvGeom v0.6.0", self.args.l)
 
     def reset_errors(self):
-        self.modeller.errCount = 0
         self.gui.reset_err_msg()
 
     def handle_input(self, values):
@@ -58,7 +56,7 @@ class CsvGeomGui:
 
         aggregated_data = self.aggregator.aggregate(self.filteredRows)
 
-        feature_collection_model = self.modeller.create_feature_collection(aggregated_data, self.selectedType)
+        feature_collection_model = Modeller.create_feature_collection(aggregated_data, self.selectedType)
 
         validator = Validator(self.args.l)
 
