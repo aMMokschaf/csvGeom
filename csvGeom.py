@@ -13,11 +13,11 @@ class Main:
 
     def main(self):
         if self.args.cli:
-            cli = CsvGeomCli(self.args)
-            cli.handle_cli()
+            csv_geom = CsvGeomCli(self.args)
+            csv_geom.handle_cli()
         else:
-            gui = CsvGeomGui(self.args)
-            gui.handle_gui()
+            csv_geom = CsvGeomGui(self.args)
+            csv_geom.handle_gui()
 
 
 if __name__ == '__main__':

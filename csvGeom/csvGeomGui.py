@@ -38,10 +38,13 @@ class CsvGeomGui:
         self.rows = self.inputReader.create_csv_row_list(self.selectedFileName)
 
         entries = self.inputReader.create_code_drop_down_entries(self.rows)
-        self.gui.update_values("-CODE-", entries)
-        self.gui.enable_element("-CODE-")
+
+        gui = self.gui
+
+        gui.update_values("-CODE-", entries)
+        gui.enable_element("-CODE-")
         
-        self.gui.disable_element("-CONVERT-")
+        gui.disable_element("-CONVERT-")
 
     def handle_code(self, values):
         self.reset_errors()
