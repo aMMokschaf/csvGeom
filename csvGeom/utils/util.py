@@ -22,7 +22,7 @@ class Util:
             with open(f"./localization/{language}.json", "r", encoding="utf-8") as file:
                 translations = json.load(file)
             return translations
-        except:
+        except FileNotFoundError:
             return default_localization
 
     @staticmethod
