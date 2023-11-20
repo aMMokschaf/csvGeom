@@ -1,5 +1,6 @@
 from csvGeom.enums.outputType import OutputType
 from csvGeom.utils.util import Util
+from csvGeom.utils.logger import Logger
 
 from csvGeom.geojson.featureCollection import FeatureCollection
 from csvGeom.geojson.feature import Feature
@@ -7,12 +8,10 @@ from csvGeom.geojson.feature import Feature
 
 class Validator:
     
-    def __init__(self, logger, language):
-        self.logger = logger
+    def __init__(self, language):
         self.errCount = 0
 
-        self.util = Util()
-        self.translations = self.util.load_translations(language)
+        self.translations = Util.load_translations(language)
     
     def determine_geometry_type(self, geometry):
         return geometry.type
@@ -40,7 +39,7 @@ class Validator:
             try:
                 self.validate_coordinate(element)
             except:
-                self.logger.error(self.translations["err_validation"], [geometry.type, element.ptId], logToFile=True)
+                Logger.error(self.translations["err_validation"], [geometry.type, element.ptId], log_to_file=True)
                 self.errCount += 1
 
         return geometry
@@ -55,7 +54,7 @@ class Validator:
             try:
                 self.validate_coordinate(element)
             except:
-                self.logger.error(self.translations["err_validation"], [geometry.type, element.ptId], logToFile=True)
+                Logger.error(self.translations["err_validation"], [geometry.type, element.ptId], log_to_file=True)
                 self.errCount += 1
                 
         return geometry
@@ -70,7 +69,7 @@ class Validator:
             try:
                 self.validate_coordinate(element)
             except:
-                self.logger.error(self.translations["err_validation"], [geometry.type, element.ptId], logToFile=True)
+                Logger.error(self.translations["err_validation"], [geometry.type, element.ptId], log_to_file=True)
                 self.errCount += 1
         
         return geometry
@@ -85,7 +84,7 @@ class Validator:
             try:
                 self.validate_point(element)
             except:
-                self.logger.error(self.translations["err_validation"], [element.type, element.ptId], logToFile=True)
+                Logger.error(self.translations["err_validation"], [element.type, element.ptId], log_to_file=True)
                 self.errCount += 1
 
         return geometry
@@ -100,7 +99,7 @@ class Validator:
             try:
                 self.validate_line_string(element)
             except:
-                self.logger.error(self.translations["err_validation"], [element.type, element.ptId], logToFile=True)
+                Logger.error(self.translations["err_validation"], [element.type, element.ptId], log_to_file=True)
                 self.errCount += 1
         
         return geometry
@@ -115,7 +114,7 @@ class Validator:
             try:
                 self.validate_polygon(element)
             except:
-                self.logger.error(self.translations["err_validation"], [element.type, element.ptId], logToFile=True)
+                Logger.error(self.translations["err_validation"], [element.type, element.ptId], log_to_file=True)
                 self.errCount += 1
 
         return geometry
@@ -148,7 +147,7 @@ class Validator:
                 feature = Feature(element.identifier, valid_geometry)
                 valid_model.add_feature(feature)
             except:
-                self.logger.error(self.translations["err_validation_feature"], [element.identifier], logToFile=True)
+                Logger.error(self.translations["err_validation_feature"], [element.identifier], log_to_file=True)
                 self.errCount += 1
         
         return valid_model

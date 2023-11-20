@@ -4,25 +4,29 @@ from localization.default import default_localization
 
 class Util:
 
-    def get_file_name_without_ending(self, filename):
+    @staticmethod
+    def get_file_name_without_ending(filename):
         return filename.rsplit(".", 1)[0]
-    
-    def create_output_file_name(self, file_name, geometry_type, ending):
-        outputFileName = self.get_file_name_without_ending(file_name)
-        type = geometry_type.get_as_suffix()
+
+    @staticmethod
+    def create_output_file_name(file_name, geometry_type, ending):
+        output_file_name = Util.get_file_name_without_ending(file_name)
+        geometry_type = geometry_type.get_as_suffix()
         file_ending = ending.value
-        
-        return f"{outputFileName}{type}{file_ending}"
-    
-    def load_translations(self, language):
+
+        return f"{output_file_name}{geometry_type}{file_ending}"
+
+    @staticmethod
+    def load_translations(language):
         try:
             with open(f"./localization/{language}.json", "r", encoding="utf-8") as file:
                 translations = json.load(file)
             return translations
         except:
             return default_localization
-    
-    def create_formatted_msg(self, msg, replacements):
+
+    @staticmethod
+    def create_formatted_msg(msg, replacements):
         formatted_msg = msg
 
         replacement_strings = [str(element) for element in replacements]
@@ -33,15 +37,17 @@ class Util:
 
         return formatted_msg
 
-    def get_first_element(self, list):
-        if len(list) == 0:
+    @staticmethod
+    def get_first_element(elements):
+        if len(elements) == 0:
             raise IndexError
         else:
-            return list[0]
+            return elements[0]
 
-    def get_identifier_from_list(self, list):
+    @staticmethod
+    def get_identifier_from_list(elements):
         try:
-            first_element = self.get_first_element(list)
+            first_element = Util.get_first_element(elements)
             return first_element.identifier
         except IndexError:
             raise IndexError

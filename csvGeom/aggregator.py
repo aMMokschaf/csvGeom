@@ -1,23 +1,22 @@
 from csvGeom.utils.util import Util
+from csvGeom.utils.logger import Logger
 
 
 class Aggregator:
 
-    def __init__(self, language, logger):
-        self.logger = logger
-        self.util = Util()
-        self.translations = self.util.load_translations(language)
+    def __init__(self, language):
+        self.translations = Util.load_translations(language)
 
     def get_all_unique_identifiers(self, lists):
         identifiers = []
 
         for element in lists:
-            identifier = self.util.get_identifier_from_list(element)
+            identifier = Util.get_identifier_from_list(element)
 
             if identifier not in identifiers:
                 identifiers.append(identifier)
 
-        self.logger.info(self.translations["cli_uniqueIdentifiers"], [len(identifiers), identifiers])
+        Logger.info(self.translations["cli_uniqueIdentifiers"], [len(identifiers), identifiers])
 
         return identifiers    
 
@@ -29,12 +28,12 @@ class Aggregator:
 
         for identifier in identifiers:
             for item in split_list:
-                if identifier == self.util.get_identifier_from_list(item):
+                if identifier == Util.get_identifier_from_list(item):
                     geometry_wrapper.append(item)
             geometry_list.append(geometry_wrapper)
             geometry_wrapper = []
 
-        self.logger.info(self.translations["cli_aggregatedGeometries"], [len(geometry_list)])
+        Logger.info(self.translations["cli_aggregatedGeometries"], [len(geometry_list)])
 
         return geometry_list
     
@@ -46,7 +45,7 @@ class Aggregator:
         element = []
         lists.append(element)
         
-        identifier = self.util.get_identifier_from_list(rows)
+        identifier = Util.get_identifier_from_list(rows)
 
         for row in rows:
             if row.identifier == identifier:

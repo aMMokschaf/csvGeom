@@ -17,10 +17,8 @@ from csvGeom.utils.util import Util
 
 class Modeller:
 
-    def __init__(self, language, logger):
-        self.util = Util()
-        self.logger = logger
-        self.translations = self.util.load_translations(language)
+    def __init__(self, language):
+        self.translations = Util.load_translations(language)
 
     def create_coordinate(self, row):
         pt_id = row.id.strip()
@@ -31,10 +29,10 @@ class Modeller:
         return Coordinate(pt_id, east, north, height)
     
     def create_point_geometry(self, row_list):
-        coordinates = self.util.get_first_element(row_list)
+        coordinates = Util.get_first_element(row_list)
 
         geometry = Point()
-        row = self.util.get_first_element(coordinates)
+        row = Util.get_first_element(coordinates)
         coordinate = self.create_coordinate(row)
 
         geometry.add_coordinate(coordinate)
@@ -42,7 +40,7 @@ class Modeller:
         return geometry
 
     def create_line_string_geometry(self, row_list):
-        coordinates = self.util.get_first_element(row_list)
+        coordinates = Util.get_first_element(row_list)
 
         geometry = LineString()
 
@@ -54,7 +52,7 @@ class Modeller:
         return geometry
 
     def create_polygon_geometry(self, row_list):
-        coordinates = self.util.get_first_element(row_list)
+        coordinates = Util.get_first_element(row_list)
 
         geometry = Polygon()
 
@@ -78,10 +76,10 @@ class Modeller:
 
         return geometry
 
-    def create_multi_linestring_geometry(self, rowList):
+    def create_multi_linestring_geometry(self, row_list):
         geometry = MultiLineString()
 
-        for item in rowList:
+        for item in row_list:
             item_geometry = LineString()
 
             for rows in item:
@@ -137,30 +135,30 @@ class Modeller:
         
         geometry = self.create_geometry(row_list, selected_geometry_type)
         if geometry is not None:
-            first_coordinate_list = self.util.get_first_element(row_list)
-            identifier = self.util.get_identifier_from_list(first_coordinate_list)
+            first_coordinate_list = Util.get_first_element(row_list)
+            identifier = Util.get_identifier_from_list(first_coordinate_list)
             return Feature(identifier, geometry)
         else:
             return None
         
-    def transform_row_list_for_multi_point(self, rowList):
+    def transform_row_list_for_multi_point(self, row_list):
         list = []
 
-        for subList in rowList:
+        for subList in row_list:
             for coordinate in subList:
                 list2 = [coordinate]
                 list.append(list2)
 
         return list
 
-    def create_features(self, rowLists, selectedGeometryType):
+    def create_features(self, row_lists, selected_geometry_type):
         list = []
 
-        for rowList in rowLists:
+        for rowList in row_lists:
 
-            if selectedGeometryType == OutputType.POINT and len(rowList[0]) >= 2:
+            if selected_geometry_type == OutputType.POINT and len(rowList[0]) >= 2:
 
-                geometry_type = self.switch_to_multi_geometry(selectedGeometryType)
+                geometry_type = self.switch_to_multi_geometry(selected_geometry_type)
 
                 transformed_list = self.transform_row_list_for_multi_point(rowList)
 
@@ -169,9 +167,9 @@ class Modeller:
             else:
 
                 if len(rowList) >= 2:
-                    geometry_type = self.switch_to_multi_geometry(selectedGeometryType)
+                    geometry_type = self.switch_to_multi_geometry(selected_geometry_type)
                 else:
-                    geometry_type = selectedGeometryType
+                    geometry_type = selected_geometry_type
 
                 feature = self.create_feature(rowList, geometry_type)
 

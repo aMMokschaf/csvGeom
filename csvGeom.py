@@ -11,15 +11,12 @@ class Main:
         self.argParser = ArgParser()
         self.args = self.argParser.args
 
-        self.writer = FileWriter()
-        self.logger = Logger(self.writer)
-
     def main(self):
         if self.args.cli:
-            cli = CsvGeomCli(self.args, self.logger)
+            cli = CsvGeomCli(self.args)
             cli.handle_cli()
         else:
-            gui = CsvGeomGui(self.args, self.logger)
+            gui = CsvGeomGui(self.args)
             gui.handle_gui()
 
 

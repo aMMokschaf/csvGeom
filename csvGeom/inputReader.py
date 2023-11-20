@@ -3,16 +3,15 @@ import io
 
 from csvGeom.csvRow import CsvRow
 from csvGeom.utils.util import Util
+from csvGeom.utils.logger import Logger
 
 DELIMITER = ','
 
 
 class InputReader:
 
-    def __init__(self, language, logger):
-        self.logger = logger
-        self.util = Util()
-        self.translations = self.util.load_translations(language)
+    def __init__(self, language):
+        self.translations = Util.load_translations(language)
 
     def parse_row(self, row):
         row_obj = CsvRow()
@@ -28,7 +27,7 @@ class InputReader:
         
         try:
             row_obj.height = row['Height']
-        except:
+        except KeyError:
             row_obj.height = "0"
 
         return row_obj
@@ -44,7 +43,7 @@ class InputReader:
                     row_obj = self.parse_row(row)
                     rows.append(row_obj)
                 except KeyError:
-                    self.logger.error(self.translations["err_missingColumn"])
+                    Logger.error(self.translations["err_missingColumn"])
                     break
                 
             return rows
@@ -52,21 +51,21 @@ class InputReader:
     def create_code_drop_down_entries(self, rows):
         codes = []
 
-        for obj in rows:
-            if obj.code not in codes:
-                codes.append(obj.code)
+        for element in rows:
+            if element.code not in codes:
+                codes.append(element.code)
 
-        self.logger.info(self.translations["cli_uniqueCodes"], [len(codes), codes])
+        Logger.info(self.translations["cli_uniqueCodes"], [len(codes), codes])
 
         return codes
         
     def filter_by_code(self, rows, code):
-        list = []
+        elements = []
 
-        for obj in rows:
-            if obj.code == code:
-                list.append(obj)
+        for element in rows:
+            if element.code == code:
+                elements.append(element)
 
-        self.logger.info(self.translations["cli_filteredByCode"], [code])
+        Logger.info(self.translations["cli_filteredByCode"], [code])
 
-        return list
+        return elements

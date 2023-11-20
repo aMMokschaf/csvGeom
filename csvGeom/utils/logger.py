@@ -1,6 +1,7 @@
 from enum import Enum
 
 from csvGeom.utils.util import Util
+from csvGeom.utils.fileWriter import FileWriter
 
 
 class LogType(Enum):
@@ -16,25 +17,36 @@ class Logger:
     ERROR_DEL = "!!!"
     CRITICAL_DEL = "-X-"
 
-    def __init__(self, writer):
-        self.util = Util()
-        self.writer = writer
+    @staticmethod
+    def info(msg, objects=None, log_to_file=False):
+        if objects is None:
+            objects = []
+        Logger.print_msg(LogType.INFO.value, Logger.INFO_DEL, msg, objects, log_to_file)
 
-    def info(self, msg, objects=[], log_to_file=False):
-        self.print_msg(LogType.INFO.value, self.INFO_DEL, msg, objects, log_to_file)
+    @staticmethod
+    def debug(msg, objects=None, log_to_file=False):
+        if objects is None:
+            objects = []
+        Logger.print_msg(LogType.DEBUG.value, Logger.DEBUG_DEL, msg, objects, log_to_file)
 
-    def debug(self, msg, objects=[], log_to_file=False):
-        self.print_msg(LogType.DEBUG.value, self.DEBUG_DEL, msg, objects, log_to_file)
+    @staticmethod
+    def error(msg, objects=None, log_to_file=False):
+        if objects is None:
+            objects = []
+        Logger.print_msg(LogType.ERR.value, Logger.ERROR_DEL, msg, objects, log_to_file)
 
-    def error(self, msg, objects=[], logToFile=False):
-        self.print_msg(LogType.ERR.value, self.ERROR_DEL, msg, objects, logToFile)
+    @staticmethod
+    def critical(msg, objects=None, log_to_file=False):
+        if objects is None:
+            objects = []
+        Logger.print_msg(LogType.CRIT.value, Logger.CRITICAL_DEL, msg, objects, log_to_file)
 
-    def critical(self, msg, objects=[], log_to_file=False):
-        self.print_msg(LogType.CRIT.value, self.CRITICAL_DEL, msg, objects, log_to_file)
+    @staticmethod
+    def print_msg(log_type, delimiter, msg, objects=None, log_to_file=False):
+        if objects is None:
+            objects = []
+        formatted_msg = Util.create_formatted_msg(msg, objects)
+        print(log_type, delimiter, formatted_msg)
 
-    def print_msg(self, logType, delimiter, msg, objects=[], log_to_file=False):
-        formatted_msg = self.util.create_formatted_msg(msg, objects)
-        print(logType, delimiter, formatted_msg)
-
-        if self.writer is not None and log_to_file:
-            self.writer.appendToFile(formatted_msg + "\n", "./log.txt")
+        if log_to_file:
+            FileWriter.append_to_file(formatted_msg + "\n", "./log.txt")

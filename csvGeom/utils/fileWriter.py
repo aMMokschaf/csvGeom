@@ -5,10 +5,8 @@ from csvGeom.utils.util import Util
 
 class FileWriter:
 
-    def __init__(self):
-        self.util = Util()
-
-    def write(self, data, filename, mode):
+    @staticmethod
+    def write(data, filename, mode):
         try:
             file = io.open(filename, mode)
             file.write(data)
@@ -16,15 +14,17 @@ class FileWriter:
         except:
             raise Exception
 
-    def writeToFile(self, data, filename):
+    @staticmethod
+    def write_to_file(data, filename):
         try:
-            self.write(data, filename, "w")
+            FileWriter.write(data, filename, "w")
         except:
             raise Exception
 
-    def appendToFile(self, data, filename):
+    @staticmethod
+    def append_to_file(data, filename):
         try:
-            self.write(data, filename, "a")
+            FileWriter.write(data, filename, "a")
         except:
             raise Exception
         

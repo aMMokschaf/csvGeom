@@ -9,8 +9,7 @@ class Gui:
 
     def __init__(self, program_title, language):
         self.programTitle = program_title
-        self.util = Util()
-        self.translations = self.util.load_translations(language)
+        self.translations = Util.load_translations(language)
         self.layout = self.create_layout()
         self.window = sG.Window(self.programTitle, self.layout)
 
@@ -109,7 +108,7 @@ class Gui:
         if count > 0:
             color = 'red'
             err_msg = self.translations["gui_error_validation"]
-            formatted_msg = self.util.create_formatted_msg(err_msg, [count])
+            formatted_msg = Util.create_formatted_msg(err_msg, [count])
 
             self.window["errRectangle"].draw_text(formatted_msg, (350, 25), color='black')
         else:

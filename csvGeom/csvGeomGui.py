@@ -4,6 +4,7 @@ from csvGeom.gui import Gui
 from csvGeom.inputReader import InputReader
 from csvGeom.modeller import Modeller
 from csvGeom.utils.util import Util
+from csvGeom.utils.fileWriter import FileWriter
 from csvGeom.enums.outputType import OutputType
 from csvGeom.enums.fileType import FileType
 from csvGeom.validator import Validator
@@ -12,14 +13,12 @@ from csvGeom.aggregator import Aggregator
 
 class CsvGeomGui:
 
-    def __init__(self, args, logger):
+    def __init__(self, args):
         self.args = args
 
-        self.util = Util()
-        self.logger = logger
-        self.modeller = Modeller(args.l, logger)
-        self.inputReader = InputReader(args.l, logger)
-        self.aggregator = Aggregator(args.l, logger)
+        self.modeller = Modeller(args.l)
+        self.inputReader = InputReader(args.l)
+        self.aggregator = Aggregator(args.l)
 
         self.rows = None
         self.filteredRows = None
@@ -61,7 +60,7 @@ class CsvGeomGui:
 
         feature_collection_model = self.modeller.create_feature_collection(aggregated_data, self.selectedType)
 
-        validator = Validator(self.logger, self.args.l)
+        validator = Validator(self.args.l)
 
         validated_model = validator.validate(feature_collection_model)
 
@@ -70,9 +69,9 @@ class CsvGeomGui:
         
         output = str(validated_model)
 
-        output_file_name = self.util.create_output_file_name(self.selectedFileName, self.selectedType, self.selectedFileType)
+        output_file_name = Util.create_output_file_name(self.selectedFileName, self.selectedType, self.selectedFileType)
         
-        self.logger.writer.writeToFile(output, output_file_name)
+        FileWriter.write_to_file(output, output_file_name)
 
     def handle_gui(self):
         while True:
