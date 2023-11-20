@@ -1,8 +1,6 @@
 from csvGeom.utils.argParser import ArgParser
 from csvGeom.csvGeomGui import CsvGeomGui
 from csvGeom.csvGeomCli import CsvGeomCli
-from csvGeom.utils.fileWriter import FileWriter
-from csvGeom.utils.logger import Logger
 
 
 class Main:
