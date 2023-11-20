@@ -10,11 +10,11 @@ class Point:
     def add_coordinate(self, coordinate):
         self.coordinates.append(coordinate)
 
-    def returnCoordinates(self):
+    def return_coordinates(self):
         return self.coordinates[0]
 
     def __str__(self):
-        return f'"type": "{OutputType.POINT.get_geo_json_case()}", "coordinates": {self.returnCoordinates()}'
+        return f'"type": "{OutputType.POINT.get_geo_json_case()}", "coordinates": {self.return_coordinates()}'
 
     def __repr__(self):
         return str(self)

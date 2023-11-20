@@ -138,7 +138,7 @@ class Modeller:
             return OutputType.MULTI_POINT
 
     @staticmethod
-    def create_feature( row_list, selected_geometry_type):
+    def create_feature(row_list, selected_geometry_type):
         
         geometry = Modeller.create_geometry(row_list, selected_geometry_type)
         if geometry is not None:
@@ -150,18 +150,18 @@ class Modeller:
 
     @staticmethod
     def transform_row_list_for_multi_point(row_list):
-        list = []
+        elements = []
 
         for subList in row_list:
             for coordinate in subList:
-                list2 = [coordinate]
-                list.append(list2)
+                element = [coordinate]
+                elements.append(element)
 
-        return list
+        return elements
 
     @staticmethod
     def create_features(row_lists, selected_geometry_type):
-        list = []
+        features = []
 
         for rowList in row_lists:
 
@@ -183,9 +183,9 @@ class Modeller:
                 feature = Modeller.create_feature(rowList, geometry_type)
 
             if feature is not None:
-                list.append(feature)
+                features.append(feature)
         
-        return list
+        return features
 
     @staticmethod
     def create_feature_collection(row_lists, selected_geometry_type):

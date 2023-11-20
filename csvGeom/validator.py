@@ -39,7 +39,7 @@ class Validator:
             try:
                 self.validate_coordinate(element)
             except:
-                Logger.error(self.translations["err_validation"], [geometry.type, element.ptId], log_to_file=True)
+                Logger.error(self.translations["err_validation"], [geometry.type, element.pt_id], log_to_file=True)
                 self.errCount += 1
 
         return geometry
@@ -54,7 +54,7 @@ class Validator:
             try:
                 self.validate_coordinate(element)
             except:
-                Logger.error(self.translations["err_validation"], [geometry.type, element.ptId], log_to_file=True)
+                Logger.error(self.translations["err_validation"], [geometry.type, element.pt_id], log_to_file=True)
                 self.errCount += 1
                 
         return geometry
@@ -69,7 +69,7 @@ class Validator:
             try:
                 self.validate_coordinate(element)
             except:
-                Logger.error(self.translations["err_validation"], [geometry.type, element.ptId], log_to_file=True)
+                Logger.error(self.translations["err_validation"], [geometry.type, element.pt_id], log_to_file=True)
                 self.errCount += 1
         
         return geometry
@@ -84,7 +84,7 @@ class Validator:
             try:
                 self.validate_point(element)
             except:
-                Logger.error(self.translations["err_validation"], [element.type, element.ptId], log_to_file=True)
+                Logger.error(self.translations["err_validation"], [element.type, element.pt_id], log_to_file=True)
                 self.errCount += 1
 
         return geometry
@@ -99,7 +99,7 @@ class Validator:
             try:
                 self.validate_line_string(element)
             except:
-                Logger.error(self.translations["err_validation"], [element.type, element.ptId], log_to_file=True)
+                Logger.error(self.translations["err_validation"], [element.type, element.pt_id], log_to_file=True)
                 self.errCount += 1
         
         return geometry
@@ -114,26 +114,26 @@ class Validator:
             try:
                 self.validate_polygon(element)
             except:
-                Logger.error(self.translations["err_validation"], [element.type, element.ptId], log_to_file=True)
+                Logger.error(self.translations["err_validation"], [element.type, element.pt_id], log_to_file=True)
                 self.errCount += 1
 
         return geometry
 
     def validate_geometry(self, geometry):
-        type = self.determine_geometry_type(geometry)
+        geometry_type = self.determine_geometry_type(geometry)
 
         try:
-            if type == OutputType.POINT:
+            if geometry_type == OutputType.POINT:
                 return self.validate_point(geometry)
-            elif type == OutputType.LINESTRING:
+            elif geometry_type == OutputType.LINESTRING:
                 return self.validate_line_string(geometry)
-            elif type == OutputType.POLYGON:
+            elif geometry_type == OutputType.POLYGON:
                 return self.validate_polygon(geometry)
-            elif type == OutputType.MULTI_POINT:
+            elif geometry_type == OutputType.MULTI_POINT:
                 return self.validate_multi_point(geometry)
-            elif type == OutputType.MULTI_LINESTRING:
+            elif geometry_type == OutputType.MULTI_LINESTRING:
                 return self.validate_multi_line_string(geometry)
-            elif type == OutputType.MULTI_POLYGON:
+            elif geometry_type == OutputType.MULTI_POLYGON:
                 return self.validate_multi_polygon(geometry)
         except:
             raise Exception

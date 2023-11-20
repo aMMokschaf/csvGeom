@@ -1,7 +1,5 @@
 import io
 
-from csvGeom.utils.util import Util
-
 
 class FileWriter:
 

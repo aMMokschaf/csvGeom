@@ -11,7 +11,7 @@ class Multipoint:
         self.points.append(point)
 
     def __str__(self):
-        points = ','.join(str(p.returnCoordinates()) for p in self.points)
+        points = ','.join(str(p.return_coordinates()) for p in self.points)
 
         return f'"type": "{OutputType.MULTI_POINT.get_geo_json_case()}", "coordinates": [{points}]'
 

@@ -11,7 +11,7 @@ class MultiPolygon:
         self.polygons.append(polygon)
 
     def __str__(self):
-        polygons = ','.join('[' + str(p.returnCoordinates()) + ']' for p in self.polygons)
+        polygons = ','.join('[' + str(p.return_coordinates()) + ']' for p in self.polygons)
 
         return f'"type": "{OutputType.MULTI_POLYGON.get_geo_json_case()}","coordinates": [{polygons}]'
     

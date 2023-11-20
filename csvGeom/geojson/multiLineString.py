@@ -7,11 +7,11 @@ class MultiLineString:
         self.lineStrings = []
         self.type = OutputType.MULTI_LINESTRING
 
-    def add_line_string(self, lineString):
-        self.lineStrings.append(lineString)
+    def add_line_string(self, line_string):
+        self.lineStrings.append(line_string)
 
     def __str__(self):
-        line_strings = ','.join(str(l.returnCoordinates()) for l in self.lineStrings)
+        line_strings = ','.join(str(line_string.return_coordinates()) for line_string in self.lineStrings)
 
         return f'"type": "{OutputType.MULTI_LINESTRING.get_geo_json_case()}", "coordinates" : [{line_strings}]'
 

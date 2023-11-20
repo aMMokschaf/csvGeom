@@ -13,7 +13,7 @@ class LineString:
     def add_multiple_coordinates(self, coordinates):
         self.coordinates.append(coordinates)
 
-    def returnCoordinates(self):
+    def return_coordinates(self):
         return self.coordinates
 
     def __str__(self):
