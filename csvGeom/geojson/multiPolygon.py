@@ -1,11 +1,11 @@
-from csvGeom.enums.outputType import OutputType
+from csvGeom.enums.geoJsonType import GeoJsonType
 
 
 class MultiPolygon:
 
     def __init__(self):
         self.polygons = []
-        self.type = OutputType.MULTI_POLYGON
+        self.type = GeoJsonType.MULTI_POLYGON
 
     def add_polygon(self, polygon):
         self.polygons.append(polygon)
@@ -13,14 +13,14 @@ class MultiPolygon:
     def __str__(self):
         polygons = ','.join('[' + str(p.return_coordinates()) + ']' for p in self.polygons)
 
-        return f'"type": "{OutputType.MULTI_POLYGON.get_geo_json_case()}","coordinates": [{polygons}]'
+        return f'"type": "{GeoJsonType.MULTI_POLYGON.get_geo_json_case()}","coordinates": [{polygons}]'
     
     def __repr__(self):
         return str(self)
     
     def __dict__(self):
         return {
-            'type': OutputType.MULTI_POLYGON.value,
+            'type': GeoJsonType.MULTI_POLYGON.value,
             'coordinates': self.polygons
         }
     

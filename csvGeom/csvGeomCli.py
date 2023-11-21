@@ -4,7 +4,7 @@ from csvGeom.aggregator import Aggregator
 from csvGeom.utils.util import Util
 from csvGeom.utils.logger import Logger
 from csvGeom.utils.fileWriter import FileWriter
-from csvGeom.enums.outputType import OutputType
+from csvGeom.enums.geoJsonType import GeoJsonType
 from csvGeom.enums.fileType import FileType
 from csvGeom.validator import Validator
 
@@ -22,10 +22,10 @@ class CsvGeomCli:
 
     def parse_geometry_type(self, arg):
         try:
-            geometry_type = OutputType(arg)
+            geometry_type = GeoJsonType(arg)
         except ValueError:
             Logger.error(self.translations["err_parseGeometry"], [arg])
-            geometry_type = OutputType.POLYGON
+            geometry_type = GeoJsonType.POLYGON
 
         return geometry_type
 

@@ -1,7 +1,7 @@
 from enum import Enum
 
 
-class OutputType(Enum):
+class GeoJsonType(Enum):
     POINT = "Point"
     LINESTRING = "LineString"
     POLYGON = "Polygon"

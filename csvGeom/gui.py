@@ -2,7 +2,7 @@ import PySimpleGUI as sG
 
 from csvGeom.utils.util import Util
 
-from csvGeom.enums.outputType import OutputType
+from csvGeom.enums.geoJsonType import GeoJsonType
 
 
 class Gui:
@@ -41,7 +41,7 @@ class Gui:
                     ],
                     [
                         sG.Radio(
-                            OutputType.POLYGON.get_title_case(),
+                            GeoJsonType.POLYGON.get_title_case(),
                             "GEOMTYPE",
                             enable_events=True,
                             default=True,
@@ -49,7 +49,7 @@ class Gui:
                     ],
                     [
                         sG.Radio(
-                            OutputType.POINT.get_title_case(),
+                            GeoJsonType.POINT.get_title_case(),
                             "GEOMTYPE",
                             enable_events=True,
                             default=False,
@@ -58,7 +58,7 @@ class Gui:
                     ],
                     [
                         sG.Radio(
-                            OutputType.LINESTRING.get_title_case(),
+                            GeoJsonType.LINESTRING.get_title_case(),
                             "GEOMTYPE",
                             enable_events=True,
                             default=False,

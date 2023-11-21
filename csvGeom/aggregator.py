@@ -18,7 +18,7 @@ class Aggregator:
 
         Logger.info(self.translations["cli_uniqueIdentifiers"], [len(identifiers), identifiers])
 
-        return identifiers    
+        return identifiers
 
     def aggregate_by_identifier(self, split_list):
         identifiers = self.get_all_unique_identifiers(split_list)
@@ -36,15 +36,15 @@ class Aggregator:
         Logger.info(self.translations["cli_aggregatedGeometries"], [len(geometry_list)])
 
         return geometry_list
-    
+
     def split_by_identifier(self, rows):
         if len(rows) == 0:
             return []
-        
+
         lists = []
         element = []
         lists.append(element)
-        
+
         identifier = Util.get_identifier_from_list(rows)
 
         for row in rows:
@@ -56,9 +56,9 @@ class Aggregator:
                 lists.append(element)
 
         return lists
-    
+
     def aggregate(self, filtered_rows):
-        
+
         split_data = self.split_by_identifier(filtered_rows)
 
         aggregated_data = self.aggregate_by_identifier(split_data)

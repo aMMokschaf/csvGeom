@@ -5,7 +5,7 @@ from csvGeom.inputReader import InputReader
 from csvGeom.modeller import Modeller
 from csvGeom.utils.util import Util
 from csvGeom.utils.fileWriter import FileWriter
-from csvGeom.enums.outputType import OutputType
+from csvGeom.enums.geoJsonType import GeoJsonType
 from csvGeom.enums.fileType import FileType
 from csvGeom.validator import Validator
 from csvGeom.aggregator import Aggregator
@@ -23,7 +23,7 @@ class CsvGeomGui:
         self.filteredRows = None
 
         self.selectedFileName = None
-        self.selectedType = OutputType.POLYGON
+        self.selectedType = GeoJsonType.POLYGON
         self.selectedFileType = FileType.GEO_JSON
 
         self.gui = Gui("csvGeom v0.6.0", self.args.l)
@@ -85,13 +85,13 @@ class CsvGeomGui:
                 self.handle_code(values)
 
             if event == "-GEOM_POINT-":
-                self.selectedType = OutputType.POINT
+                self.selectedType = GeoJsonType.POINT
 
             if event == "-GEOM_LINESTRING-":
-                self.selectedType = OutputType.LINESTRING
+                self.selectedType = GeoJsonType.LINESTRING
 
             if event == "-GEOM_POLYGON-":
-                self.selectedType = OutputType.POLYGON
+                self.selectedType = GeoJsonType.POLYGON
 
             if event == "-CONVERT-":
                 self.handle_convert()

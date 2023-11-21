@@ -1,4 +1,4 @@
-from csvGeom.enums.outputType import OutputType
+from csvGeom.enums.geoJsonType import GeoJsonType
 from csvGeom.utils.util import Util
 from csvGeom.utils.logger import Logger
 
@@ -123,17 +123,17 @@ class Validator:
         geometry_type = self.determine_geometry_type(geometry)
 
         try:
-            if geometry_type == OutputType.POINT:
+            if geometry_type == GeoJsonType.POINT:
                 return self.validate_point(geometry)
-            elif geometry_type == OutputType.LINESTRING:
+            elif geometry_type == GeoJsonType.LINESTRING:
                 return self.validate_line_string(geometry)
-            elif geometry_type == OutputType.POLYGON:
+            elif geometry_type == GeoJsonType.POLYGON:
                 return self.validate_polygon(geometry)
-            elif geometry_type == OutputType.MULTI_POINT:
+            elif geometry_type == GeoJsonType.MULTI_POINT:
                 return self.validate_multi_point(geometry)
-            elif geometry_type == OutputType.MULTI_LINESTRING:
+            elif geometry_type == GeoJsonType.MULTI_LINESTRING:
                 return self.validate_multi_line_string(geometry)
-            elif geometry_type == OutputType.MULTI_POLYGON:
+            elif geometry_type == GeoJsonType.MULTI_POLYGON:
                 return self.validate_multi_polygon(geometry)
         except:
             raise Exception
