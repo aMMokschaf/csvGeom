@@ -1,14 +1,6 @@
-from enum import Enum
-
+from csvGeom.enums.logtype import LogType
 from csvGeom.utils.util import Util
 from csvGeom.utils.fileWriter import FileWriter
-
-
-class LogType(Enum):
-    INFO = "INFO"
-    DEBUG = "DEBUG"
-    ERR = "ERROR"
-    CRIT = "CRITICAL"
 
 
 class Logger:
